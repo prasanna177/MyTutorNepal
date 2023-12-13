@@ -38,12 +38,13 @@ const Signup = () => {
         "http://localhost:4000/api/user/signup",
         data
       );
-      if (response.data.success) {
-        toast.success(response.data.message); 
+      const { success, message } = response.data
+      if (success) {
+        toast.success(message); 
         navigate('/login');
       }
       else {
-        toast.error(response.data.message);
+        toast.error(message);
       }
     }
     catch (error) {

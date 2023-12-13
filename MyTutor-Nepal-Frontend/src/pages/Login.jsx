@@ -8,19 +8,21 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import colors from "../theme/colors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import TextField from "../components/common/TextField";
 import Password from "../components/common/Password";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const schema = yup.object({
-    email: yup
-      .string()
-      .required("Email address is required"),
+    email: yup.string().required("Email address is required"),
     password: yup.string().required("Password is required"),
   });
 
@@ -32,11 +34,22 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:4000/api/user/login", data);
+      const { success, message } = response.data;
+      if (success) {
+        toast.success(message);
+        localStorage.setItem("token", response.data.token);
+        navigate("/");
+      } else {
+        toast.error(message);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong");
+    }
   };
-
-  console.log(errors);
 
   return (
     <Flex
