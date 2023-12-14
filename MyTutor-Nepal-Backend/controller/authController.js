@@ -45,3 +45,22 @@ module.exports.login_post = async(req,res) => {
     res.status(500).send({ message: "Error logging in", success: false, err})
   }
 }
+
+module.exports.getUserById = async (req,res) => {
+  try {
+    const user = await User.findOne({ _id: req.body.userId });
+    if(user) {
+      res.status(200).send({ success: true, data: {
+        fullName: user.fullName,
+        email: user.email
+      }})
+    }
+    else {
+      return res.status(200).send({ message: "User does not exist", success: false})
+    }
+  } 
+  catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Error getting user info", success: false, error})
+  }
+}
