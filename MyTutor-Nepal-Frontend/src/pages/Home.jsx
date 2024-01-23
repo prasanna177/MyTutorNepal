@@ -8,7 +8,7 @@ const Home = () => {
     try {
       const response = await axios.post('http://localhost:4000/api/user/getUserById', {},  {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token') //Authorization must starat with capital when posting to backend
+          Authorization: 'Bearer ' + localStorage.getItem('token') //Authorization must start with capital when posting to backend
         }
       })
       console.log(response.data)

@@ -17,8 +17,11 @@ import TextField from "../components/common/TextField";
 import Password from "../components/common/Password";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../redux/alertSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const schema = yup.object({
@@ -36,7 +39,12 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://localhost:4000/api/user/login", data);
+      dispatch(showLoading());
+      const response = await axios.post(
+        "http://localhost:4000/api/user/login",
+        data
+      );
+      dispatch(hideLoading());
       const { success, message } = response.data;
       if (success) {
         toast.success(message);
@@ -46,6 +54,7 @@ const Login = () => {
         toast.error(message);
       }
     } catch (err) {
+      dispatch(hideLoading());
       console.log(err);
       toast.error("Something went wrong");
     }
@@ -100,7 +109,7 @@ const Login = () => {
                     }}
                     iconColor="white"
                   >
-                    <Text variant={"title1"}>Remember me</Text>
+                    <Text variant={"title1"}>Are you a parent?</Text>
                   </Checkbox>
                   <Text color={"primary.0"} fontSize={"md"}>
                     <Link to={"/forgot-password"}>Forgot password?</Link>

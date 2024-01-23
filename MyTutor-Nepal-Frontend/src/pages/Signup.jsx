@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Flex, Text, VStack } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,17 +8,18 @@ import TextField from "../components/common/TextField";
 import Password from "../components/common/Password";
 import axios from "axios";
 import toast from "react-hot-toast";
+import colors from "../theme/colors";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../redux/alertSlice";
 
 const Signup = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  {
-    /* validation schema */
-  }
   const schema = yup.object({
-    fullName: yup.string().required("Full name is required"),
+    firstName: yup.string().required("First name is required"),
+    lastName: yup.string().required("Last name is required"),
     email: yup
       .string()
       .required("Email address is required")
@@ -34,21 +35,22 @@ const Signup = () => {
 
   const onSubmit = async (data) => {
     try {
+      dispatch(showLoading());
       const response = await axios.post(
         "http://localhost:4000/api/user/signup",
         data
       );
-      const { success, message } = response.data
+      dispatch(hideLoading());
+      const { success, message } = response.data;
       if (success) {
-        toast.success(message); 
-        navigate('/login');
-      }
-      else {
+        toast.success(message);
+        navigate("/login");
+      } else {
         toast.error(message);
       }
-    }
-    catch (error) {
-      toast.error('Something went wrong')
+    } catch (error) {
+      dispatch(hideLoading());
+      toast.error("Something went wrong");
     }
   };
 
@@ -81,12 +83,18 @@ const Signup = () => {
             </VStack>
 
             {/*Input fields */}
-            <VStack textAlign={"start"} w={"100%"} gap={6}>
+            <VStack alignItems={"start"} w={"100%"} gap={6}>
               <TextField
-                name={"fullName"}
-                errors={errors?.fullName?.message}
+                name={"firstName"}
+                errors={errors?.firstName?.message}
                 register={register}
-                placeholder={"Full name"}
+                placeholder={"First Name"}
+              />
+              <TextField
+                name={"lastName"}
+                errors={errors?.lastName?.message}
+                register={register}
+                placeholder={"Last Name"}
               />
               <TextField
                 name={"email"}
@@ -100,6 +108,17 @@ const Signup = () => {
                 errors={errors?.password?.message}
                 placeholder={"Password"}
               />
+              <Checkbox
+                _checked={{
+                  "& .chakra-checkbox__control": {
+                    background: colors.primary[0],
+                    border: "none",
+                  },
+                }}
+                iconColor="white"
+              >
+                <Text variant={"title1"}>Include parent panel?</Text>
+              </Checkbox>
             </VStack>
             <VStack mt={4} gap={4} alignItems={"start"} w={"100%"}>
               <Button

@@ -11,18 +11,23 @@ const gray = {
   600: "#4A5568",
   700: "#2D3748",
   800: "#1A202C",
-  900: "#171923"
+  900: "#171923",
+};
+
+const opaque = {
+  0: "rgba(0,0,0,0.300)",
 };
 
 const primary = {
-  0: "#5B3B8C"
-}
+  0: "#5B3B8C",
+};
 
 const colors = {
   black,
   white,
   gray,
-  primary
+  primary,
+  opaque,
 };
 
 export default colors;
