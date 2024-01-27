@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
+const tutorSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -19,16 +19,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  hasParentPanel: {
-    type: Boolean,
-  },
   role: {
-    type: String,
-    enum: ["student", "admin"],
-    default: "student",
-  },
+    type: String
+  }
 });
 
-const User = mongoose.model("user", userSchema);
+const Tutor = mongoose.model("tutor", tutorSchema);
 
-module.exports = User;
+module.exports = Tutor;

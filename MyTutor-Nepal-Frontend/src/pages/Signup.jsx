@@ -115,6 +115,7 @@ const Signup = () => {
                     border: "none",
                   },
                 }}
+                {...register("hasParentPanel")}
                 iconColor="white"
               >
                 <Text variant={"title1"}>Include parent panel?</Text>

@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const Tutor = require("../models/tutorModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -6,7 +7,8 @@ module.exports.signup_post = async (req, res) => {
   try {
     let { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (user) {
+    const tutor = await Tutor.findOne({ email });
+    if (user || tutor) {
       return res
         .status(200)
         .send({ message: "User already exists", success: false });
@@ -15,7 +17,33 @@ module.exports.signup_post = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
     req.body.password = hashedPassword;
     const newUser = new User(req.body);
-    await newUser.save(); //save to mongodb
+    await newUser.save(); //save to database
+    res
+      .status(200)
+      .send({ message: "User created successfully", success: true });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .send({ message: "Error creating user", success: false, err });
+  }
+};
+
+module.exports.becomeTutor_post = async (req, res) => {
+  try {
+    let { email, password } = req.body;
+    const tutor = await Tutor.findOne({ email });
+    const user = await User.findOne({ email });
+    if (tutor || user) {
+      return res
+        .status(200)
+        .send({ message: "User already exists", success: false });
+    }
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    req.body.password = hashedPassword;
+    const newUser = new Tutor(req.body);
+    await newUser.save(); //save to database
     res
       .status(200)
       .send({ message: "User created successfully", success: true });
@@ -30,8 +58,9 @@ module.exports.signup_post = async (req, res) => {
 module.exports.login_post = async (req, res) => {
   const maxAge = 3 * 24 * 60 * 60;
   try {
-    let { email, password } = req.body;
-    const user = await User.findOne({ email });
+    let { email, password, isParent } = req.body;
+    const user =
+      (await User.findOne({ email })) || (await Tutor.findOne({ email }));
     if (!user) {
       return res
         .status(200)
@@ -39,9 +68,19 @@ module.exports.login_post = async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: maxAge,
-      });
+      if (isParent && !user.hasParentPanel) {
+        return res.status(200).send({
+          message: "This account does not have a parent panel",
+          success: false,
+        });
+      }
+      const token = jwt.sign(
+        { id: user._id, isParent: isParent && user.hasParentPanel },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: maxAge,
+        }
+      );
       res
         .status(200)
         .send({ message: "Login successful", success: true, token });
@@ -58,16 +97,26 @@ module.exports.login_post = async (req, res) => {
 
 module.exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.body.userId });
-    console.log(user);
+    const user =
+      (await User.findOne({ _id: req.body.userId })) ||
+      (await Tutor.findOne({ _id: req.body.userId }));
+    console.log(req.body);
     if (user) {
+      const userData = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      };
+
+      if (req.body.isParent) {
+        userData.role = "parent";
+      } else {
+        userData.role = user.role;
+      }
+
       res.status(200).send({
         success: true,
-        data: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-        },
+        data: userData,
       });
     } else {
       return res

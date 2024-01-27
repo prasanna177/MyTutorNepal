@@ -1,31 +1,30 @@
-import { Heading } from "@chakra-ui/react"
-import axios from "axios"
-import { useEffect } from "react"
-
+import axios from "axios";
+import { useEffect } from "react";
+import Layout from "../components/Layout";
 
 const Home = () => {
   const getData = async () => {
     try {
-      const response = await axios.post('http://localhost:4000/api/user/getUserById', {},  {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token') //Authorization must start with capital when posting to backend
+      const response = await axios.post(
+        "http://localhost:4000/api/user/getUserById",
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"), //Authorization must start with capital when posting to backend
+          },
         }
-      })
-      console.log(response.data)
+      );
+      console.log(response.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    getData()
-  },[])
+    getData();
+  }, []);
 
-  return (
-    <Heading>
-      Home
-    </Heading>
-  )
-}
+  return <Layout>Home</Layout>;
+};
 
-export default Home
+export default Home;

@@ -39,6 +39,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
+      console.log(data);
       dispatch(showLoading());
       const response = await axios.post(
         "http://localhost:4000/api/user/login",
@@ -107,6 +108,7 @@ const Login = () => {
                         border: "none",
                       },
                     }}
+                    {...register("isParent")}
                     iconColor="white"
                   >
                     <Text variant={"title1"}>Are you a parent?</Text>

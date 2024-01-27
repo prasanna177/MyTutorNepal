@@ -8,6 +8,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import SpinnerComponenet from "./components/SpinnerComponent";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -20,9 +22,30 @@ function App() {
             <SpinnerComponenet />
           ) : (
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <Login />
+                  </PublicRoute>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <PublicRoute>
+                    <Signup />
+                  </PublicRoute>
+                }
+              />
               <Route path="/forgot-password" element={<ForgotPassword />} />
             </Routes>
           )}
