@@ -103,8 +103,7 @@ module.exports.getUserById = async (req, res) => {
     console.log(req.body);
     if (user) {
       const userData = {
-        firstName: user.firstName,
-        lastName: user.lastName,
+        fullName: user.fullName,
         email: user.email,
       };
 

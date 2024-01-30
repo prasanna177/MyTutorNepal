@@ -7,11 +7,7 @@ const tutorSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
   },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  fullName: {
     type: String,
     required: true,
   },
@@ -20,8 +16,8 @@ const tutorSchema = new mongoose.Schema({
     required: true,
   },
   role: {
-    type: String
-  }
+    type: String,
+  },
 });
 
 const Tutor = mongoose.model("tutor", tutorSchema);

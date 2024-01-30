@@ -18,7 +18,7 @@ import Password from "../components/common/Password";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../redux/alertSlice";
+import { hideLoading, showLoading } from "../redux/features/alertSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -62,12 +62,7 @@ const Login = () => {
   };
 
   return (
-    <Flex
-      h={"100dvh"}
-      bgColor={"gray.0"}
-      justifyContent={"center"}
-      alignItems={"center"}
-    >
+    <Flex h={"100dvh"} justifyContent={"center"} alignItems={"center"}>
       <Box
         boxShadow={"md"}
         borderRadius={"10px"}

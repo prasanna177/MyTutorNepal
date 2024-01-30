@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
-import Layout from "../components/Layout";
+import Layout from "../components/Layout/Layout";
 
 const Home = () => {
   const getData = async () => {

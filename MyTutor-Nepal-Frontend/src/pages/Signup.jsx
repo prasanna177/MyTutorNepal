@@ -10,7 +10,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import colors from "../theme/colors";
 import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../redux/alertSlice";
+import { hideLoading, showLoading } from "../redux/features/alertSlice";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -18,8 +18,7 @@ const Signup = () => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const schema = yup.object({
-    firstName: yup.string().required("First name is required"),
-    lastName: yup.string().required("Last name is required"),
+    fullName: yup.string().required("Full name is required"),
     email: yup
       .string()
       .required("Email address is required")
@@ -55,12 +54,7 @@ const Signup = () => {
   };
 
   return (
-    <Flex
-      h={"100dvh"}
-      bgColor={"gray.0"}
-      justifyContent={"center"}
-      alignItems={"center"}
-    >
+    <Flex h={"100dvh"} justifyContent={"center"} alignItems={"center"}>
       <Box
         boxShadow={"md"}
         borderRadius={"10px"}
@@ -85,16 +79,10 @@ const Signup = () => {
             {/*Input fields */}
             <VStack alignItems={"start"} w={"100%"} gap={6}>
               <TextField
-                name={"firstName"}
-                errors={errors?.firstName?.message}
+                name={"fullName"}
+                errors={errors?.fullName?.message}
                 register={register}
-                placeholder={"First Name"}
-              />
-              <TextField
-                name={"lastName"}
-                errors={errors?.lastName?.message}
-                register={register}
-                placeholder={"Last Name"}
+                placeholder={"Full Name"}
               />
               <TextField
                 name={"email"}
