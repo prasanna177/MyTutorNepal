@@ -1,18 +1,33 @@
 import {
   Avatar,
   Box,
+  Flex,
   HStack,
   Image,
   Input,
   InputGroup,
   InputLeftElement,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
 import logo from "../../assets/images/logo.png";
-import { BellIcon, SearchIcon } from "@chakra-ui/icons";
+import { Link, useNavigate } from "react-router-dom";
+import { BellIcon, HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
 import { useSelector } from "react-redux";
 import { createImageFromInitials } from "../Utils";
+import toast from "react-hot-toast";
 
 const Layout = ({ children }) => {
+  const navigate = useNavigate();
+  //logout
+  const handleLogout = () => {
+    localStorage.clear();
+    toast.success("Logged out successfully");
+    navigate("/login");
+  };
+
   const { user } = useSelector((state) => state.user);
   // const initial = user?.fullName.substring(0, 1);
   return (
@@ -39,12 +54,37 @@ const Layout = ({ children }) => {
                   />
                 </InputGroup>
               </HStack>
-              <HStack w={"200px"}>
-                <BellIcon></BellIcon>
-                <Avatar
-                  size={'sm'}
-                  src={localStorage.getItem('token')? createImageFromInitials(user?.fullName) : logo}
-                />
+              <HStack>
+                <BellIcon boxSize={8} color={"black"}></BellIcon>
+                <Menu>
+                  <MenuButton>
+                    <Flex
+                      alignItems={"center"}
+                      p={2}
+                      justifyContent={"space-between"}
+                      border={"1px"}
+                      borderRadius={20}
+                      w={"80px"}
+                      borderColor={"gray.400"}
+                    >
+                      <HamburgerIcon />
+                      <Avatar
+                        size={"sm"}
+                        src={
+                          localStorage.getItem("token")
+                            ? createImageFromInitials(user?.fullName)
+                            : logo
+                        }
+                      />
+                    </Flex>
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    <Link to={"/become-tutor"}>
+                      <MenuItem>Become a Tutor</MenuItem>
+                    </Link>
+                  </MenuList>
+                </Menu>
               </HStack>
             </HStack>
           </Box>

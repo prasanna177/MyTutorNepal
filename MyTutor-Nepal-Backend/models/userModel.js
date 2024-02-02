@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     enum: ["student", "admin"],
     default: "student",
   },
+  notification: {
+    type: Array,
+    default: []
+
+  }
 });
 
 const User = mongoose.model("user", userSchema);

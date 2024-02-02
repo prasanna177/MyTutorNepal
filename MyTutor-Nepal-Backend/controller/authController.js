@@ -102,11 +102,8 @@ module.exports.getUserById = async (req, res) => {
       (await Tutor.findOne({ _id: req.body.userId }));
     console.log(req.body);
     if (user) {
-      const userData = {
-        fullName: user.fullName,
-        email: user.email,
-      };
-
+      user.password = undefined;
+      const userData = user;
       if (req.body.isParent) {
         userData.role = "parent";
       } else {

@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import SpinnerComponenet from "./components/SpinnerComponent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
+import BecomeTutor from "./pages/BecomeTutor";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -27,6 +28,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/become-tutor"
+                element={
+                  <ProtectedRoute>
+                    <BecomeTutor />
                   </ProtectedRoute>
                 }
               />
