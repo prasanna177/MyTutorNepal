@@ -26,6 +26,10 @@ const tutorSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    status: {
+      type: String,
+      default: 'Pending'
+    },
     timing: {
       type: Object,
       required: true,

@@ -31,32 +31,44 @@ module.exports.signup_post = async (req, res) => {
 
 module.exports.becomeTutor_post = async (req, res) => {
   try {
-    let { email, password } = req.body;
-    const tutor = await Tutor.findOne({ email });
-    const user = await User.findOne({ email });
-    if (tutor || user) {
-      return res
-        .status(200)
-        .send({ message: "User already exists", success: false });
+    const { subjects } = req.body;
+    const uniqueSubjects = new Set(subjects);
+    if (uniqueSubjects.size !== subjects.length) {
+      return res.status(400).send({
+        success: false,
+        message: "Subjects must be unique",
+      });
     }
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-    req.body.password = hashedPassword;
-    const newUser = new Tutor(req.body);
-    await newUser.save(); //save to database
-    res
-      .status(200)
-      .send({ message: "User created successfully", success: true });
-  } catch (err) {
-    console.log(err);
-    res
-      .status(500)
-      .send({ message: "Error creating user", success: false, err });
+    const newTutor = await Tutor({ ...req.body, status: "Pending" });
+    await newTutor.save();
+    const adminUser = await User.findOne({ role: "admin" });
+    const notification = adminUser.notification;
+    notification.push({
+      type: "Apply tutor request",
+      message: `${newTutor.fullName} has applied for tutor account.`,
+      data: {
+        tutorId: newTutor._id,
+        name: newTutor.fullName,
+        onClickPath: "/admin/tutors",
+      },
+    });
+    await User.findByIdAndUpdate(adminUser._id, { notification });
+    res.status(201).send({
+      success: true,
+      message: "Applied for tutor account successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while applying for tutor",
+    });
   }
 };
 
 module.exports.login_post = async (req, res) => {
-  const maxAge = 3 * 24 * 60 * 60;
+  const maxAge = 5;
   try {
     let { email, password, isParent } = req.body;
     const user =

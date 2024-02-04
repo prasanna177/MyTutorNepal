@@ -6,7 +6,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const router = Router();
 
 router.post("/signup", authController.signup_post);
-router.post("/become-tutor", authController.becomeTutor_post);
+router.post("/become-tutor", authMiddleware, authController.becomeTutor_post);
 router.post("/login", authController.login_post);
 router.post("/getUserById", authMiddleware, authController.getUserById);
 

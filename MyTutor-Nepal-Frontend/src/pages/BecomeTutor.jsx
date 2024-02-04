@@ -4,29 +4,37 @@ import {
   FormControl,
   FormErrorMessage,
   HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
+  Input,
   Select,
-  Text,
-  VStack,
 } from "@chakra-ui/react";
 import Layout from "../components/Layout/Layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useFieldArray, useForm } from "react-hook-form";
 import TextField from "../components/common/TextField";
-import { DevTool } from "@hookform/devtools";
-import toast from "react-hot-toast";
-import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
+import toast from "react-hot-toast";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  geocodeByPlaceId,
+  getLatLng,
+} from "react-places-autocomplete";
+import { useState } from "react";
 
 const BecomeTutor = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [address, setAddress] = useState("");
+  const [coordinates, setCoordinates] = useState({
+    lat: null,
+    lng: null,
+  });
 
+  const handleSelect = async (value) => {
+    const results = await geocodeByAddress(value);
+    const ll = await getLatLng(results[0])
+    setAddress(value);
+    setCoordinates(ll);
+    console.log(coordinates.lat, coordinates.lng);
+  };
   const schema = yup.object({
     fullName: yup.string().required("Full Name is required"),
     email: yup.string().required("Email address is required"),
@@ -39,11 +47,20 @@ const BecomeTutor = () => {
         "Subjects must be unique",
         (values) => new Set(values).size === values.length
       ),
+    feePerClass: yup
+      .number()
+      .typeError("Please enter a valid number")
+      .positive("Please enter a positive number")
+      .required("Please enter fee per class"),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    console.log(errors);
+  const onSubmit = async (data) => {
+    try {
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
   };
 
   const subjectsOptions = [
@@ -120,7 +137,7 @@ const BecomeTutor = () => {
                 {index > 0 && (
                   <CloseIcon
                     boxSize={3}
-                    _hover={{cursor: "pointer"}}
+                    _hover={{ cursor: "pointer" }}
                     type="button"
                     onClick={() => remove(index)}
                   >
@@ -134,20 +151,54 @@ const BecomeTutor = () => {
         <Button type="button" onClick={() => append("")}>
           Add Subject
         </Button>
+        <TextField
+          name={"feePerClass"}
+          errors={errors?.feePerClass?.message}
+          register={register}
+          placeholder={"Fee Per Class"}
+        />
+        <Input type="time" {...register("timing.startTime")} />
+        <Input type="time" {...register("timing.endTime")} />
+        <PlacesAutocomplete
+        value={address}
+        onChange={setAddress}
+        onSelect={handleSelect}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <input
+              {...getInputProps({
+                placeholder: 'Search Places ...',
+                className: 'location-search-input',
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map((suggestion,index) => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div key = {index}
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
         <Button type="submit">Submit</Button>
       </Box>
-
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Error</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>{errors.subjects?.message}</Text>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-      <DevTool control={control} />
     </Layout>
   );
 };

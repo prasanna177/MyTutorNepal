@@ -6,11 +6,9 @@ const TextField = ({ name, errors, register, placeholder }) => {
       <Input
         {...register(name)}
         focusBorderColor="black"
-        placeholder= {placeholder}
+        placeholder={placeholder}
       />
-      {errors && (
-        <FormErrorMessage>{errors}</FormErrorMessage>
-      )}
+      {errors && <FormErrorMessage>{errors}</FormErrorMessage>}
     </FormControl>
   );
 };

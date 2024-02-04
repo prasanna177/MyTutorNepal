@@ -37,7 +37,9 @@ const Layout = ({ children }) => {
           <Box borderBottom={"gray.200"} mb={"20px"} bgColor={"white"}>
             <HStack justifyContent={"space-between"} gap={"300px"}>
               <Box maxW={"200px"}>
-                <Image src={logo} w={"200px"} />
+                <Link to={"/"}>
+                  <Image src={logo} w={"200px"} />
+                </Link>
               </Box>
               <HStack flex={"1"} maxW={"500px"}>
                 <InputGroup>

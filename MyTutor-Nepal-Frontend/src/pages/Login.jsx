@@ -38,6 +38,7 @@ const Login = () => {
   });
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       console.log(data);
       dispatch(showLoading());

@@ -1,28 +1,28 @@
-import axios from "axios";
-import { useEffect } from "react";
+// import axios from "axios";
+// import { useEffect } from "react";
 import Layout from "../components/Layout/Layout";
 
 const Home = () => {
-  const getData = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:4000/api/user/getUserById",
-        {},
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"), //Authorization must start with capital when posting to backend
-          },
-        }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:4000/api/user/getUserById",
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization: "Bearer " + localStorage.getItem("token"), //Authorization must start with capital when posting to backend
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return <Layout>Home</Layout>;
 };

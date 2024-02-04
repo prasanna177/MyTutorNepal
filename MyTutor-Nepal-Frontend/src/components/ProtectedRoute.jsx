@@ -38,7 +38,7 @@ const ProtectedRoute = ({ children }) => {
     if (!user) {
       getUser();
     }
-  }, [user, getUser]);
+  }, [user,getUser]);
 
   if (localStorage.getItem("token")) {
     return children;
