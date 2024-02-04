@@ -16,7 +16,6 @@ import { CloseIcon } from "@chakra-ui/icons";
 import toast from "react-hot-toast";
 import PlacesAutocomplete, {
   geocodeByAddress,
-  geocodeByPlaceId,
   getLatLng,
 } from "react-places-autocomplete";
 import { useState } from "react";
@@ -33,7 +32,6 @@ const BecomeTutor = () => {
     const ll = await getLatLng(results[0])
     setAddress(value);
     setCoordinates(ll);
-    console.log(coordinates.lat, coordinates.lng);
   };
   const schema = yup.object({
     fullName: yup.string().required("Full Name is required"),
@@ -52,11 +50,12 @@ const BecomeTutor = () => {
       .typeError("Please enter a valid number")
       .positive("Please enter a positive number")
       .required("Please enter fee per class"),
-  });
+      address: yup.string().required("Please enter a proper address"),
+  }); 
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
+      console.log({...data, coordinates});
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -166,12 +165,16 @@ const BecomeTutor = () => {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <input
+            
+<FormControl isInvalid={Boolean(errors?.address)}>
+            <Input
+              {...register('address')}
               {...getInputProps({
                 placeholder: 'Search Places ...',
-                className: 'location-search-input',
               })}
             />
+                  {errors && <FormErrorMessage>{errors.address?.message}</FormErrorMessage>}
+    </FormControl>
             <div className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion,index) => {
