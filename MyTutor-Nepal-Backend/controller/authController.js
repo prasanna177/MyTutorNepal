@@ -31,12 +31,18 @@ module.exports.signup_post = async (req, res) => {
 
 module.exports.becomeTutor_post = async (req, res) => {
   try {
-    const { subjects } = req.body;
+    const { subjects, address, coordinates } = req.body;
     const uniqueSubjects = new Set(subjects);
     if (uniqueSubjects.size !== subjects.length) {
-      return res.status(400).send({
+      return res.status(200).send({
         success: false,
         message: "Subjects must be unique",
+      });
+    }
+    if (!(address || coordinates.lat || coordinates.lng)) {
+      return res.status(200).send({
+        success: false,
+        message: "Please enter an address",
       });
     }
     const newTutor = await Tutor({ ...req.body, status: "Pending" });
@@ -68,7 +74,7 @@ module.exports.becomeTutor_post = async (req, res) => {
 };
 
 module.exports.login_post = async (req, res) => {
-  const maxAge = 5;
+  const maxAge = 6 * 24 * 60 * 60;
   try {
     let { email, password, isParent } = req.body;
     const user =
@@ -136,5 +142,18 @@ module.exports.getUserById = async (req, res) => {
     res
       .status(500)
       .send({ message: "Error getting user info", success: false, error });
+  }
+};
+
+module.exports.getAllNotification = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.body._id });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error in notification",
+      success: false,
+      error,
+    });
   }
 };

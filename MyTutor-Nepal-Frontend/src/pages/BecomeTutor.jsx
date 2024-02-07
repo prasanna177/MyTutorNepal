@@ -21,6 +21,9 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { hideLoading, showLoading } from "../redux/features/alertSlice";
 
 const BecomeTutor = () => {
   const [address, setAddress] = useState("");
@@ -28,6 +31,10 @@ const BecomeTutor = () => {
     lat: null,
     lng: null,
   });
+
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const API_KEY = "b67402f59aa24b6ea5b2b5b7309a6d66";
   const apiEndpoint = "https://api.opencagedata.com/geocode/v1/json";
@@ -53,26 +60,39 @@ const BecomeTutor = () => {
     fullName: yup.string().required("Full Name is required"),
     email: yup.string().required("Email address is required"),
     phone: yup.string().required("Phone number is required"),
-    subjects: yup
-      .array()
-      .of(yup.string().required("Subject is required"))
-      .test(
-        "uniqueSubjects",
-        "Subjects must be unique",
-        (values) => new Set(values).size === values.length
-      ),
     feePerClass: yup
       .number()
       .typeError("Please enter a valid number")
       .positive("Please enter a positive number")
       .required("Please enter fee per class"),
-    // address: yup.string().required("Please enter a proper address"),
+    timing: yup.object().shape({
+      startTime: yup.string().required("Start Time is required"),
+      endTime: yup.string().required("End Time is required"),
+    }),
   });
 
   const onSubmit = async (data) => {
+    const submissionData = { ...data, coordinates, address, userId: user._id };
     try {
-      console.log({ ...data, coordinates, address });
+      dispatch(showLoading());
+      const res = await axios.post(
+        "http://localhost:4000/api/user/become-tutor",
+        submissionData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      dispatch(hideLoading());
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/");
+      } else {
+        toast.error(res.data.message);
+      }
     } catch (error) {
+      dispatch(hideLoading());
       console.log(error);
       toast.error("Something went wrong");
     }
@@ -171,8 +191,20 @@ const BecomeTutor = () => {
           register={register}
           placeholder={"Fee Per Class"}
         />
-        <Input type="time" {...register("timing.startTime")} />
-        <Input type="time" {...register("timing.endTime")} />
+        <TextField
+          type={"time"}
+          name={"timing.startTime"}
+          errors={errors?.timing?.startTime?.message}
+          register={register}
+          placeholder={"Start time"}
+        />
+        <TextField
+          type={"time"}
+          name={"timing.endTime"}
+          errors={errors?.timing?.endTime?.message}
+          register={register}
+          placeholder={"End time"}
+        />
         <PlacesAutocomplete
           value={address}
           onChange={setAddress}
@@ -222,7 +254,10 @@ const BecomeTutor = () => {
                     lat: latitude,
                     lng: longitude,
                   };
-                  const address = await getUserCurrentAddress(latitude, longitude);
+                  const address = await getUserCurrentAddress(
+                    latitude,
+                    longitude
+                  );
                   setAddress(address);
                   setCoordinates(cords);
                 },

@@ -12,7 +12,6 @@ const tutorSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
       lowercase: true,
     },
     phone: {
@@ -34,6 +33,14 @@ const tutorSchema = new mongoose.Schema(
       type: Object,
       required: true,
     },
+    address: {
+      type: String,
+      required: [true,"Please enter an address"],
+    },
+    coordinates: {
+      type: Object,
+      required: true
+    }
   },
   { timestamps: true }
 );

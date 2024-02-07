@@ -1,9 +1,9 @@
 import { FormControl, FormErrorMessage, Input } from "@chakra-ui/react";
 
-const TextField = ({ name, errors, register, placeholder }) => {
+const TextField = ({ name, errors, register, placeholder, type }) => {
   return (
     <FormControl isInvalid={Boolean(errors)}>
-      <Input {...register(name)} placeholder={placeholder} />
+      <Input type={type} {...register(name)} placeholder={placeholder} />
       {errors && <FormErrorMessage>{errors}</FormErrorMessage>}
     </FormControl>
   );

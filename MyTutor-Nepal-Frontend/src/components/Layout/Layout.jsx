@@ -57,7 +57,36 @@ const Layout = ({ children }) => {
                 </InputGroup>
               </HStack>
               <HStack>
-                <BellIcon boxSize={8} color={"black"}></BellIcon>
+                <Menu>
+                  <MenuButton>
+                    <Flex pos={"relative"}>
+                      <BellIcon boxSize={10} color={"black"} />
+                      <Box
+                        bgColor={"red"}
+                        color={"white"}
+                        pos={"absolute"}
+                        top={"-2px"}
+                        right={"-1px"}
+                        paddingX={"5px"}
+                        borderRadius={"14px"}
+                        fontSize={"12px"}
+                      >
+                        {user?.notification != 0 && user?.notification?.length}
+                      </Box>
+                    </Flex>
+                  </MenuButton>
+                  <MenuList>
+                    {!user?.notification.length && "No new notifications"}
+                    {user?.notification.map((item, index) => (
+                      <MenuItem
+                        onClick={() => navigate(item.onClickPath)}
+                        key={index}
+                      >
+                        {item.message}
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                </Menu>
                 <Menu>
                   <MenuButton>
                     <Flex
