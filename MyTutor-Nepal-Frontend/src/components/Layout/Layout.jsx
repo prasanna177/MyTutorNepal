@@ -14,10 +14,11 @@ import {
 } from "@chakra-ui/react";
 import logo from "../../assets/images/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { BellIcon, HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
 import { useSelector } from "react-redux";
 import { createImageFromInitials } from "../Utils";
 import toast from "react-hot-toast";
+import Notifications from "../Notifications";
 
 const Layout = ({ children }) => {
   const navigate = useNavigate();
@@ -57,36 +58,7 @@ const Layout = ({ children }) => {
                 </InputGroup>
               </HStack>
               <HStack>
-                <Menu>
-                  <MenuButton>
-                    <Flex pos={"relative"}>
-                      <BellIcon boxSize={10} color={"black"} />
-                      <Box
-                        bgColor={"red"}
-                        color={"white"}
-                        pos={"absolute"}
-                        top={"-2px"}
-                        right={"-1px"}
-                        paddingX={"5px"}
-                        borderRadius={"14px"}
-                        fontSize={"12px"}
-                      >
-                        {user?.notification != 0 && user?.notification?.length}
-                      </Box>
-                    </Flex>
-                  </MenuButton>
-                  <MenuList>
-                    {!user?.notification.length && "No new notifications"}
-                    {user?.notification.map((item, index) => (
-                      <MenuItem
-                        onClick={() => navigate(item.onClickPath)}
-                        key={index}
-                      >
-                        {item.message}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                </Menu>
+                <Notifications />
                 <Menu>
                   <MenuButton>
                     <Flex

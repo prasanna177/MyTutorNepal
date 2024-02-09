@@ -40,8 +40,13 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [user, getUser]);
 
+  console.log(user);
+
   if (localStorage.getItem("token")) {
     return children;
+  }
+  if (user.role === "admin") {
+    return <Navigate to="/admin" />;
   } else {
     return <Navigate to="/login" />;
   }

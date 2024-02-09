@@ -11,6 +11,9 @@ import SpinnerComponenet from "./components/SpinnerComponent";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import BecomeTutor from "./pages/BecomeTutor";
+import Admin from "./pages/admin/Admin";
+import Users from "./pages/admin/Users";
+import Tutors from "./pages/admin/Tutors";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -28,6 +31,30 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <Admin />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <ProtectedRoute>
+                    <Users />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/tutors"
+                element={
+                  <ProtectedRoute>
+                    <Tutors />
                   </ProtectedRoute>
                 }
               />

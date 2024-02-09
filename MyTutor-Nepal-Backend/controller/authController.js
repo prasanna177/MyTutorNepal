@@ -145,15 +145,3 @@ module.exports.getUserById = async (req, res) => {
   }
 };
 
-module.exports.getAllNotification = async (req, res) => {
-  try {
-    const user = await User.findOne({ _id: req.body._id });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      message: "Error in notification",
-      success: false,
-      error,
-    });
-  }
-};
