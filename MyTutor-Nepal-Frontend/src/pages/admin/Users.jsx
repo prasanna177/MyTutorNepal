@@ -1,24 +1,8 @@
 import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import axios from "axios";
-import {
-  Button,
-  ButtonGroup,
-  Heading,
-  IconButton,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
-import {
-  createColumnHelper,
-  flexRender,
-  useReactTable,
-} from "@tanstack/react-table";
+import { Button, Heading } from "@chakra-ui/react";
+import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../../components/DataTable";
 
 const Users = () => {
@@ -27,42 +11,6 @@ const Users = () => {
   const columnHelper = createColumnHelper();
 
   const columns = [
-    columnHelper.accessor("fromUnit", {
-      cell: (info) => info.getValue(),
-      header: "To convert",
-    }),
-    columnHelper.accessor("toUnit", {
-      cell: (info) => info.getValue(),
-      header: "Into",
-    }),
-    columnHelper.accessor("factor", {
-      cell: (info) => info.getValue(),
-      header: "Multiply by",
-      meta: {
-        isNumeric: true,
-      },
-    }),
-  ];
-
-  const data = [
-    {
-      fromUnit: "inches",
-      toUnit: "millimetres (mm)",
-      factor: 25.4,
-    },
-    {
-      fromUnit: "feet",
-      toUnit: "centimetres (cm)",
-      factor: 30.48,
-    },
-    {
-      fromUnit: "yards",
-      toUnit: "metres (m)",
-      factor: 0.91444,
-    },
-  ];
-
-  const col = [
     columnHelper.accessor("fullName", {
       header: "Name",
     }),
@@ -74,16 +22,8 @@ const Users = () => {
     }),
     columnHelper.accessor("action", {
       header: "ACTION",
-      cell: (row) => (
-        <ButtonGroup>
-          <Button
-            aria-label="edit"
-            variant="ghost"
-
-          />
-        </ButtonGroup>
-      )
-    })
+      cell: (row) => <Button onClick={() => {console.log(row.row.original._id)}}>Action</Button>,
+    }),
   ];
 
   const getUsers = async () => {
@@ -108,28 +48,10 @@ const Users = () => {
     getUsers();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(users);
-  // }, [users]);
-  // console.log(users, "ssss");
-
-  // const as = [
-  //   {
-  //     fullName: "asd",
-  //     email: "asdsad",
-  //     role: "asdsadsad",
-  //   },
-  //   {
-  //     fullName: "asasd",
-  //     email: "asdssad",
-  //     role: "asdssadsad",
-  //   },
-  // ];
-
   return (
     <PanelLayout>
       <Heading>Users List</Heading>
-      <DataTable columns={col} data={users} />
+      <DataTable columns={columns} data={users} />
     </PanelLayout>
   );
 };
