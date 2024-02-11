@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
     enum: ["student", "admin"],
     default: "student",
   },
+  isTutor: {
+    type: Boolean,
+    default: false
+  },
   notification: {
     type: Array,
     default: []

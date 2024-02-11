@@ -7,3 +7,5 @@ const router = Router();
 router.get("/getAllUsers", authMiddleware, getAllUsers);
 
 router.get("/getAllDoctors", authMiddleware, getAllDoctors);
+
+module.exports = router;

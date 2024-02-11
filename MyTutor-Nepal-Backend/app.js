@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const userRoute = require('./routes/userRoute')
+const adminRoute = require('./routes/adminRoute')
 const dbCongfig = require("./config/dbConfig");
 const cors = require('cors');
 
@@ -10,6 +11,7 @@ app.use(express.json()); //this is used to destructure username and password sen
 const PORT = 4000;
 
 app.use('/api/user', userRoute); //whenever api request comes with the user keyword, it will search in the userRoute
+app.use('/api/admin', adminRoute);
 
 app.get("/", (req,res)=> {
   console.log("Hello from the server");
