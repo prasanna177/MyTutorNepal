@@ -1,9 +1,34 @@
 import { Box, Divider, Flex, Image } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
-import { AdminMenu } from "../../data/sidebarData";
+import { AdminMenu, StudentMenu } from "../../data/sidebarData";
+import { useSelector } from "react-redux";
 
 const PanelLayout = ({ children }) => {
+  const { user } = useSelector((state) => state.user);
+  const TutorMenu = [
+    {
+      name: "Home",
+      path: "/tutor",
+      icon: "fa-solid fa-users",
+    },
+    {
+      name: "Students",
+      path: "/tutor/students",
+      icon: "fa-solid fa-users",
+    },
+    {
+      name: "Profile",
+      path: `/tutor/profile/${user?._id}`,
+      icon: "fa-solid fa-users",
+    },
+  ];
+  const SideBarMenu =
+    user?.role === "admin"
+      ? AdminMenu
+      : user?.role === "tutor"
+      ? TutorMenu
+      : StudentMenu;
   return (
     <>
       <Box p={"20px"} h={"100vh"}>
@@ -22,7 +47,7 @@ const PanelLayout = ({ children }) => {
             </Box>
             <Divider />
             <Box>
-              {AdminMenu.map((menu, index) => (
+              {SideBarMenu.map((menu, index) => (
                 <Box key={index}>
                   <i className={menu.icon}></i>
                   <Link to={menu.path}>{menu.name}</Link>

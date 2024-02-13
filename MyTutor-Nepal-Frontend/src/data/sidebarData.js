@@ -15,3 +15,16 @@ export const AdminMenu = [
     icon: "fa-solid fa-users",
   },
 ];
+
+export const StudentMenu = [
+  {
+    name: "My Tutor",
+    path: "/student/MyTutor",
+    icon: "fa-solid fa-users",
+  },
+  {
+    name: "Payment",
+    path: "/student/Payment",
+    icon: "fa-solid fa-users",
+  },
+];

@@ -48,7 +48,7 @@ module.exports.changeAccountStatus = async (req, res) => {
       message: `Your tutor account request has been ${status}`,
       onClickPath: "/notification",
     });
-    user.isTutor = status === "Approved" ? true : false;
+    user.role = status === "Approved" ? "tutor" : user.role;
 
     await user.save();
     res.status(201).send({
