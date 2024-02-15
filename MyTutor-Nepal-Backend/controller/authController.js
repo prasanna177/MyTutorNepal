@@ -145,3 +145,20 @@ module.exports.getUserById = async (req, res) => {
   }
 };
 
+module.exports.getAllTutors = async (req, res) => {
+  try {
+    const tutors = await Tutor.find({ status: "Approved" });
+    res.status(200).send({
+      success: true,
+      message: "Tutors fetched successfully.",
+      data: tutors
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error when fetching tutors.",
+    });
+  }
+};
