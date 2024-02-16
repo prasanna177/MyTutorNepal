@@ -16,6 +16,8 @@ import Users from "./pages/admin/Users";
 import Tutors from "./pages/admin/Tutors";
 import Profile from "./pages/tutor/Profile";
 import TutorHome from "./pages/tutor/Home";
+import BookTutor from "./pages/BookTutor";
+import Map from "./pages/Map";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -33,6 +35,30 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/map"
+                element={
+                  <ProtectedRoute>
+                    <Map />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/become-tutor"
+                element={
+                  <ProtectedRoute>
+                    <BecomeTutor />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/book-tutor/:tutorId"
+                element={
+                  <ProtectedRoute>
+                    <BookTutor />
                   </ProtectedRoute>
                 }
               />
@@ -73,14 +99,6 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/become-tutor"
-                element={
-                  <ProtectedRoute>
-                    <BecomeTutor />
                   </ProtectedRoute>
                 }
               />

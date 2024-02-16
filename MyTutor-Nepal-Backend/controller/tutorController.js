@@ -41,13 +41,31 @@ module.exports.updateProfile = async (req, res) => {
     res.status(201).send({
       success: true,
       message: "Profile updated",
-      data: tutor
+      data: tutor,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       message: "Tutor profile could not be updated.",
+    });
+  }
+};
+
+module.exports.getTutorById = async (req, res) => {
+  try {
+    const tutor = await Tutor.findOne({ _id: req.body.tutorId });
+    res.status(200).send({
+      success: true,
+      message: "Single tutor fetched",
+      data: tutor,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while fetching tutor by id.",
     });
   }
 };

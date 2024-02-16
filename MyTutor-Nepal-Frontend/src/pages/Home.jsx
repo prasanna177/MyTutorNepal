@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
-import { Grid, Heading } from "@chakra-ui/react";
+import { Button, Grid, Heading } from "@chakra-ui/react";
 import TutorCard from "../components/TutorCard";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [tutors, setTutors] = useState([]);
@@ -28,10 +29,12 @@ const Home = () => {
   useEffect(() => {
     getTutorData();
   }, []);
-  console.log(tutors, "sss");
 
   return (
     <Layout>
+      <Button>
+        <Link to="/map">Map</Link>
+      </Button>
       <Heading>Home</Heading>
       <Grid gap={"16px"} templateColumns="repeat(5, 1fr)">
         {tutors?.map((tutor) => (
