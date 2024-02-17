@@ -25,6 +25,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
 
+const API_KEY = "b67402f59aa24b6ea5b2b5b7309a6d66"
+const apiEndpoint = "https://api.opencagedata.com/geocode/v1/json"
+
 const BecomeTutor = () => {
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState({
@@ -35,9 +38,6 @@ const BecomeTutor = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const API_KEY = "b67402f59aa24b6ea5b2b5b7309a6d66";
-  const apiEndpoint = "https://api.opencagedata.com/geocode/v1/json";
 
   const getUserCurrentAddress = async (lat, lng) => {
     let query = `${lat},${lng}`;

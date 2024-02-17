@@ -17,7 +17,7 @@ import Tutors from "./pages/admin/Tutors";
 import Profile from "./pages/tutor/Profile";
 import TutorHome from "./pages/tutor/Home";
 import BookTutor from "./pages/BookTutor";
-import Map from "./pages/Map";
+import MapPage from "./pages/Map";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -42,7 +42,7 @@ function App() {
                 path="/map"
                 element={
                   <ProtectedRoute>
-                    <Map />
+                    <MapPage />
                   </ProtectedRoute>
                 }
               />

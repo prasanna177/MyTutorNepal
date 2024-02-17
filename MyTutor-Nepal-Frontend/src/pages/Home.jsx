@@ -32,9 +32,9 @@ const Home = () => {
 
   return (
     <Layout>
-      <Button>
-        <Link to="/map">Map</Link>
-      </Button>
+      <Link to="/map">
+        <Button>Map</Button>
+      </Link>
       <Heading>Home</Heading>
       <Grid gap={"16px"} templateColumns="repeat(5, 1fr)">
         {tutors?.map((tutor) => (
