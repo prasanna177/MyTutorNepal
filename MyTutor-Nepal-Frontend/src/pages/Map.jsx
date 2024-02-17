@@ -2,11 +2,20 @@ import { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import Map, { Marker, Popup } from "react-map-gl";
 import axios from "axios";
-import { Box, Text } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Text,
+} from "@chakra-ui/react";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useNavigate } from "react-router-dom";
 
 const MapPage = () => {
-  const [selectedLocation, setSelectedLocaion] = useState(null);
+  const navigate = useNavigate();
+  const [selectedLocationId, setSelectedLocaionId] = useState(null);
   const [tutors, setTutors] = useState([]);
 
   const getTutorData = async () => {
@@ -41,7 +50,9 @@ const MapPage = () => {
   const mapBoxKey =
     "pk.eyJ1IjoicHJhc2FubmE3NyIsImEiOiJjbHM3azZsMnAxdGNpMmxxcG40aWZiODZlIn0.iVFFaLMdf8uMXlnsMxjg0A";
 
-  console.log(selectedLocation);
+  const handleMarkerClick = (id) => {
+    setSelectedLocaionId(id);
+  };
   return (
     <Layout>
       <Map
@@ -55,27 +66,44 @@ const MapPage = () => {
             <Marker
               longitude={result.coordinates.lng}
               latitude={result.coordinates.lat}
-              anchor="bottom"
+              anchor="left"
             >
-              <Text
-                onClick={() => {
-                  setSelectedLocaion(result);
-                  // setShowPopup(true);
-                }}
+              <Badge
+                bgColor={
+                  result._id === selectedLocationId ? "black" : "primary.0"
+                }
+                color={"white"}
+                px={3}
+                py={2}
+                borderRadius={20}
+                onClick={() => handleMarkerClick(result._id)}
               >
-                📌
-              </Text>
+                <Text fontSize={11}>Rs. {result.feePerClass}</Text>
+              </Badge>
             </Marker>
-            <Popup
-              // onClose={() => setSelectedLocaion({})}
-              // closeOnClick={true}
-              latitude={result.coordinates.lat}
-              longitude={result.coordinates.lng}
-              closeButton={true}
-              closeOnClick={false}
-            >
-              {result.fullName}
-            </Popup>
+            {result._id === selectedLocationId && (
+              <Popup
+                latitude={result.coordinates.lat}
+                longitude={result.coordinates.lng}
+                closeButton={true}
+                closeOnClick={false}
+                closeOnMove={true}
+                onClose={() => setSelectedLocaionId(null)}
+              >
+                <Card cursor={"pointer"} onClick={() => navigate(`/book-tutor/${result._id}`)}>
+                  <CardHeader>{result.fullName}</CardHeader>
+                  <CardBody>
+                    <Text>Fee Per Class: {result.feePerClass}</Text>
+                    <Text>
+                      Timing:{" "}
+                      {result.timing.startTime + "-" + result.timing.endTime}
+                    </Text>
+                    <Text>Address: {result.address}</Text>
+                    <Text>Phone: {result.phone}</Text>
+                  </CardBody>
+                </Card>
+              </Popup>
+            )}
           </Box>
         ))}
       </Map>
