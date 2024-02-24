@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const Tutor = require("../models/tutorModel");
+const Appointment = require("../models/appointmentModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -151,7 +152,7 @@ module.exports.getAllTutors = async (req, res) => {
     res.status(200).send({
       success: true,
       message: "Tutors fetched successfully.",
-      data: tutors
+      data: tutors,
     });
   } catch (error) {
     console.log(error);
@@ -159,6 +160,32 @@ module.exports.getAllTutors = async (req, res) => {
       success: false,
       error,
       message: "Error when fetching tutors.",
+    });
+  }
+};
+
+module.exports.bookTutor_post = async (req, res) => {
+  try {
+    req.body.status = "Pending";
+    const newAppointment = new Appointment(req.body);
+    await newAppointment.save();
+    const user = await User.findOne({ _id: req.body.tutorInfo.userId });
+    user.notification.push({
+      type: "New-appointment-request",
+      message: `A new appointment request has been sent by ${req.body.userInfo.fullName}`,
+      onClickPath: "/user/appointments",
+    });
+    await user.save();
+    res.status(200).send({
+      success: true,
+      message: "Appointment booked successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error booking a tutor",
     });
   }
 };

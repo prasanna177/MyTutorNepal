@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import Map, { Marker, Popup } from "react-map-gl";
 import axios from "axios";
-import {
-  Badge,
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
-  Text,
-} from "@chakra-ui/react";
+import { Badge, Box, Card, CardBody, CardHeader, Text } from "@chakra-ui/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useNavigate } from "react-router-dom";
 
@@ -90,7 +83,10 @@ const MapPage = () => {
                 closeOnMove={true}
                 onClose={() => setSelectedLocaionId(null)}
               >
-                <Card cursor={"pointer"} onClick={() => navigate(`/book-tutor/${result._id}`)}>
+                <Card
+                  cursor={"pointer"}
+                  onClick={() => navigate(`/book-tutor/${result._id}`)}
+                >
                   <CardHeader>{result.fullName}</CardHeader>
                   <CardBody>
                     <Text>Fee Per Class: {result.feePerClass}</Text>

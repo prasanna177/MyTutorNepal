@@ -10,5 +10,6 @@ router.post("/become-tutor", authMiddleware, authController.becomeTutor_post);
 router.post("/login", authController.login_post);
 router.post("/getUserById", authMiddleware, authController.getUserById);
 router.get("/getAllTutors", authMiddleware, authController.getAllTutors);
+router.post("/book-tutor", authMiddleware, authController.bookTutor_post);
 
 module.exports = router;
