@@ -17,12 +17,8 @@ const tutorSchema = new mongoose.Schema(
     phone: {
       type: String,
     },
-    subjects: {
+    teachingInfo: {
       type: Array,
-      required: true,
-    },
-    feePerClass: {
-      type: Number,
       required: true,
     },
     status: {

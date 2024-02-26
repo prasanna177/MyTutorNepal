@@ -35,6 +35,18 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    message: {
+      type: String,
+      required: true,
+    },
+    feePerClass: {
+      type: Number,
+      required: true,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

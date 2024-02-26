@@ -2,7 +2,17 @@ import { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  Select,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "../components/common/TextField";
@@ -10,13 +20,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 const BookTutor = () => {
   const { user } = useSelector((state) => state.user);
   const params = useParams();
   const dispatch = useDispatch();
   const [tutor, setTutor] = useState([]);
-  // const [isAvailable, setIsAvailable] = useState();
+  const [price, setPrice] = useState(0);
 
   const getTutorData = async () => {
     try {
@@ -41,6 +52,8 @@ const BookTutor = () => {
     fromDate: yup.string().required("Please enter the starting date"),
     toDate: yup.string().required("Please ending the ending date"),
     time: yup.string().required("Time is required"),
+    subject: yup.string().required("Subject is required"),
+    message: yup.string().required("Please write a message"),
   });
 
   const {
@@ -54,6 +67,10 @@ const BookTutor = () => {
   const handleBooking = async (data) => {
     try {
       dispatch(showLoading());
+      //to send total price to backend
+    const fromDate = moment(data.fromDate, "YYYY-MM-DD");
+    const toDate = moment(data.toDate, "YYYY-MM-DD");
+    const numberOfDays = toDate.diff(fromDate, "days") + 1;
       const res = await axios.post(
         "http://localhost:4000/api/user/book-tutor",
         {
@@ -61,6 +78,8 @@ const BookTutor = () => {
           userId: user._id,
           tutorInfo: tutor,
           userInfo: user,
+          feePerClass: price,
+          totalPrice: numberOfDays * price,
           ...data,
         },
         {
@@ -81,10 +100,13 @@ const BookTutor = () => {
       toast.error("Something went wrong");
     }
   };
+
   useEffect(() => {
     getTutorData();
     //eslint-disable-next-line
   }, []);
+
+  console.log(tutor, "tutor");
   return (
     <Layout>
       <Heading>Booking Page</Heading>
@@ -113,12 +135,36 @@ const BookTutor = () => {
             errors={errors?.time?.message}
             register={register}
           />
-          {/* <TextField
-            type={"number"}
-            name={"duration"}
-            errors={errors?.duration?.message}
-            register={register}
-          /> */}
+          <FormControl isInvalid={Boolean(errors?.subject)}>
+            <Select
+              {...register("subject")}
+              placeholder={"Select your subject"}
+              onChange={(e) => {
+                const selectedSubjectInfo = tutor?.teachingInfo.find(
+                  (item) => item.subject === e.target.value
+                );
+                setPrice(selectedSubjectInfo?.price || 0);
+              }}
+            >
+              {tutor?.teachingInfo?.map((item, index) => (
+                <option key={index} value={item.subject}>
+                  {item.subject} - Rs. {item.price} per class
+                </option>
+              ))}
+            </Select>
+            {errors && (
+              <FormErrorMessage>{errors?.subject?.message}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={Boolean(errors?.message)}>
+            <Textarea
+              {...register("message")}
+              placeholder={"Enter your message here"}
+            />
+            {errors && (
+              <FormErrorMessage>{errors?.message?.message}</FormErrorMessage>
+            )}
+          </FormControl>
         </Flex>
         <Button type="submit">Book now</Button>
       </Box>

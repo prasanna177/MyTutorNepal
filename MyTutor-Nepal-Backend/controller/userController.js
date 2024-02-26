@@ -33,14 +33,7 @@ module.exports.signup_post = async (req, res) => {
 
 module.exports.becomeTutor_post = async (req, res) => {
   try {
-    const { subjects, address, coordinates } = req.body;
-    const uniqueSubjects = new Set(subjects);
-    if (uniqueSubjects.size !== subjects.length) {
-      return res.status(200).send({
-        success: false,
-        message: "Subjects must be unique",
-      });
-    }
+    const { address, coordinates } = req.body;
     if (!(address || coordinates.lat || coordinates.lng)) {
       return res.status(200).send({
         success: false,
@@ -167,28 +160,50 @@ module.exports.getAllTutors = async (req, res) => {
 
 module.exports.bookTutor_post = async (req, res) => {
   try {
-    const { fromDate, toDate, time, tutorInfo, userInfo } = req.body;
+    const { fromDate, toDate, time, tutorInfo, userInfo} =
+      req.body;
+    const tutorStartTime = moment(tutorInfo.timing.startTime, "HH:mm");
+    const tutorEndTime = moment(tutorInfo.timing.endTime, "HH:mm");
+    const bookingTime = moment(time, "HH:mm");
 
-    const fromDateISO = moment(fromDate, "YYYY-MM-DD").toISOString();
-    const toDateISO = moment(toDate, "YYYY-MM-DD").toISOString();
-    const timeISO = moment(time, "HH:mm").toISOString();
-    const tutorId = tutorInfo._id; 
+    if (
+      bookingTime.isBefore(tutorStartTime) ||
+      bookingTime.isAfter(tutorEndTime)
+    ) {
+      return res.status(200).send({
+        success: false,
+        message: "Cannot book outside of tutor's available hours",
+      });
+    }
 
+    const isDateValid = moment(toDate, "YYYY-MM-DD").isSameOrAfter(
+      moment(fromDate, "YYYY-MM-DD")
+    );
+
+    if (!isDateValid) {
+      return res.status(200).send({
+        success: false,
+        message: "Invalid date range. Please enter valid dates",
+      });
+    }
+
+    const fromTime = moment(time, "HH:mm").subtract(1, "hours").toISOString();
+    const toTime = moment(time, "HH:mm").add(1, "hours").toISOString();
     const appointments = await Appointment.find({
-      tutorId,
+      tutorId: tutorInfo._id,
       $or: [
         {
           $and: [
-            { time: { $gte: moment(timeISO).subtract(1, "hours").toISOString(), $lte: moment(timeISO).add(1, "hours").toISOString() } },
-            { fromDate: { $lte: toDateISO } },
-            { toDate: { $gte: fromDateISO } },
+            { time: { $gte: fromTime, $lte: toTime } },
+            { fromDate: { $lte: toDate } },
+            { toDate: { $gte: fromDate } },
           ],
         },
         {
           $and: [
-            { time: { $gte: moment(timeISO).subtract(1, "hours").toISOString(), $lte: moment(timeISO).add(1, "hours").toISOString() } },
-            { fromDate: { $gte: toDateISO } },
-            { toDate: { $lte: fromDateISO } },
+            { time: { $gte: fromTime, $lte: toTime } },
+            { fromDate: { $gte: toDate } },
+            { toDate: { $lte: fromDate } },
           ],
         },
       ],
@@ -196,19 +211,17 @@ module.exports.bookTutor_post = async (req, res) => {
 
     if (appointments.length > 0) {
       return res.status(200).send({
-        message: "Appointments not available at this time",
         success: false,
+        message: "Appointments not available at this time",
       });
     }
 
-    const newAppointment = new Appointment({
-      ...req.body,
-      fromDate: fromDateISO,
-      toDate: toDateISO,
-      time: timeISO,
-      status: "pending",
-    });
+    req.body.fromDate = moment(fromDate, "YYYY-MM-DD").toISOString();
+    req.body.toDate = moment(toDate, "YYYY-MM-DD").toISOString();
+    req.body.time = moment(time, "HH:mm").toISOString();
+    req.body.status = "pending";
 
+    const newAppointment = new Appointment(req.body);
     await newAppointment.save();
 
     const user = await User.findOne({ _id: tutorInfo.userId });
@@ -217,7 +230,6 @@ module.exports.bookTutor_post = async (req, res) => {
       message: `A new appointment request has been sent by ${userInfo.fullName}`,
       onClickPath: "/user/appointments",
     });
-
     await user.save();
 
     res.status(200).send({
@@ -234,52 +246,21 @@ module.exports.bookTutor_post = async (req, res) => {
   }
 };
 
-
-// const bookingAvailabilityController = async (req, res) => {
-//   try {
-//     const fromDate = moment(req.body.fromDate, "YYYY-MM-DD").toISOString();
-//     const toDate = moment(req.body.toDate, "YYYY-MM-DD").toISOString();
-//     const fromTime = moment(req.body.time, "HH:mm")
-//       .subtract(1, "hours")
-//       .toISOString();
-//     const toTime = moment(req.body.time, "HH:mm").add(1, "hours").toISOString();
-//     const tutorId = req.body.tutorId;
-//     const appointments = await Appointment.find({
-//       tutorId,
-//       $or: [
-//         {
-//           $and: [
-//             { time: { $gte: fromTime, $lte: toTime } },
-//             { fromDate: { $lte: toDate } },
-//             { toDate: { $gte: fromDate } },
-//           ],
-//         },
-//         {
-//           $and: [
-//             { time: { $gte: fromTime, $lte: toTime } },
-//             { fromDate: { $gte: toDate } },
-//             { toDate: { $lte: fromDate } },
-//           ],
-//         },
-//       ],
-//     });
-//     if (appointments.length > 0) {
-//       return res.status(200).send({
-//         message: "Appointments not available at this time",
-//         success: false,
-//       });
-//     } else {
-//       return res.status(200).send({
-//         message: "Appointment booked",
-//         success: true,
-//       });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({
-//       success: false,
-//       error,
-//       message: "Error in booking",
-//     });
-//   }
-// };
+module.exports.getAllAppointments = async (req, res) => {
+  try {
+    const appointments = await Appointment.find({ userId: req.body.userId });
+    console.log(appointments);
+    res.status(200).send({
+      success: true,
+      message: "Appointments fetched successfully.",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in fetching user appointments",
+    });
+  }
+};

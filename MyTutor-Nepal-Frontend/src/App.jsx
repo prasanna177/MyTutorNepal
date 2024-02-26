@@ -18,6 +18,7 @@ import Profile from "./pages/tutor/Profile";
 import TutorHome from "./pages/tutor/Home";
 import BookTutor from "./pages/BookTutor";
 import MapPage from "./pages/Map";
+import UserAppointments from "./pages/UserAppointments";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -119,6 +120,14 @@ function App() {
                 }
               />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route
+                path="/student/appointments"
+                element={
+                  <ProtectedRoute>
+                    <UserAppointments />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           )}
         </Router>

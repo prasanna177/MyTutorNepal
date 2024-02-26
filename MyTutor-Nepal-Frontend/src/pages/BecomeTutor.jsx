@@ -5,7 +5,6 @@ import {
   FormErrorMessage,
   HStack,
   Input,
-  Select,
   Text,
 } from "@chakra-ui/react";
 import Layout from "../components/Layout/Layout";
@@ -60,15 +59,24 @@ const BecomeTutor = () => {
     fullName: yup.string().required("Full Name is required"),
     email: yup.string().required("Email address is required"),
     phone: yup.string().required("Phone number is required"),
-    feePerClass: yup
-      .number()
-      .typeError("Please enter a valid number")
-      .positive("Please enter a positive number")
-      .required("Please enter fee per class"),
     timing: yup.object().shape({
       startTime: yup.string().required("Start Time is required"),
       endTime: yup.string().required("End Time is required"),
     }),
+    teachingInfo: yup
+      .array()
+      .of(
+        yup.object().shape({
+          subject: yup.string().required("Subject is required"),
+          price: yup
+            .number()
+            .typeError("Please enter a valid number")
+            .positive("Please enter a positive number")
+            .required("Please enter the price"),
+          proficiency: yup.string().required("Proficiency is required"),
+        })
+      )
+      .required("At least one teaching information is required"),
   });
 
   const onSubmit = async (data) => {
@@ -97,13 +105,6 @@ const BecomeTutor = () => {
       toast.error("Something went wrong");
     }
   };
-  const subjectsOptions = [
-    "Math",
-    "Science",
-    "English",
-    "History",
-    "Programming",
-  ];
 
   const {
     register,
@@ -111,20 +112,20 @@ const BecomeTutor = () => {
     control,
     formState: { errors },
   } = useForm({
-    // defaultValues: {
-    //   subjects: [""],
-    // },
+    defaultValues: {
+      teachingInfo: [{ subject: "", price: 0, proficiency: "" }],
+    },
     resolver: yupResolver(schema),
   });
 
   const { fields, append, remove } = useFieldArray({
-    name: "subjects",
+    name: "teachingInfo",
     control,
   });
 
-  if (fields.length === 0) {
-    append("");
-  }
+  // if (fields.length === 0) {
+  //   append("");
+  // }
 
   return (
     <Layout>
@@ -149,48 +150,62 @@ const BecomeTutor = () => {
         />
         {fields.map((field, index) => (
           <Box key={field.id}>
-            <FormControl isInvalid={Boolean(errors?.subjects?.[index])}>
+            <HStack>
               <HStack>
-                <Box>
-                  <Select
-                    name={`subjects[${index}]`}
+                <FormControl
+                  isInvalid={Boolean(errors?.teachingInfo?.[index]?.subject)}
+                >
+                  <Input
+                    name={`teachingInfo[${index}]`}
                     placeholder="Select a subject"
-                    {...register(`subjects[${index}]`)}
-                  >
-                    {subjectsOptions.map((subject) => (
-                      <option key={subject} value={subject}>
-                        {subject}
-                      </option>
-                    ))}
-                  </Select>
+                    {...register(`teachingInfo.${index}.subject`)}
+                  />
                   <FormErrorMessage>
-                    {errors.subjects?.[index]?.message}
+                    {errors.teachingInfo?.[index]?.subject?.message}
                   </FormErrorMessage>
-                </Box>
+                </FormControl>
+                
+                <FormControl
+                  isInvalid={Boolean(errors?.teachingInfo?.[index]?.price)}
+                >
+                  <Input
+                    name={`teachingInfo[${index}]`}
+                    placeholder="Enter rate per class for this subject"
+                    {...register(`teachingInfo.${index}.price`)}
+                  />
+                  <FormErrorMessage>
+                    {errors.teachingInfo?.[index]?.price?.message}
+                  </FormErrorMessage>
+                </FormControl>
 
-                {index > 0 && (
-                  <CloseIcon
-                    boxSize={3}
-                    _hover={{ cursor: "pointer" }}
-                    type="button"
-                    onClick={() => remove(index)}
-                  >
-                    Remove
-                  </CloseIcon>
-                )}
+                <FormControl
+                  isInvalid={Boolean(errors?.teachingInfo?.[index]?.proficiency)}
+                >
+                  <Input
+                    name={`teachingInfo[${index}]`}
+                    placeholder="Write your proficiency for this subject"
+                    {...register(`teachingInfo.${index}.proficiency`)}
+                  />
+                  <FormErrorMessage>
+                    {errors.teachingInfo?.[index]?.proficiency?.message}
+                  </FormErrorMessage>
+                </FormControl>
               </HStack>
-            </FormControl>
+
+              {index > 0 && (
+                <CloseIcon
+                  boxSize={3}
+                  _hover={{ cursor: "pointer" }}
+                  type="button"
+                  onClick={() => remove(index)}
+                />
+              )}
+            </HStack>
           </Box>
         ))}
         <Button type="button" onClick={() => append("")}>
           Add Subject
         </Button>
-        <TextField
-          name={"feePerClass"}
-          errors={errors?.feePerClass?.message}
-          register={register}
-          placeholder={"Fee Per Class"}
-        />
         <TextField
           type={"time"}
           name={"timing.startTime"}
