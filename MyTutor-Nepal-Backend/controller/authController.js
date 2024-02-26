@@ -3,6 +3,7 @@ const Tutor = require("../models/tutorModel");
 const Appointment = require("../models/appointmentModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
 
 module.exports.signup_post = async (req, res) => {
   try {
@@ -166,16 +167,59 @@ module.exports.getAllTutors = async (req, res) => {
 
 module.exports.bookTutor_post = async (req, res) => {
   try {
-    req.body.status = "Pending";
-    const newAppointment = new Appointment(req.body);
+    const { fromDate, toDate, time, tutorInfo, userInfo } = req.body;
+
+    const fromDateISO = moment(fromDate, "YYYY-MM-DD").toISOString();
+    const toDateISO = moment(toDate, "YYYY-MM-DD").toISOString();
+    const timeISO = moment(time, "HH:mm").toISOString();
+    const tutorId = tutorInfo._id; 
+
+    const appointments = await Appointment.find({
+      tutorId,
+      $or: [
+        {
+          $and: [
+            { time: { $gte: moment(timeISO).subtract(1, "hours").toISOString(), $lte: moment(timeISO).add(1, "hours").toISOString() } },
+            { fromDate: { $lte: toDateISO } },
+            { toDate: { $gte: fromDateISO } },
+          ],
+        },
+        {
+          $and: [
+            { time: { $gte: moment(timeISO).subtract(1, "hours").toISOString(), $lte: moment(timeISO).add(1, "hours").toISOString() } },
+            { fromDate: { $gte: toDateISO } },
+            { toDate: { $lte: fromDateISO } },
+          ],
+        },
+      ],
+    });
+
+    if (appointments.length > 0) {
+      return res.status(200).send({
+        message: "Appointments not available at this time",
+        success: false,
+      });
+    }
+
+    const newAppointment = new Appointment({
+      ...req.body,
+      fromDate: fromDateISO,
+      toDate: toDateISO,
+      time: timeISO,
+      status: "pending",
+    });
+
     await newAppointment.save();
-    const user = await User.findOne({ _id: req.body.tutorInfo.userId });
+
+    const user = await User.findOne({ _id: tutorInfo.userId });
     user.notification.push({
       type: "New-appointment-request",
-      message: `A new appointment request has been sent by ${req.body.userInfo.fullName}`,
+      message: `A new appointment request has been sent by ${userInfo.fullName}`,
       onClickPath: "/user/appointments",
     });
+
     await user.save();
+
     res.status(200).send({
       success: true,
       message: "Appointment booked successfully",
@@ -189,3 +233,53 @@ module.exports.bookTutor_post = async (req, res) => {
     });
   }
 };
+
+
+// const bookingAvailabilityController = async (req, res) => {
+//   try {
+//     const fromDate = moment(req.body.fromDate, "YYYY-MM-DD").toISOString();
+//     const toDate = moment(req.body.toDate, "YYYY-MM-DD").toISOString();
+//     const fromTime = moment(req.body.time, "HH:mm")
+//       .subtract(1, "hours")
+//       .toISOString();
+//     const toTime = moment(req.body.time, "HH:mm").add(1, "hours").toISOString();
+//     const tutorId = req.body.tutorId;
+//     const appointments = await Appointment.find({
+//       tutorId,
+//       $or: [
+//         {
+//           $and: [
+//             { time: { $gte: fromTime, $lte: toTime } },
+//             { fromDate: { $lte: toDate } },
+//             { toDate: { $gte: fromDate } },
+//           ],
+//         },
+//         {
+//           $and: [
+//             { time: { $gte: fromTime, $lte: toTime } },
+//             { fromDate: { $gte: toDate } },
+//             { toDate: { $lte: fromDate } },
+//           ],
+//         },
+//       ],
+//     });
+//     if (appointments.length > 0) {
+//       return res.status(200).send({
+//         message: "Appointments not available at this time",
+//         success: false,
+//       });
+//     } else {
+//       return res.status(200).send({
+//         message: "Appointment booked",
+//         success: true,
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       success: false,
+//       error,
+//       message: "Error in booking",
+//     });
+//   }
+// };

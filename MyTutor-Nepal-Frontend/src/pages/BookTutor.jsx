@@ -38,7 +38,8 @@ const BookTutor = () => {
   };
 
   const schema = yup.object({
-    date: yup.string().required("Date is required"),
+    fromDate: yup.string().required("Please enter the starting date"),
+    toDate: yup.string().required("Please ending the ending date"),
     time: yup.string().required("Time is required"),
   });
 
@@ -52,7 +53,6 @@ const BookTutor = () => {
 
   const handleBooking = async (data) => {
     try {
-      console.log(data);
       dispatch(showLoading());
       const res = await axios.post(
         "http://localhost:4000/api/user/book-tutor",
@@ -91,24 +91,34 @@ const BookTutor = () => {
       <Text>Name: {tutor?.fullName}</Text>
       <Text>Fee: {tutor?.feePerClass}</Text>
       <Text>
-        Timing{tutor?.timing?.startTime} - {tutor?.timing?.endTime}
+        Timing: {tutor?.timing?.startTime} - {tutor?.timing?.endTime}
       </Text>
       <Box as="form" onSubmit={handleSubmit(handleBooking)}>
         <Flex flexDir={"column"} width={"400px"}>
           <TextField
             type={"date"}
-            name={"date"}
-            errors={errors?.timing?.startTime?.message}
+            name={"fromDate"}
+            errors={errors?.fromDate?.message}
             register={register}
-            placeholder={"Date"}
-          ></TextField>
+          />
+          <TextField
+            type={"date"}
+            name={"toDate"}
+            errors={errors?.toDate?.message}
+            register={register}
+          />
           <TextField
             type={"time"}
             name={"time"}
             errors={errors?.time?.message}
             register={register}
-            placeholder={"Time"}
           />
+          {/* <TextField
+            type={"number"}
+            name={"duration"}
+            errors={errors?.duration?.message}
+            register={register}
+          /> */}
         </Flex>
         <Button type="submit">Book now</Button>
       </Box>
