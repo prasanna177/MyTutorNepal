@@ -18,6 +18,11 @@ const PanelLayout = ({ children }) => {
       icon: "fa-solid fa-users",
     },
     {
+      name: "Appointments",
+      path: "/tutor/appointments",
+      icon: "fa-solid fa-users",
+    },
+    {
       name: "Profile",
       path: `/tutor/profile/${user?._id}`,
       icon: "fa-solid fa-users",

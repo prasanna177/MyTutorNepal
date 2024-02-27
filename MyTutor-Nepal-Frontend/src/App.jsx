@@ -19,6 +19,7 @@ import TutorHome from "./pages/tutor/Home";
 import BookTutor from "./pages/BookTutor";
 import MapPage from "./pages/Map";
 import UserAppointments from "./pages/UserAppointments";
+import TutorAppointments from "./pages/tutor/TutorAppointments";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -125,6 +126,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <UserAppointments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tutor/appointments"
+                element={
+                  <ProtectedRoute>
+                    <TutorAppointments />
                   </ProtectedRoute>
                 }
               />

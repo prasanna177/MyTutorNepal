@@ -31,13 +31,28 @@ const UserAppointments = () => {
     columnHelper.accessor((row) => row.tutorInfo.email, {
       header: "Tutor email",
     }),
+    // columnHelper.accessor(
+    //   //will work later, tutorinfo is not an object rn
+    //   (row) => {
+    //     const fromDate = moment(row.tutorInfo.fromDate);
+    //     const toDate = moment(row.tutorInfo.toDate, "YYYY-MM-DD");
+    //     const nowDate = moment(new Date(), "YYYY-MM-DD").toISOString();
+    //     const remainingDays = toDate.diff(fromDate, "days");
+    //     return remainingDays;
+    //   },
+    //   {
+    //     header: "Tutor",
+    //   }
+    // ),
+    columnHelper.accessor("status", {
+      header: "Status",
+    }),
   ];
 
   useEffect(() => {
     getAppointments();
   }, []);
 
-  console.log(appointments, "app");
   return (
     <PanelLayout>
       <h1>Booking</h1>

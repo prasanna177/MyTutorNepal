@@ -1,4 +1,6 @@
 const Tutor = require("../models/tutorModel");
+const Appointment = require("../models/appointmentModel");
+const User = require("../models/userModel");
 
 module.exports.getTutorInfo = async (req, res) => {
   try {
@@ -66,6 +68,52 @@ module.exports.getTutorById = async (req, res) => {
       success: false,
       error,
       message: "Error while fetching tutor by id.",
+    });
+  }
+};
+
+module.exports.getTutorAppointments = async (req, res) => {
+  try {
+    const tutor = await Tutor.findOne({ userId: req.body.userId });
+    const appointments = await Appointment.find({ tutorId: tutor._id });
+    res.status(200).send({
+      success: true,
+      message: "Tutor appointments fetched successfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while fetching appointments.",
+    });
+  }
+};
+
+module.exports.updateStatus = async (req, res) => {
+  try {
+    const { appointmentId, status } = req.body;
+    const appointments = await Appointment.findByIdAndUpdate(appointmentId, {
+      status,
+    });
+    const user = await User.findOne({ _id: appointments.userId });
+    user.notification.push({
+      type: "Status-Updated",
+      message: `Your appointment has been ${status}`,
+      onClickPath: "/tutor/appointments",
+    });
+    await user.save();
+    res.status(200).send({
+      success: true,
+      message: "Appointment status updated",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while updating appointment status",
+      error,
     });
   }
 };

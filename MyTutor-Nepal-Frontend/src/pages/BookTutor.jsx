@@ -64,13 +64,15 @@ const BookTutor = () => {
     resolver: yupResolver(schema),
   });
 
+  console.log(moment(new Date(), "YYYY-MM-DD").format("YYYY-MM-DD"));
+
   const handleBooking = async (data) => {
     try {
       dispatch(showLoading());
       //to send total price to backend
-    const fromDate = moment(data.fromDate, "YYYY-MM-DD");
-    const toDate = moment(data.toDate, "YYYY-MM-DD");
-    const numberOfDays = toDate.diff(fromDate, "days") + 1;
+      const fromDate = moment(data.fromDate, "YYYY-MM-DD");
+      const toDate = moment(data.toDate, "YYYY-MM-DD");
+      const numberOfDays = toDate.diff(fromDate, "days") + 1;
       const res = await axios.post(
         "http://localhost:4000/api/user/book-tutor",
         {
