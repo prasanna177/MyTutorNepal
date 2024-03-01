@@ -3,6 +3,7 @@ import axios from "axios";
 import PanelLayout from "../components/Layout/PanelLayout";
 import { DataTable } from "../components/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
+import moment from "moment";
 
 const UserAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -31,19 +32,28 @@ const UserAppointments = () => {
     columnHelper.accessor((row) => row.tutorInfo.email, {
       header: "Tutor email",
     }),
-    // columnHelper.accessor(
-    //   //will work later, tutorinfo is not an object rn
-    //   (row) => {
-    //     const fromDate = moment(row.tutorInfo.fromDate);
-    //     const toDate = moment(row.tutorInfo.toDate, "YYYY-MM-DD");
-    //     const nowDate = moment(new Date(), "YYYY-MM-DD").toISOString();
-    //     const remainingDays = toDate.diff(fromDate, "days");
-    //     return remainingDays;
-    //   },
-    //   {
-    //     header: "Tutor",
-    //   }
-    // ),
+    columnHelper.accessor((row) => row.tutorInfo.phone, {
+      header: "Tutor phone",
+    }),
+    columnHelper.accessor("subject", {
+      header: "Subject",
+    }),
+    columnHelper.accessor(
+      //will work later, tutorinfo is not an object rn
+      (row) => {
+        const fromDate = moment(row.fromDate);
+        const toDate = moment(row.toDate, "YYYY-MM-DD");
+        const nowDate = moment(new Date(), "YYYY-MM-DD").toISOString();
+        console.log(fromDate, "from");
+        console.log(toDate, "to");
+        console.log(nowDate, "now");
+        const remainingDays = toDate.diff(nowDate, "days") + 1;
+        return remainingDays;
+      },
+      {
+        header: "Remaining days",
+      }
+    ),
     columnHelper.accessor("status", {
       header: "Status",
     }),

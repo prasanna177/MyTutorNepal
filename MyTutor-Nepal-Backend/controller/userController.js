@@ -9,8 +9,7 @@ module.exports.signup_post = async (req, res) => {
   try {
     let { email, password } = req.body;
     const user = await User.findOne({ email });
-    const tutor = await Tutor.findOne({ email });
-    if (user || tutor) {
+    if (user) {
       return res
         .status(200)
         .send({ message: "User already exists", success: false });
@@ -72,8 +71,7 @@ module.exports.login_post = async (req, res) => {
   const maxAge = 6 * 24 * 60 * 60;
   try {
     let { email, password, isParent } = req.body;
-    const user =
-      (await User.findOne({ email })) || (await Tutor.findOne({ email }));
+    const user = await User.findOne({ email });
     if (!user) {
       return res
         .status(200)
@@ -160,8 +158,8 @@ module.exports.getAllTutors = async (req, res) => {
 
 module.exports.bookTutor_post = async (req, res) => {
   try {
-    const { fromDate, toDate, time, tutorInfo, userInfo} =
-      req.body;
+    console.log(req.body);
+    const { fromDate, toDate, time, tutorInfo, userInfo } = req.body;
     const tutorStartTime = moment(tutorInfo.timing.startTime, "HH:mm");
     const tutorEndTime = moment(tutorInfo.timing.endTime, "HH:mm");
     const bookingTime = moment(time, "HH:mm");

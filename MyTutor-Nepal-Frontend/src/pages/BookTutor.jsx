@@ -28,6 +28,7 @@ const BookTutor = () => {
   const dispatch = useDispatch();
   const [tutor, setTutor] = useState([]);
   const [price, setPrice] = useState(0);
+  const [subject, setSubject] = useState("");
 
   const getTutorData = async () => {
     try {
@@ -64,8 +65,6 @@ const BookTutor = () => {
     resolver: yupResolver(schema),
   });
 
-  console.log(moment(new Date(), "YYYY-MM-DD").format("YYYY-MM-DD"));
-
   const handleBooking = async (data) => {
     try {
       dispatch(showLoading());
@@ -82,6 +81,7 @@ const BookTutor = () => {
           userInfo: user,
           feePerClass: price,
           totalPrice: numberOfDays * price,
+          subject,
           ...data,
         },
         {
@@ -146,6 +146,7 @@ const BookTutor = () => {
                   (item) => item.subject === e.target.value
                 );
                 setPrice(selectedSubjectInfo?.price || 0);
+                setSubject(selectedSubjectInfo?.price || "")
               }}
             >
               {tutor?.teachingInfo?.map((item, index) => (

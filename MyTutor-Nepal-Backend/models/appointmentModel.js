@@ -11,11 +11,11 @@ const appointmentSchema = new mongoose.Schema(
       required: true,
     },
     tutorInfo: {
-      type: String,
+      type: Object,
       required: true,
     },
     userInfo: {
-      type: String,
+      type: Object,
       required: true,
     },
     fromDate: {
@@ -45,6 +45,10 @@ const appointmentSchema = new mongoose.Schema(
     },
     totalPrice: {
       type: Number,
+      required: true,
+    },
+    subject: {
+      type: String,
       required: true,
     },
   },
