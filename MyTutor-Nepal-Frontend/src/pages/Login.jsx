@@ -44,7 +44,7 @@ const Login = () => {
         "http://localhost:4000/api/user/login",
         data
       );
-      window.location.reload();
+      // window.location.reload();
       dispatch(hideLoading());
       const { success, message } = response.data;
       if (success) {

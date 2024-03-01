@@ -1,34 +1,7 @@
 const User = require("../models/userModel");
 const Tutor = require("../models/tutorModel");
 const Appointment = require("../models/appointmentModel");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const moment = require("moment");
-
-module.exports.signup_post = async (req, res) => {
-  try {
-    let { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (user) {
-      return res
-        .status(200)
-        .send({ message: "User already exists", success: false });
-    }
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-    req.body.password = hashedPassword;
-    const newUser = new User(req.body);
-    await newUser.save(); //save to database
-    res
-      .status(200)
-      .send({ message: "User created successfully", success: true });
-  } catch (err) {
-    console.log(err);
-    res
-      .status(500)
-      .send({ message: "Error creating user", success: false, err });
-  }
-};
 
 module.exports.becomeTutor_post = async (req, res) => {
   try {
@@ -64,45 +37,6 @@ module.exports.becomeTutor_post = async (req, res) => {
       error,
       message: "Error while applying for tutor",
     });
-  }
-};
-
-module.exports.login_post = async (req, res) => {
-  const maxAge = 6 * 24 * 60 * 60;
-  try {
-    let { email, password, isParent } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res
-        .status(200)
-        .send({ message: "Email does not exist", success: false });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (isMatch) {
-      if (isParent && !user.hasParentPanel) {
-        return res.status(200).send({
-          message: "This account does not have a parent panel",
-          success: false,
-        });
-      }
-      const token = jwt.sign(
-        { id: user._id, isParent: isParent && user.hasParentPanel },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: maxAge,
-        }
-      );
-      res
-        .status(200)
-        .send({ message: "Login successful", success: true, token });
-    } else {
-      return res
-        .status(200)
-        .send({ message: "Password is incorrect", success: false });
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({ message: "Error logging in", success: false, err });
   }
 };
 

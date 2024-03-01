@@ -20,13 +20,17 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["student", "admin","tutor"],
+    enum: ["student", "admin", "tutor"],
     default: "student",
   },
   notification: {
     type: Array,
-    default: []
-  }
+    default: [],
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = mongoose.model("user", userSchema);

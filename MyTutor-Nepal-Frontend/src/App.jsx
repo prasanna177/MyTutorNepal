@@ -20,6 +20,7 @@ import BookTutor from "./pages/BookTutor";
 import MapPage from "./pages/Map";
 import UserAppointments from "./pages/UserAppointments";
 import TutorAppointments from "./pages/tutor/TutorAppointments";
+import EmailVerify from "./pages/EmailVerify";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -120,6 +121,7 @@ function App() {
                   </PublicRoute>
                 }
               />
+              <Route path="users/:id/verify/:token" element={<EmailVerify />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route
                 path="/student/appointments"
