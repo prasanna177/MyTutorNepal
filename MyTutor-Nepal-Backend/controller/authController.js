@@ -56,6 +56,12 @@ module.exports.login_post = async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
+      if (isParent && !user.hasParentPanel) {
+        return res.status(200).send({
+          message: "This account does not have a parent panel",
+          success: false,
+        });
+      }
       if (!user.verified) {
         let token = await Token.findOne({ userId: user._id });
         if (!token) {
@@ -64,17 +70,15 @@ module.exports.login_post = async (req, res) => {
             token: crypto.randomBytes(32).toString("hex"),
           }).save();
           const url = `http://localhost:5173/users/${user._id}/verify/${token.token}`;
-          await sendEmail(user.email, "Verify email", `Click on this link to verify your registered email ${url}`);
+          await sendEmail(
+            user.email,
+            "Verify email",
+            `Click on this link to verify your registered email ${url}`
+          );
         }
         return res.status(200).send({
           message:
             "An email has been sent to your account. Please verify first.",
-          success: false,
-        });
-      }
-      if (isParent && !user.hasParentPanel) {
-        return res.status(200).send({
-          message: "This account does not have a parent panel",
           success: false,
         });
       }
