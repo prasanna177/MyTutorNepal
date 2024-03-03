@@ -1,4 +1,11 @@
-import { Card, CardBody, CardHeader, Stack, Text } from "@chakra-ui/react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Image,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 const TutorCard = ({ tutor }) => {
@@ -12,6 +19,7 @@ const TutorCard = ({ tutor }) => {
         >
           <CardHeader>{tutor.fullName}</CardHeader>
           <CardBody>
+            <Image src={`http://localhost:4000/${tutor.profilePicUrl}`}></Image>
             <Text>Fee Per Class: {tutor.feePerClass}</Text>
             <Text>
               Timing: {tutor.timing.startTime + "-" + tutor.timing.endTime}

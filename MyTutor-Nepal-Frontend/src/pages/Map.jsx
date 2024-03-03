@@ -57,8 +57,8 @@ const MapPage = () => {
         {tutors?.map((result, index) => (
           <Box key={index}>
             <Marker
-              longitude={result.coordinates.lng}
-              latitude={result.coordinates.lat}
+              longitude={result?.coordinates?.lng}
+              latitude={result?.coordinates?.lat}
               anchor="left"
             >
               <Badge
@@ -76,8 +76,8 @@ const MapPage = () => {
             </Marker>
             {result._id === selectedLocationId && (
               <Popup
-                latitude={result.coordinates.lat}
-                longitude={result.coordinates.lng}
+                latitude={result?.coordinates?.lat}
+                longitude={result?.coordinates?.lng}
                 closeButton={true}
                 closeOnClick={false}
                 closeOnMove={true}

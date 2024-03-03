@@ -3,7 +3,17 @@ const Tutor = require("../models/tutorModel");
 const Appointment = require("../models/appointmentModel");
 const moment = require("moment");
 
+module.exports.saveFilePath = async (req, res) => {
+  const profilePicUrl = req.file.path;
+  console.log(profilePicUrl, "ppu");
+  res.status(200).send({
+    message: "Successfully fetched file path",
+    data: profilePicUrl,
+  });
+};
+
 module.exports.becomeTutor_post = async (req, res) => {
+  console.log(req.body);
   try {
     const { address, coordinates } = req.body;
     if (!(address || coordinates.lat || coordinates.lng)) {
@@ -12,7 +22,10 @@ module.exports.becomeTutor_post = async (req, res) => {
         message: "Please enter an address",
       });
     }
-    const newTutor = await Tutor({ ...req.body, status: "Pending" });
+    const newTutor = await Tutor({
+      ...req.body,
+      status: "Pending",
+    });
     await newTutor.save();
     const adminUser = await User.findOne({ role: "admin" });
     const notification = adminUser.notification;

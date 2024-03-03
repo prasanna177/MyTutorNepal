@@ -28,6 +28,7 @@ const API_KEY = "b67402f59aa24b6ea5b2b5b7309a6d66";
 const apiEndpoint = "https://api.opencagedata.com/geocode/v1/json";
 
 const BecomeTutor = () => {
+  // const [profilePicUrl, setProfilePicUrl] = useState("");
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState({
     lat: null,
@@ -55,6 +56,7 @@ const BecomeTutor = () => {
     setAddress(value);
     setCoordinates(ll);
   };
+
   const schema = yup.object({
     fullName: yup.string().required("Full Name is required"),
     email: yup.string().required("Email address is required"),
@@ -80,12 +82,21 @@ const BecomeTutor = () => {
   });
 
   const onSubmit = async (data) => {
+    console.log(data);
+    data.profilePicUrl = data.profilePicUrl[0];
     const submissionData = { ...data, coordinates, address, userId: user._id };
     try {
       dispatch(showLoading());
+      const formData = new FormData();
+      formData.append("profilePic", submissionData.profilePicUrl);
+      const filePathUrl = await axios.post(
+        "http://localhost:4000/api/user/saveFilePath",
+        formData
+      );
+      submissionData.profilePicUrl = filePathUrl.data.data;
       const res = await axios.post(
         "http://localhost:4000/api/user/become-tutor",
-        submissionData,
+        { submissionData },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -156,7 +167,7 @@ const BecomeTutor = () => {
                   isInvalid={Boolean(errors?.teachingInfo?.[index]?.subject)}
                 >
                   <Input
-                    name={`teachingInfo[${index}]`}
+                    name={`teachingInfo[${index}].subject`}
                     placeholder="Select a subject"
                     {...register(`teachingInfo.${index}.subject`)}
                   />
@@ -164,12 +175,12 @@ const BecomeTutor = () => {
                     {errors.teachingInfo?.[index]?.subject?.message}
                   </FormErrorMessage>
                 </FormControl>
-                
+
                 <FormControl
                   isInvalid={Boolean(errors?.teachingInfo?.[index]?.price)}
                 >
                   <Input
-                    name={`teachingInfo[${index}]`}
+                    name={`teachingInfo[${index}].price`}
                     placeholder="Enter rate per class for this subject"
                     {...register(`teachingInfo.${index}.price`)}
                   />
@@ -179,10 +190,12 @@ const BecomeTutor = () => {
                 </FormControl>
 
                 <FormControl
-                  isInvalid={Boolean(errors?.teachingInfo?.[index]?.proficiency)}
+                  isInvalid={Boolean(
+                    errors?.teachingInfo?.[index]?.proficiency
+                  )}
                 >
                   <Input
-                    name={`teachingInfo[${index}]`}
+                    name={`teachingInfo[${index}].proficiency`}
                     placeholder="Write your proficiency for this subject"
                     {...register(`teachingInfo.${index}.proficiency`)}
                   />
@@ -285,6 +298,7 @@ const BecomeTutor = () => {
         >
           Add location
         </Button>
+          <Input {...register("profilePicUrl")} type="file" accept="image/*" />
         <Button type="submit">Submit</Button>
       </Box>
     </Layout>

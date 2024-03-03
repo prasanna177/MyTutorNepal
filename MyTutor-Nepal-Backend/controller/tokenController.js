@@ -1,23 +1,24 @@
 const User = require("../models/userModel");
 const Token = require("../models/token");
+const mongoose = require("mongoose");
 
 module.exports.verify_token = async (req, res) => {
   try {
-    console.log(req.params);
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).send({ message: "Invalid user ID" });
+    }
     const user = await User.findOne({
       _id: req.params.id,
     });
-    console.log(user, "user");
     if (!user) {
-      return res.status(200).send({ message: "Invalid link" });
+      return res.status(400).send({ message: "Invalid link" });
     }
     const token = await Token.findOne({
       userId: user._id,
       token: req.params.token,
     });
-    console.log(token, "token");
     if (!token) {
-      return res.status(200).send({ message: "Invalid link" });
+      return res.status(400).send({ message: "Invalid link" });
     }
     await User.findByIdAndUpdate(user._id, { verified: true });
     await token.deleteOne();

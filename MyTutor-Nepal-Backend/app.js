@@ -5,10 +5,14 @@ const adminRoute = require("./routes/adminRoute");
 const tutorRoute = require("./routes/tutorRoute");
 const dbCongfig = require("./config/dbConfig");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 //middleware
 const app = express();
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use("/uploads", express.static("uploads"));
 app.use(express.json()); //this is used to destructure username and password sent by the client in json format
 const PORT = 4000;
 

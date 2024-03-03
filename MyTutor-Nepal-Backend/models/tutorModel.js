@@ -23,7 +23,7 @@ const tutorSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: 'Pending'
+      default: "Pending",
     },
     timing: {
       type: Object,
@@ -31,12 +31,16 @@ const tutorSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-      required: [true,"Please enter an address"],
+      required: [true, "Please enter an address"],
     },
     coordinates: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
+    profilePicUrl: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
