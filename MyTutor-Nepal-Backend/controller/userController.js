@@ -4,16 +4,37 @@ const Appointment = require("../models/appointmentModel");
 const moment = require("moment");
 
 module.exports.saveFilePath = async (req, res) => {
-  const profilePicUrl = req.file.path;
-  console.log(profilePicUrl, "ppu");
-  res.status(200).send({
-    message: "Successfully fetched file path",
-    data: profilePicUrl,
-  });
+  try {
+    const files = req.files;
+    const fileDataArray = [];
+
+    // Loop through each file type and extract fieldname and path
+    Object.keys(files).forEach((fileType) => {
+      const file = files[fileType][0]; // Assuming only one file per type
+
+      const fileData = {
+        fieldname: file.fieldname,
+        path: file.path,
+      };
+
+      fileDataArray.push(fileData);
+    });
+    console.log(fileDataArray, "fda");
+    res.status(200).json({
+      message: "Successfully fetched file paths",
+      data: fileDataArray,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching file paths",
+      error: error.message,
+    });
+  }
 };
 
 module.exports.becomeTutor_post = async (req, res) => {
-  console.log(req.body);
+  console.log(req.body,'body');
   try {
     const { address, coordinates } = req.body;
     if (!(address || coordinates.lat || coordinates.lng)) {

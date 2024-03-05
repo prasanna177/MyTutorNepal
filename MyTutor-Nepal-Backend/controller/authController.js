@@ -102,3 +102,36 @@ module.exports.login_post = async (req, res) => {
     res.status(500).send({ message: "Error logging in", success: false, err });
   }
 };
+
+module.exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(200).send({
+        message: "User does not exist",
+        success: false,
+      });
+      const token = jwt.sign({ id: user._id }, process.env.RESET_SECRET, {
+        expiresIn: "1d",
+      });
+      const url = `http://localhost:5173/reset-password/${user._id}/${token}`;
+      await sendEmail(
+        user.email,
+        "Reset your password",
+        `Click on this link to reset your password ${url}`
+      );
+      return res.status(200).send({
+        message:
+          "An link has been sent to your email account. Please verify it.",
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error
+    })
+  }
+};

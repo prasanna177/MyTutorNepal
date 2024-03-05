@@ -18,7 +18,6 @@ module.exports = async (email, subject, text) => {
       subject,
       text,
     });
-    console.log("Email sent successfully");
   } catch (error) {
     console.log("Email not sent");
     console.log(error);

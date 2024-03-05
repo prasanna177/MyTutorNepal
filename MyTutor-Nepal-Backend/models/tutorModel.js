@@ -41,6 +41,18 @@ const tutorSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    nIdFrontUrl: {
+      type: String,
+      required: true,
+    },
+    nIdBackUrl: {
+      type: String,
+      required: true,
+    },
+    teachingCertificateUrl: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

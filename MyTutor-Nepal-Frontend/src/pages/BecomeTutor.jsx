@@ -53,7 +53,7 @@ const BecomeTutor = () => {
   const handleSelect = async (value) => {
     const results = await geocodeByAddress(value);
     const ll = await getLatLng(results[0]);
-    setAddress(value);
+  setAddress(value);
     setCoordinates(ll);
   };
 
@@ -82,21 +82,34 @@ const BecomeTutor = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
     data.profilePicUrl = data.profilePicUrl[0];
+    data.nIdFrontUrl = data.nIdFrontUrl[0];
+    data.nIdBackUrl = data.nIdBackUrl[0];
+    data.teachingCertificateUrl = data.teachingCertificateUrl[0];
     const submissionData = { ...data, coordinates, address, userId: user._id };
     try {
-      dispatch(showLoading());
       const formData = new FormData();
-      formData.append("profilePic", submissionData.profilePicUrl);
+      formData.append("profilePicUrl", submissionData.profilePicUrl);
+      formData.append("nIdFrontUrl", submissionData.nIdFrontUrl);
+      formData.append("nIdBackUrl", submissionData.nIdBackUrl);
+      formData.append(
+        "teachingCertificateUrl",
+        submissionData.teachingCertificateUrl
+      );
       const filePathUrl = await axios.post(
         "http://localhost:4000/api/user/saveFilePath",
         formData
       );
-      submissionData.profilePicUrl = filePathUrl.data.data;
+      filePathUrl.data.data.forEach((file) => {
+        const { fieldname, path } = file;
+
+        // Update the corresponding URL in submissionData
+        submissionData[fieldname] = path;
+      });
+      dispatch(showLoading());
       const res = await axios.post(
         "http://localhost:4000/api/user/become-tutor",
-        { submissionData },
+        submissionData,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -140,7 +153,11 @@ const BecomeTutor = () => {
 
   return (
     <Layout>
-      <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+      <Box
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        enctype="multipart/form-data"
+      >
         <TextField
           name={"fullName"}
           errors={errors?.fullName?.message}
@@ -298,7 +315,14 @@ const BecomeTutor = () => {
         >
           Add location
         </Button>
-          <Input {...register("profilePicUrl")} type="file" accept="image/*" />
+        <Input {...register("profilePicUrl")} type="file" accept="image/*" />
+        <Input {...register("nIdFrontUrl")} type="file" accept="image/*" />
+        <Input {...register("nIdBackUrl")} type="file" accept="image/*" />
+        <Input
+          {...register("teachingCertificateUrl")}
+          type="file"
+          accept="image/*"
+        />
         <Button type="submit">Submit</Button>
       </Box>
     </Layout>

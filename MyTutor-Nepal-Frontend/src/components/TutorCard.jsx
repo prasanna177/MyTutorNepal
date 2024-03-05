@@ -19,7 +19,7 @@ const TutorCard = ({ tutor }) => {
         >
           <CardHeader>{tutor.fullName}</CardHeader>
           <CardBody>
-            <Image src={`http://localhost:4000/${tutor.profilePicUrl}`}></Image>
+            <Image src={`http://localhost:4000/${tutor.profilePicUrl}`} />
             <Text>Fee Per Class: {tutor.feePerClass}</Text>
             <Text>
               Timing: {tutor.timing.startTime + "-" + tutor.timing.endTime}
