@@ -21,6 +21,7 @@ import MapPage from "./pages/Map";
 import UserAppointments from "./pages/UserAppointments";
 import TutorAppointments from "./pages/tutor/TutorAppointments";
 import EmailVerify from "./pages/EmailVerify";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -123,6 +124,10 @@ function App() {
               />
               <Route path="users/:id/verify/:token" element={<EmailVerify />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route
+                path="/reset-password/:id/:token/"
+                element={<ResetPassword />}
+              />
               <Route
                 path="/student/appointments"
                 element={

@@ -1,34 +1,42 @@
+import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { ArrowRightIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
-import TextField from "../components/common/TextField";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
-import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
-import { ArrowRightIcon } from "@chakra-ui/icons";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import Password from "../components/common/Password";
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id, token } = useParams();
+
+  const schema = yup.object({
+    password: yup.string().required("Password is required"),
+  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data) => {
     try {
       dispatch(showLoading());
-      console.log("start");
       const response = await axios.post(
-        "http://localhost:4000/api/user/forgot-password",
+        `http://localhost:4000/api/user/reset-password/${id}/${token}`,
         data
       );
-      console.log("end");
       dispatch(hideLoading());
       const { success, message } = response.data;
       if (success) {
         toast.success(message);
+        navigate('/login')
       } else {
         toast.error(message);
       }
@@ -52,20 +60,19 @@ const ForgotPassword = () => {
           <VStack alignItems={"start"}>
             <VStack mb={5} alignItems={"start"}>
               <Text color={"primary.0"} fontSize={"2xl"} fontWeight={"bold"}>
-                Find your account
+                Reset password
               </Text>
               <Text color={"gray.100"} fontSize={"lg"}>
-                Please enter your email or mobile number to search for your
-                account.
+                Please enter a new password.
               </Text>
             </VStack>
             <VStack alignItems={"start"} gap={3} w={"100%"}>
               <VStack alignItems={"start"} w={"100%"} gap={8}>
-                <TextField
-                  name={"email"}
-                  errors={errors?.email?.message}
+                <Password
                   register={register}
-                  placeholder={"Email"}
+                  name={"password"}
+                  placeholder={"Password"}
+                  errors={errors?.password?.message}
                 />
                 <Button
                   type="submit"
@@ -76,7 +83,7 @@ const ForgotPassword = () => {
                   bgColor={"primary.0"}
                   w={"100%"}
                 >
-                  Search
+                  Change password
                 </Button>
               </VStack>
             </VStack>
@@ -87,4 +94,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

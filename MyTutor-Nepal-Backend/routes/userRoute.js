@@ -35,6 +35,7 @@ router.post("/signup", authController.signup_post);
 router.post("/become-tutor", authMiddleware, userController.becomeTutor_post);
 router.post("/login", authController.login_post);
 router.post("/forgot-password", authController.forgotPassword);
+router.post("/reset-password/:id/:token", authController.resetPassword);
 router.post("/getUserById", authMiddleware, userController.getUserById);
 router.get("/getAllTutors", authMiddleware, userController.getAllTutors);
 router.post("/book-tutor", authMiddleware, userController.bookTutor_post);

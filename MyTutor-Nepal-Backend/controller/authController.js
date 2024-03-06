@@ -105,33 +105,65 @@ module.exports.login_post = async (req, res) => {
 
 module.exports.forgotPassword = async (req, res) => {
   try {
+    console.log(req.body, "reqbody");
     const { email } = req.body;
+    console.log(email, "email");
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(200).send({
+      return res.status(200).send({
         message: "User does not exist",
         success: false,
       });
-      const token = jwt.sign({ id: user._id }, process.env.RESET_SECRET, {
-        expiresIn: "1d",
-      });
-      const url = `http://localhost:5173/reset-password/${user._id}/${token}`;
-      await sendEmail(
-        user.email,
-        "Reset your password",
-        `Click on this link to reset your password ${url}`
-      );
-      return res.status(200).send({
-        message:
-          "An link has been sent to your email account. Please verify it.",
-        success: false,
-      });
     }
+    const token = jwt.sign({ id: user._id }, process.env.RESET_SECRET, {
+      expiresIn: "1d",
+    });
+    console.log(token, "token");
+    const url = `http://localhost:5173/reset-password/${user._id}/${token}`;
+    await sendEmail(
+      user.email,
+      "Reset your password",
+      `Click on this link to reset your password ${url}`
+    );
+    res.status(200).send({
+      message: "An link has been sent to your email account. Please verify it.",
+      success: true,
+    });
   } catch (error) {
     res.status(500).send({
       success: false,
       message: "Something went wrong",
-      error
-    })
+      error,
+    });
+  }
+};
+
+module.exports.resetPassword = async (req, res) => {
+  try {
+    const { id, token } = req.params;
+    const { password } = req.body;
+
+    jwt.verify(token, process.env.RESET_SECRET, async (err, decodedToken) => {
+      if (err) {
+        return res.status(401).send({
+          message: "Failed to reset password",
+          success: false,
+        });
+      } else {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+        await User.findByIdAndUpdate({_id:id},{password:hashedPassword});
+        res.status(200).send({
+          message: "Password reset successfully",
+          success: true,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
   }
 };

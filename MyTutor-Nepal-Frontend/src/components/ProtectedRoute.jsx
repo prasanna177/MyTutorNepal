@@ -45,11 +45,8 @@ const ProtectedRoute = ({ children }) => {
   if (localStorage.getItem("token")) {
     return children;
   }
-  if (user.role === "admin") {
-    return <Navigate to="/admin" />;
-  } else {
-    return <Navigate to="/login" />;
-  }
+
+  return <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
