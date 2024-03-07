@@ -9,7 +9,7 @@ export const theme = extendTheme({
       body: {
         fontSize: "2xl",
         fontWeight: 600,
-        backgroundColor: "gray.50",
+        backgroundColor: "gray.0",
       },
     },
   },

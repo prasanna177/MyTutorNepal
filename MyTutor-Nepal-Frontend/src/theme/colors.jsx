@@ -19,7 +19,7 @@ const opaque = {
 };
 
 const primary = {
-  0: "#5B3B8C",
+  0: "#685CFE",
 };
 
 const colors = {

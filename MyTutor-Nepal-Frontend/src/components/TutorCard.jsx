@@ -21,9 +21,14 @@ const TutorCard = ({ tutor }) => {
           <CardHeader>{tutor.fullName}</CardHeader>
           <CardBody>
             {tutor.profilePicUrl ? (
-              <Image src={`http://localhost:4000/${tutor.profilePicUrl}`} />
+              <Image
+                w={"250px"}
+                h={"200px"}
+                objectFit={"cover"}
+                src={`http://localhost:4000/${tutor.profilePicUrl}`}
+              />
             ) : (
-              <Image src={NoProfilePic} />
+              <Image objectFit={"cover"} w={"250px"} h={"200px"} src={NoProfilePic} />
             )}
             <Text>
               Timing: {tutor.timing.startTime + "-" + tutor.timing.endTime}

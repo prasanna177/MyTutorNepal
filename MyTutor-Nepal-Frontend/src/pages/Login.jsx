@@ -114,7 +114,7 @@ const Login = () => {
                 </HStack>
                 <Button
                   type="submit"
-                  rightIcon={<ArrowRightIcon />}
+                  rightIcon={<ArrowRightIcon/>}
                   _hover={{ opacity: 0.8 }}
                   _active={{}}
                   color={"white"}

@@ -1,34 +1,29 @@
 import {
   Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
+  Grid,
   HStack,
+  Heading,
   Input,
   Text,
+  VStack,
 } from "@chakra-ui/react";
-import Layout from "../components/Layout/Layout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useFieldArray, useForm } from "react-hook-form";
 import TextField from "../components/common/TextField";
 import { CloseIcon } from "@chakra-ui/icons";
 import toast from "react-hot-toast";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from "react-places-autocomplete";
-import { useState } from "react";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
-
-const API_KEY = "b67402f59aa24b6ea5b2b5b7309a6d66";
-const apiEndpoint = "https://api.opencagedata.com/geocode/v1/json";
+import PanelLayout from "../components/Layout/PanelLayout";
+import PlaceAutocomplete from "../components/PlaceAutocomplete";
+import NormalButton from "../components/common/Button";
 
 const BecomeTutor = () => {
-  // const [profilePicUrl, setProfilePicUrl] = useState("");
   const [address, setAddress] = useState("");
   const [coordinates, setCoordinates] = useState({
     lat: null,
@@ -39,21 +34,10 @@ const BecomeTutor = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const getUserCurrentAddress = async (lat, lng) => {
-    let query = `${lat},${lng}`;
-    let apiUrl = `${apiEndpoint}?key=${API_KEY}&q=${query}&pretty=1`;
-    try {
-      const res = await axios.get(apiUrl);
-      return res.data.results[0].formatted;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleSelect = async (value) => {
     const results = await geocodeByAddress(value);
     const ll = await getLatLng(results[0]);
-  setAddress(value);
+    setAddress(value);
     setCoordinates(ll);
   };
 
@@ -152,180 +136,147 @@ const BecomeTutor = () => {
   // }
 
   return (
-    <Layout>
-      <Box
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        enctype="multipart/form-data"
-      >
-        <TextField
-          name={"fullName"}
-          errors={errors?.fullName?.message}
-          register={register}
-          placeholder={"Full Name"}
-        />
-        <TextField
-          name={"email"}
-          errors={errors?.email?.message}
-          register={register}
-          placeholder={"Email"}
-        />
-        <TextField
-          name={"phone"}
-          errors={errors?.phone?.message}
-          register={register}
-          placeholder={"Phone number"}
-        />
-        {fields.map((field, index) => (
-          <Box key={field.id}>
-            <HStack>
-              <HStack>
-                <FormControl
-                  isInvalid={Boolean(errors?.teachingInfo?.[index]?.subject)}
-                >
-                  <Input
-                    name={`teachingInfo[${index}].subject`}
-                    placeholder="Select a subject"
-                    {...register(`teachingInfo.${index}.subject`)}
-                  />
-                  <FormErrorMessage>
-                    {errors.teachingInfo?.[index]?.subject?.message}
-                  </FormErrorMessage>
-                </FormControl>
+    <PanelLayout>
+      <Box p={3}>
+        <Heading>Become tutor</Heading>
+        <Text color={"primary.0"}>Personal Information</Text>
+        <Box
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+          enctype="multipart/form-data"
+        >
+          <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+            <TextField
+              name={"fullName"}
+              errors={errors?.fullName?.message}
+              register={register}
+              placeholder={"Full Name"}
+              label={"Full name"}
+              hasLabel={true}
+            />
+            <TextField
+              name={"email"}
+              errors={errors?.email?.message}
+              register={register}
+              placeholder={"Email"}
+              label={"Email"}
+              hasLabel={true}
+            />
+            <TextField
+              name={"phone"}
+              errors={errors?.phone?.message}
+              register={register}
+              placeholder={"Phone number"}
+              label={"Phone number"}
+              hasLabel={true}
+            />
+            <VStack alignItems={"stretch"}>
+              <Text fontSize={"md"} color={"black"}>
+                <span style={{ color: "red" }}>* </span>
+                Enter your location
+              </Text>
+              <PlaceAutocomplete
+                address={address}
+                setAddress={setAddress}
+                handleSelect={handleSelect}
+                setCoordinates={setCoordinates}
+              />
+            </VStack>
+          </Grid>
+          <Text color={"primary.0"}>Services</Text>
+          <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+            {fields.map((field, index) => (
+              <React.Fragment key={field.id}>
+                <TextField
+                  name={`teachingInfo[${index}].subject`}
+                  errors={errors.teachingInfo?.[index]?.subject?.message}
+                  register={register}
+                  placeholder={"Select a subject"}
+                  label={"Subject"}
+                  hasLabel={true}
+                />
 
-                <FormControl
-                  isInvalid={Boolean(errors?.teachingInfo?.[index]?.price)}
-                >
-                  <Input
-                    name={`teachingInfo[${index}].price`}
-                    placeholder="Enter rate per class for this subject"
-                    {...register(`teachingInfo.${index}.price`)}
-                  />
-                  <FormErrorMessage>
-                    {errors.teachingInfo?.[index]?.price?.message}
-                  </FormErrorMessage>
-                </FormControl>
+                <TextField
+                  name={`teachingInfo[${index}].price`}
+                  errors={errors.teachingInfo?.[index]?.price?.message}
+                  register={register}
+                  placeholder={"Enter rate per class for this subject"}
+                  label={"Price"}
+                  hasLabel={true}
+                />
 
-                <FormControl
-                  isInvalid={Boolean(
-                    errors?.teachingInfo?.[index]?.proficiency
+                <HStack>
+                  <Box width={"100%"}>
+                    <TextField
+                      name={`teachingInfo[${index}].proficiency`}
+                      errors={
+                        errors.teachingInfo?.[index]?.proficiency?.message
+                      }
+                      register={register}
+                      placeholder={"Write your proficiency for this subject"}
+                      label={"Proficiency"}
+                      hasLabel={true}
+                    />
+                  </Box>
+                  {index > 0 && (
+                    <CloseIcon
+                      boxSize={5}
+                      color={"red.600"}
+                      _hover={{ cursor: "pointer" }}
+                      type="button"
+                      onClick={() => remove(index)}
+                    />
                   )}
-                >
-                  <Input
-                    name={`teachingInfo[${index}].proficiency`}
-                    placeholder="Write your proficiency for this subject"
-                    {...register(`teachingInfo.${index}.proficiency`)}
-                  />
-                  <FormErrorMessage>
-                    {errors.teachingInfo?.[index]?.proficiency?.message}
-                  </FormErrorMessage>
-                </FormControl>
-              </HStack>
-
-              {index > 0 && (
-                <CloseIcon
-                  boxSize={3}
-                  _hover={{ cursor: "pointer" }}
-                  type="button"
-                  onClick={() => remove(index)}
-                />
-              )}
-            </HStack>
-          </Box>
-        ))}
-        <Button type="button" onClick={() => append("")}>
-          Add Subject
-        </Button>
-        <TextField
-          type={"time"}
-          name={"timing.startTime"}
-          errors={errors?.timing?.startTime?.message}
-          register={register}
-          placeholder={"Start time"}
-        />
-        <TextField
-          type={"time"}
-          name={"timing.endTime"}
-          errors={errors?.timing?.endTime?.message}
-          register={register}
-          placeholder={"End time"}
-        />
-        <PlacesAutocomplete
-          value={address}
-          onChange={setAddress}
-          onSelect={handleSelect}
-        >
-          {({
-            getInputProps,
-            suggestions,
-            getSuggestionItemProps,
-            loading,
-          }) => (
-            <Box>
-              <FormControl isInvalid={Boolean(errors?.address)}>
-                <Input
-                  {...getInputProps({
-                    placeholder: "Search Places ...",
-                  })}
-                />
-              </FormControl>
-              <Box>
-                {loading && <Box>Loading...</Box>}
-                {suggestions.map((suggestion, index) => {
-                  return (
-                    <Box
-                      w={"500px"}
-                      h={"60px"}
-                      bgColor={"red.200"}
-                      borderBottom={"1px"}
-                      key={index}
-                      {...getSuggestionItemProps(suggestion, {})}
-                    >
-                      <Text color={"red"}>{suggestion.description}</Text>
-                    </Box>
-                  );
-                })}
-              </Box>
-            </Box>
-          )}
-        </PlacesAutocomplete>
-        <Button
-          onClick={() => {
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                  const { latitude, longitude } = position.coords;
-                  const cords = {
-                    lat: latitude,
-                    lng: longitude,
-                  };
-                  const address = await getUserCurrentAddress(
-                    latitude,
-                    longitude
-                  );
-                  setAddress(address);
-                  setCoordinates(cords);
-                },
-                (error) => {
-                  console.log(error);
-                }
-              );
-            }
-          }}
-        >
-          Add location
-        </Button>
-        <Input {...register("profilePicUrl")} type="file" accept="image/*" />
-        <Input {...register("nIdFrontUrl")} type="file" accept="image/*" />
-        <Input {...register("nIdBackUrl")} type="file" accept="image/*" />
-        <Input
-          {...register("teachingCertificateUrl")}
-          type="file"
-          accept="image/*"
-        />
-        <Button type="submit">Submit</Button>
+                </HStack>
+              </React.Fragment>
+            ))}
+          </Grid>
+          <NormalButton
+            mt={"10px"}
+            bgColor={"primary.0"}
+            text={"Add subject"}
+            color={"white"}
+            type="button"
+            onClick={() => append("")}
+          />
+          <Text color={"primary.0"}>Timings</Text>
+          <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+            <TextField
+              type={"time"}
+              name={"timing.startTime"}
+              errors={errors?.timing?.startTime?.message}
+              register={register}
+              placeholder={"Start time"}
+              label={"Start time"}
+              hasLabel={true}
+            />
+            <TextField
+              type={"time"}
+              name={"timing.endTime"}
+              errors={errors?.timing?.endTime?.message}
+              register={register}
+              placeholder={"End time"}
+              label={"End time"}
+              hasLabel={true}
+            />
+          </Grid>
+          <Input {...register("profilePicUrl")} type="file" accept="image/*" />
+          <Input {...register("nIdFrontUrl")} type="file" accept="image/*" />
+          <Input {...register("nIdBackUrl")} type="file" accept="image/*" />
+          <Input
+            {...register("teachingCertificateUrl")}
+            type="file"
+            accept="image/*"
+          />
+          <NormalButton
+            color={"white"}
+            bgColor={"primary.0"}
+            text={"Submit"}
+            type="submit"
+          />
+        </Box>
       </Box>
-    </Layout>
+    </PanelLayout>
   );
 };
 

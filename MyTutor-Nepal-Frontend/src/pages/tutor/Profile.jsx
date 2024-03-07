@@ -4,9 +4,7 @@ import {
   FormControl,
   FormErrorMessage,
   HStack,
-  Input,
   Select,
-  Text,
   Heading,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,7 +12,7 @@ import * as yup from "yup";
 import { useFieldArray, useForm } from "react-hook-form";
 import { CloseIcon } from "@chakra-ui/icons";
 import toast from "react-hot-toast";
-import PlacesAutocomplete, {
+import {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
@@ -26,6 +24,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { hideLoading, showLoading } from "../../redux/features/alertSlice";
 import TextField from "../../components/common/TextField";
+import PlaceAutocomplete from "../../components/PlaceAutocomplete";
 
 const Profile = () => {
   const [tutor, setTutor] = useState(null);
@@ -38,20 +37,6 @@ const Profile = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const API_KEY = "b67402f59aa24b6ea5b2b5b7309a6d66";
-  const apiEndpoint = "https://api.opencagedata.com/geocode/v1/json";
-
-  const getUserCurrentAddress = async (lat, lng) => {
-    let query = `${lat},${lng}`;
-    let apiUrl = `${apiEndpoint}?key=${API_KEY}&q=${query}&pretty=1`;
-    try {
-      const res = await axios.get(apiUrl);
-      return res.data.results[0].formatted;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleSelect = async (value) => {
     const results = await geocodeByAddress(value);
@@ -260,71 +245,12 @@ const Profile = () => {
             register={register}
             placeholder={"End time"}
           />
-          <PlacesAutocomplete
-            value={address}
-            onChange={setAddress}
-            onSelect={handleSelect}
-          >
-            {({
-              getInputProps,
-              suggestions,
-              getSuggestionItemProps,
-              loading,
-            }) => (
-              <Box>
-                <FormControl isInvalid={Boolean(errors?.address)}>
-                  <Input
-                    {...getInputProps({
-                      placeholder: "Search Places ...",
-                    })}
-                  />
-                </FormControl>
-                <Box>
-                  {loading && <Box>Loading...</Box>}
-                  {suggestions.map((suggestion, index) => {
-                    return (
-                      <Box
-                        w={"500px"}
-                        h={"60px"}
-                        bgColor={"red.200"}
-                        borderBottom={"1px"}
-                        key={index}
-                        {...getSuggestionItemProps(suggestion, {})}
-                      >
-                        <Text color={"red"}>{suggestion.description}</Text>
-                      </Box>
-                    );
-                  })}
-                </Box>
-              </Box>
-            )}
-          </PlacesAutocomplete>
-          <Button
-            onClick={() => {
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                  async (position) => {
-                    const { latitude, longitude } = position.coords;
-                    const cords = {
-                      lat: latitude,
-                      lng: longitude,
-                    };
-                    const address = await getUserCurrentAddress(
-                      latitude,
-                      longitude
-                    );
-                    setAddress(address);
-                    setCoordinates(cords);
-                  },
-                  (error) => {
-                    console.log(error);
-                  }
-                );
-              }
-            }}
-          >
-            Add location
-          </Button>
+            <PlaceAutocomplete
+              address={address}
+              setAddress={setAddress}
+              handleSelect={handleSelect}
+              setCoordinates={setCoordinates}
+            />
           <Button type="submit">Submit</Button>
         </Box>
       )}

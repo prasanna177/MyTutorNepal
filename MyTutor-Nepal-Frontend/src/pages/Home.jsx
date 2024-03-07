@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Layout from "../components/Layout/Layout";
-import { Button, Grid, Heading } from "@chakra-ui/react";
+import { Box, Button, Grid, Heading } from "@chakra-ui/react";
 import TutorCard from "../components/TutorCard";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMap } from "@fortawesome/free-solid-svg-icons";
+import PanelLayout from "../components/Layout/PanelLayout";
 
 const Home = () => {
   const [tutors, setTutors] = useState([]);
@@ -14,7 +16,7 @@ const Home = () => {
         "http://localhost:4000/api/user/getAllTutors",
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"), //Authorization must start with capital when posting to backend
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         }
       );
@@ -31,17 +33,38 @@ const Home = () => {
   }, []);
 
   return (
-    <Layout>
-      <Link to="/map">
-        <Button>Map</Button>
-      </Link>
-      <Heading>Home</Heading>
-      <Grid gap={"16px"} templateColumns="repeat(5, 1fr)">
-        {tutors?.map((tutor) => (
-          <TutorCard key={tutor._id} tutor={tutor} />
-        ))}
-      </Grid>
-    </Layout>
+    <PanelLayout>
+      <Box pos={"relative"}>
+        <Link to="/map">
+          <Button
+            pos={"fixed"}
+            zIndex={12}
+            left={"48%"}
+            borderRadius={20}
+            bottom={5}
+            bgColor={"primary.0"}
+            _hover={{
+              transform: "scale(1.03)",
+              transition: "transform 0.3s ease-in-out",
+            }}
+            _active={{
+              transform: "scale(1)",
+              transition: "transform 0.3s ease-in-out",
+            }}
+            color={"white"}
+            rightIcon={<FontAwesomeIcon icon={faMap} />}
+          >
+            Show Map
+          </Button>
+        </Link>
+        <Heading>Home</Heading>
+        <Grid gap={"16px"} templateColumns="repeat(5, 1fr)">
+          {tutors?.map((tutor) => (
+            <TutorCard key={tutor._id} tutor={tutor} />
+          ))}
+        </Grid>
+      </Box>
+    </PanelLayout>
   );
 };
 

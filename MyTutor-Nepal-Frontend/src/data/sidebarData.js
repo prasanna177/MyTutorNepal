@@ -18,18 +18,23 @@ export const AdminMenu = [
 
 export const StudentMenu = [
   {
+    name: "Home",
+    path: "/",
+    icon: "fa-solid fa-users",
+  },
+  {
     name: "My Tutor",
     path: "/student/mytutor",
-    icon: "fa-solid fa-users",
+    icon: "fa-solid fa-graduation-cap",
   },
   {
     name: "Payment",
     path: "/student/payment",
-    icon: "fa-solid fa-users",
+    icon: "fa-solid fa-money-bill",
   },
   {
     name: "Bookings",
     path: "/student/appointments",
-    icon: "fa-solid fa-users",
-  }
+    icon: "fa-solid fa-book",
+  },
 ];

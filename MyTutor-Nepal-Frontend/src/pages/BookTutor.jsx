@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import {
@@ -21,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import toast from "react-hot-toast";
 import moment from "moment";
+import PanelLayout from "../components/Layout/PanelLayout";
 
 const BookTutor = () => {
   const { user } = useSelector((state) => state.user);
@@ -67,11 +67,11 @@ const BookTutor = () => {
 
   const handleBooking = async (data) => {
     try {
-      dispatch(showLoading());
       //to send total price to backend
       const fromDate = moment(data.fromDate, "YYYY-MM-DD");
       const toDate = moment(data.toDate, "YYYY-MM-DD");
       const numberOfDays = toDate.diff(fromDate, "days") + 1;
+      dispatch(showLoading());
       const res = await axios.post(
         "http://localhost:4000/api/user/book-tutor",
         {
@@ -110,7 +110,7 @@ const BookTutor = () => {
 
   console.log(tutor, "tutor");
   return (
-    <Layout>
+    <PanelLayout>
       <Heading>Booking Page</Heading>
       <Text>Name: {tutor?.fullName}</Text>
       <Text>Fee: {tutor?.feePerClass}</Text>
@@ -146,7 +146,7 @@ const BookTutor = () => {
                   (item) => item.subject === e.target.value
                 );
                 setPrice(selectedSubjectInfo?.price || 0);
-                setSubject(selectedSubjectInfo?.price || "")
+                setSubject(selectedSubjectInfo?.price || "");
               }}
             >
               {tutor?.teachingInfo?.map((item, index) => (
@@ -171,7 +171,7 @@ const BookTutor = () => {
         </Flex>
         <Button type="submit">Book now</Button>
       </Box>
-    </Layout>
+    </PanelLayout>
   );
 };
 
