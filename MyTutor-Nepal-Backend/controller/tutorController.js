@@ -98,10 +98,11 @@ module.exports.updateStatus = async (req, res) => {
       status,
     });
     const user = await User.findOne({ _id: appointments.userId });
-    user.notification.push({
+    user.unseenNotification.push({
       type: "Status-Updated",
       message: `Your appointment has been ${status}`,
       onClickPath: "/tutor/appointments",
+      date: new Date()
     });
     await user.save();
     res.status(200).send({

@@ -22,7 +22,15 @@ const Users = () => {
     }),
     columnHelper.accessor("action", {
       header: "ACTION",
-      cell: (row) => <Button onClick={() => {console.log(row.row.original._id)}}>Action</Button>,
+      cell: (row) => (
+        <Button
+          onClick={() => {
+            console.log(row.row.original._id);
+          }}
+        >
+          Action
+        </Button>
+      ),
     }),
   ];
 

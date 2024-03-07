@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ArrowRightIcon } from "@chakra-ui/icons";
@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Password from "../components/common/Password";
 
 const ResetPassword = () => {
@@ -36,7 +36,7 @@ const ResetPassword = () => {
       const { success, message } = response.data;
       if (success) {
         toast.success(message);
-        navigate('/login')
+        navigate("/login");
       } else {
         toast.error(message);
       }
@@ -74,17 +74,21 @@ const ResetPassword = () => {
                   placeholder={"Password"}
                   errors={errors?.password?.message}
                 />
-                <Button
-                  type="submit"
-                  rightIcon={<ArrowRightIcon />}
-                  _hover={{ opacity: 0.8 }}
-                  _active={{}}
-                  color={"white"}
-                  bgColor={"primary.0"}
-                  w={"100%"}
-                >
-                  Change password
-                </Button>
+                <HStack w={"100%"} justifyContent={"flex-end"}>
+                  <Link to={"/login"}>
+                    <Button type="button">Cancel</Button>
+                  </Link>
+                  <Button
+                    type="submit"
+                    rightIcon={<ArrowRightIcon />}
+                    _hover={{ opacity: 0.8 }}
+                    _active={{}}
+                    color={"white"}
+                    bgColor={"primary.0"}
+                  >
+                    Change password
+                  </Button>
+                </HStack>
               </VStack>
             </VStack>
           </VStack>

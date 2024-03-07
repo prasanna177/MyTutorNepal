@@ -7,6 +7,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import NoProfilePic from "../assets/images/NoProfilePic.png";
 
 const TutorCard = ({ tutor }) => {
   const navigate = useNavigate();
@@ -19,12 +20,14 @@ const TutorCard = ({ tutor }) => {
         >
           <CardHeader>{tutor.fullName}</CardHeader>
           <CardBody>
-            <Image src={`http://localhost:4000/${tutor.profilePicUrl}`} />
-            <Text>Fee Per Class: {tutor.feePerClass}</Text>
+            {tutor.profilePicUrl ? (
+              <Image src={`http://localhost:4000/${tutor.profilePicUrl}`} />
+            ) : (
+              <Image src={NoProfilePic} />
+            )}
             <Text>
               Timing: {tutor.timing.startTime + "-" + tutor.timing.endTime}
             </Text>
-            <Text>Address: {tutor.address}</Text>
             <Text>Phone: {tutor.phone}</Text>
           </CardBody>
         </Card>

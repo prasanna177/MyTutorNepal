@@ -33,8 +33,68 @@ module.exports.saveFilePath = async (req, res) => {
   }
 };
 
+module.exports.mark_notifications_as_seen = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.body.userId });
+    if (!user.unseenNotification.length) {
+      return res.status(200).send({
+        success: false,
+        message: "No notifications to read",
+      });
+    }
+    const unseenNotification = user.unseenNotification;
+    const seenNotification = user.seenNotification;
+    seenNotification.push(...unseenNotification);
+    user.unseenNotification = [];
+    user.seenNotification = seenNotification;
+    const updatedUser = await user.save();
+    updatedUser.password = undefined;
+    res.status(200).send({
+      success: true,
+      message: "All notifications marked as seen",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error applying doctor account",
+      success: false,
+      error,
+    });
+  }
+};
+
+module.exports.delete_all_notifications = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.body.userId });
+    if (!user.seenNotification.length) {
+      return res.status(200).send({
+        success: false,
+        message: "There are no notifications to delete.",
+      });
+    }
+
+    user.seenNotification = [];
+
+    const updatedUser = await user.save();
+    updatedUser.password = undefined;
+    res.status(200).send({
+      success: true,
+      message: "All notifications cleared",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      message: "Error deleting notifications",
+      success: false,
+      error,
+    });
+  }
+};
+
 module.exports.becomeTutor_post = async (req, res) => {
-  console.log(req.body,'body');
+  console.log(req.body, "body");
   try {
     const { address, coordinates } = req.body;
     if (!(address || coordinates.lat || coordinates.lng)) {
@@ -49,17 +109,14 @@ module.exports.becomeTutor_post = async (req, res) => {
     });
     await newTutor.save();
     const adminUser = await User.findOne({ role: "admin" });
-    const notification = adminUser.notification;
-    notification.push({
+    const unseenNotification = adminUser.unseenNotification;
+    unseenNotification.push({
       type: "Apply tutor request",
       message: `${newTutor.fullName} has applied for tutor account.`,
-      data: {
-        tutorId: newTutor._id,
-        name: newTutor.fullName,
-        onClickPath: "/admin/tutors",
-      },
+      onClickPath: "/admin/tutors",
+      date: new Date(),
     });
-    await User.findByIdAndUpdate(adminUser._id, { notification });
+    await User.findByIdAndUpdate(adminUser._id, { unseenNotification });
     res.status(201).send({
       success: true,
       message: "Applied for tutor account successfully",
@@ -191,10 +248,11 @@ module.exports.bookTutor_post = async (req, res) => {
     await newAppointment.save();
 
     const user = await User.findOne({ _id: tutorInfo.userId });
-    user.notification.push({
+    user.unseenNotification.push({
       type: "New-appointment-request",
       message: `A new appointment request has been sent by ${userInfo.fullName}`,
       onClickPath: "/user/appointments",
+      date: new Date(),
     });
     await user.save();
 

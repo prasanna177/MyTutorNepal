@@ -42,11 +42,11 @@ module.exports.changeAccountStatus = async (req, res) => {
     const { tutorId, status } = req.body;
     const tutor = await Tutor.findByIdAndUpdate(tutorId, { status });
     const user = await User.findOne({ _id: tutor.userId });
-    const notification = user.notification;
-    notification.push({
+    const unseenNotification = user.unseenNotification;
+    unseenNotification.push({
       type: "tutor-account-request-accepted",
       message: `Your tutor account request has been ${status}`,
-      onClickPath: "/notification",
+      date: new Date()
     });
     user.role = status === "Approved" ? "tutor" : user.role;
 
@@ -60,7 +60,7 @@ module.exports.changeAccountStatus = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Error in account status",
+      message: "Error ifn account status",
       error,
     });
   }

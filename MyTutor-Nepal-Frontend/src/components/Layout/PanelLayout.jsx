@@ -36,14 +36,15 @@ const PanelLayout = ({ children }) => {
       : StudentMenu;
   return (
     <>
-      <Box p={"20px"} h={"100vh"}>
+      <Box h={"100vh"}>
         <Flex>
           <Box
+            pos={"fixed"}
             minH={"100%"}
-            w={"300px"}
+            w={"250px"}
             borderRadius={"5px"}
-            bgColor={"white"}
             mr={"20px"}
+            bgColor={"white"}
           >
             <Box maxW={"200px"}>
               <Link to={"/"}>
@@ -60,11 +61,11 @@ const PanelLayout = ({ children }) => {
               ))}
             </Box>
           </Box>
-          <Box w={"100%"} h={"100%"}>
+          <Box ml={"270px"} w={"100%"} h={"100%"}>
             <Box h={"10vh"} mb={"20px"} bgColor={"white"}>
               Header
             </Box>
-            <Box h={"85vh"} mb={"20px"} bgColor={"white"}>
+            <Box bgColor={"white"} mb={"20px"}>
               {children}
             </Box>
           </Box>

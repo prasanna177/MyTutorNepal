@@ -91,7 +91,7 @@ const Layout = ({ children }) => {
               </HStack>
             </HStack>
           </Box>
-          <Box h={"85vh"} mb={"20px"} bgColor={"white"}>
+          <Box p={"20px"} mb={"20px"} bgColor={"white"}>
             {children}
           </Box>
         </Box>

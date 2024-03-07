@@ -152,7 +152,7 @@ module.exports.resetPassword = async (req, res) => {
       } else {
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
-        await User.findByIdAndUpdate({_id:id},{password:hashedPassword});
+        await User.findByIdAndUpdate({ _id: id }, { password: hashedPassword });
         res.status(200).send({
           message: "Password reset successfully",
           success: true,

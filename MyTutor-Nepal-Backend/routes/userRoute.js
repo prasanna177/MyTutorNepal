@@ -36,6 +36,12 @@ router.post("/become-tutor", authMiddleware, userController.becomeTutor_post);
 router.post("/login", authController.login_post);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password/:id/:token", authController.resetPassword);
+router.post(
+  "/mark-notification-as-seen",
+  authMiddleware,
+  userController.mark_notifications_as_seen
+);
+router.post("/delete-all-notifications",authMiddleware,userController.delete_all_notifications);
 router.post("/getUserById", authMiddleware, userController.getUserById);
 router.get("/getAllTutors", authMiddleware, userController.getAllTutors);
 router.post("/book-tutor", authMiddleware, userController.bookTutor_post);

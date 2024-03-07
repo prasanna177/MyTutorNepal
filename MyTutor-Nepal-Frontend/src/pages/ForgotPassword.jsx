@@ -4,8 +4,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
-import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { ArrowRightIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
@@ -67,17 +68,21 @@ const ForgotPassword = () => {
                   register={register}
                   placeholder={"Email"}
                 />
-                <Button
-                  type="submit"
-                  rightIcon={<ArrowRightIcon />}
-                  _hover={{ opacity: 0.8 }}
-                  _active={{}}
-                  color={"white"}
-                  bgColor={"primary.0"}
-                  w={"100%"}
-                >
-                  Search
-                </Button>
+                <HStack w={"100%"} justifyContent={"flex-end"}>
+                  <Link to={"/login"}>
+                    <Button type="button">Cancel</Button>
+                  </Link>
+                  <Button
+                    type="submit"
+                    rightIcon={<ArrowRightIcon />}
+                    _hover={{ opacity: 0.8 }}
+                    _active={{}}
+                    color={"white"}
+                    bgColor={"primary.0"}
+                  >
+                    Search
+                  </Button>
+                </HStack>
               </VStack>
             </VStack>
           </VStack>

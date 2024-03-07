@@ -39,7 +39,6 @@ const tutorSchema = new mongoose.Schema(
     },
     profilePicUrl: {
       type: String,
-      required: true,
     },
     nIdFrontUrl: {
       type: String,
@@ -51,7 +50,6 @@ const tutorSchema = new mongoose.Schema(
     },
     teachingCertificateUrl: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
