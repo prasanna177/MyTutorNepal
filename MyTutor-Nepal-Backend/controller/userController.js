@@ -96,6 +96,12 @@ module.exports.delete_all_notifications = async (req, res) => {
 module.exports.becomeTutor_post = async (req, res) => {
   console.log(req.body, "body");
   try {
+    if (req.body.nIdFrontUrl || req.body.nIdBackUrl) {
+      return res.status(200).send({
+        success: false,
+        message: "Please provide the National ID pictures"
+      })
+    }
     const { address, coordinates } = req.body;
     if (!(address || coordinates.lat || coordinates.lng)) {
       return res.status(200).send({

@@ -24,7 +24,7 @@ const PanelLayout = ({ children }) => {
     {
       name: "Home",
       path: "/tutor",
-      icon: "fa-solid fa-users",
+      icon: "fa-solid fa-house",
     },
     {
       name: "Students",
@@ -34,12 +34,12 @@ const PanelLayout = ({ children }) => {
     {
       name: "Appointments",
       path: "/tutor/appointments",
-      icon: "fa-solid fa-users",
+      icon: "fa-solid fa-calendar-check",
     },
     {
       name: "Profile",
       path: `/tutor/profile/${user?._id}`,
-      icon: "fa-solid fa-users",
+      icon: "fa-regular fa-user",
     },
   ];
   const SideBarMenu =
@@ -55,7 +55,8 @@ const PanelLayout = ({ children }) => {
           <Box
             p={4}
             pos={"fixed"}
-            minH={"100%"}ev
+            minH={"100%"}
+            ev
             w={"250px"}
             mr={"20px"}
             bgColor={"white"}
@@ -67,7 +68,7 @@ const PanelLayout = ({ children }) => {
                 </Link>
               </Box>
               <Divider />
-              <Box w={"100%"} fontSize={"xl"}>
+              <Box w={"100%"} color={"gray.700"} fontSize={"lg"}>
                 {SideBarMenu.map((menu, index) => (
                   <Link key={index} to={menu.path}>
                     <HStack
@@ -109,7 +110,7 @@ const PanelLayout = ({ children }) => {
                 </HStack>
               </HStack>
             </Box>
-            <Box bgColor={"white"} mb={"20px"}>
+            <Box minH={"86vh"} bgColor={"white"} mb={"20px"}>
               {children}
             </Box>
           </Box>

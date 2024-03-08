@@ -16,6 +16,10 @@ const tutorSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      required: true,
+    },
+    bio: {
+      type: String,
     },
     teachingInfo: {
       type: Array,

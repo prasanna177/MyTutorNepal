@@ -5,6 +5,7 @@ import {
   Heading,
   Input,
   Text,
+  Textarea,
   VStack,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -22,6 +23,7 @@ import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import PanelLayout from "../components/Layout/PanelLayout";
 import PlaceAutocomplete from "../components/PlaceAutocomplete";
 import NormalButton from "../components/common/Button";
+import ImageComponent from "../components/common/ImageComponent";
 
 const BecomeTutor = () => {
   const [address, setAddress] = useState("");
@@ -29,6 +31,7 @@ const BecomeTutor = () => {
     lat: null,
     lng: null,
   });
+  const [image, setImage] = useState("");
 
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -131,143 +134,194 @@ const BecomeTutor = () => {
     control,
   });
 
-  // if (fields.length === 0) {
-  //   append("");
-  // }
+  //   <ImageComponent
+  //   text={"Enter your photo here"}
+  //   image={image}
+  //   handleImageChange={handleImageChange}
+  //   handleImageClick={handleImageClick}
+  //   register={register}
+  //   name={"profilePicUrl"}
+  //   ref={profilePicRef}
+  //   isProfileImg={false}
+  // />
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
 
   return (
     <PanelLayout>
-      <Box p={3}>
-        <Heading>Become tutor</Heading>
-        <Text color={"primary.0"}>Personal Information</Text>
+      <Box p={5}>
+        <Heading mb={"20px"}>Become tutor</Heading>
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
-          enctype="multipart/form-data"
+          encType="multipart/form-data"
         >
-          <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
-            <TextField
-              name={"fullName"}
-              errors={errors?.fullName?.message}
-              register={register}
-              placeholder={"Full Name"}
-              label={"Full name"}
-              hasLabel={true}
-            />
-            <TextField
-              name={"email"}
-              errors={errors?.email?.message}
-              register={register}
-              placeholder={"Email"}
-              label={"Email"}
-              hasLabel={true}
-            />
-            <TextField
-              name={"phone"}
-              errors={errors?.phone?.message}
-              register={register}
-              placeholder={"Phone number"}
-              label={"Phone number"}
-              hasLabel={true}
-            />
-            <VStack alignItems={"stretch"}>
-              <Text fontSize={"md"} color={"black"}>
-                <span style={{ color: "red" }}>* </span>
-                Enter your location
-              </Text>
-              <PlaceAutocomplete
-                address={address}
-                setAddress={setAddress}
-                handleSelect={handleSelect}
-                setCoordinates={setCoordinates}
+          <VStack alignItems={"stretch"} gap={"30px"}>
+            <VStack gap={7} alignItems={"stretch"}>
+              <Text color={"primary.0"}>Personal Information</Text>
+              <ImageComponent
+                text={"Enter your photo here"}
+                image={image}
+                handleImageChange={handleImageChange}
+                register={register}
+                name={"profilePicUrl"}
+                isProfileImg={true}
+              />
+              <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+                <TextField
+                  name={"fullName"}
+                  errors={errors?.fullName?.message}
+                  register={register}
+                  placeholder={"Full Name"}
+                  label={"Full name"}
+                  hasLabel={true}
+                />
+                <TextField
+                  name={"email"}
+                  errors={errors?.email?.message}
+                  register={register}
+                  placeholder={"Email"}
+                  label={"Email"}
+                  hasLabel={true}
+                />
+                <TextField
+                  name={"phone"}
+                  errors={errors?.phone?.message}
+                  register={register}
+                  placeholder={"Phone number"}
+                  label={"Phone number"}
+                  hasLabel={true}
+                />
+                <VStack alignItems={"stretch"}>
+                  <Text fontSize={"md"} color={"black"}>
+                    <span style={{ color: "red" }}>* </span>
+                    Enter your location
+                  </Text>
+                  <PlaceAutocomplete
+                    address={address}
+                    setAddress={setAddress}
+                    handleSelect={handleSelect}
+                    setCoordinates={setCoordinates}
+                  />
+                </VStack>
+                <VStack alignItems={"stretch"}>
+                  <Text fontSize={"md"} color={"black"}>
+                    Bio
+                  </Text>
+                  <Textarea
+                    {...register("bio")}
+                    placeholder={"Write a short description about yourself"}
+                    w={"470px"}
+                  />
+                </VStack>
+              </Grid>
+            </VStack>
+
+            <VStack gap={7} alignItems={"stretch"}>
+              <Text color={"primary.0"}>Services</Text>
+              <Box>
+                <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+                  {fields.map((field, index) => (
+                    <React.Fragment key={field.id}>
+                      <TextField
+                        name={`teachingInfo[${index}].subject`}
+                        errors={errors.teachingInfo?.[index]?.subject?.message}
+                        register={register}
+                        placeholder={"Select a subject"}
+                        label={"Subject"}
+                        hasLabel={true}
+                      />
+                      <TextField
+                        name={`teachingInfo[${index}].price`}
+                        errors={errors.teachingInfo?.[index]?.price?.message}
+                        register={register}
+                        placeholder={"Enter rate per class for this subject"}
+                        label={"Price"}
+                        hasLabel={true}
+                      />
+                      <HStack>
+                        <Box width={"100%"}>
+                          <TextField
+                            name={`teachingInfo[${index}].proficiency`}
+                            errors={
+                              errors.teachingInfo?.[index]?.proficiency?.message
+                            }
+                            register={register}
+                            placeholder={
+                              "Write your proficiency for this subject"
+                            }
+                            label={"Proficiency"}
+                            hasLabel={true}
+                          />
+                        </Box>
+                        {index > 0 && (
+                          <CloseIcon
+                            mt={2}
+                            boxSize={5}
+                            color={"red.600"}
+                            _hover={{ cursor: "pointer" }}
+                            type="button"
+                            onClick={() => remove(index)}
+                          />
+                        )}
+                      </HStack>
+                    </React.Fragment>
+                  ))}
+                </Grid>
+                <NormalButton
+                  mt={"10px"}
+                  bgColor={"primary.0"}
+                  text={"Add subject"}
+                  color={"white"}
+                  type="button"
+                  onClick={() => append("")}
+                />
+              </Box>
+            </VStack>
+
+            <VStack gap={7} alignItems={"stretch"}>
+              <Text color={"primary.0"}>Timings</Text>
+              <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+                <TextField
+                  type={"time"}
+                  name={"timing.startTime"}
+                  errors={errors?.timing?.startTime?.message}
+                  register={register}
+                  placeholder={"Start time"}
+                  label={"Start time"}
+                  hasLabel={true}
+                />
+                <TextField
+                  type={"time"}
+                  name={"timing.endTime"}
+                  errors={errors?.timing?.endTime?.message}
+                  register={register}
+                  placeholder={"End time"}
+                  label={"End time"}
+                  hasLabel={true}
+                />
+              </Grid>
+            </VStack>
+
+            <VStack gap={7} alignItems={"stretch"}>
+              <Text color={"primary.0"}>Submit your documents here</Text>
+
+              <Input
+                {...register("nIdFrontUrl")}
+                type="file"
+                accept="image/*"
+              />
+              <Input {...register("nIdBackUrl")} type="file" accept="image/*" />
+              <Input
+                {...register("teachingCertificateUrl")}
+                type="file"
+                accept="image/*"
               />
             </VStack>
-          </Grid>
-          <Text color={"primary.0"}>Services</Text>
-          <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
-            {fields.map((field, index) => (
-              <React.Fragment key={field.id}>
-                <TextField
-                  name={`teachingInfo[${index}].subject`}
-                  errors={errors.teachingInfo?.[index]?.subject?.message}
-                  register={register}
-                  placeholder={"Select a subject"}
-                  label={"Subject"}
-                  hasLabel={true}
-                />
+          </VStack>
 
-                <TextField
-                  name={`teachingInfo[${index}].price`}
-                  errors={errors.teachingInfo?.[index]?.price?.message}
-                  register={register}
-                  placeholder={"Enter rate per class for this subject"}
-                  label={"Price"}
-                  hasLabel={true}
-                />
-
-                <HStack>
-                  <Box width={"100%"}>
-                    <TextField
-                      name={`teachingInfo[${index}].proficiency`}
-                      errors={
-                        errors.teachingInfo?.[index]?.proficiency?.message
-                      }
-                      register={register}
-                      placeholder={"Write your proficiency for this subject"}
-                      label={"Proficiency"}
-                      hasLabel={true}
-                    />
-                  </Box>
-                  {index > 0 && (
-                    <CloseIcon
-                      boxSize={5}
-                      color={"red.600"}
-                      _hover={{ cursor: "pointer" }}
-                      type="button"
-                      onClick={() => remove(index)}
-                    />
-                  )}
-                </HStack>
-              </React.Fragment>
-            ))}
-          </Grid>
-          <NormalButton
-            mt={"10px"}
-            bgColor={"primary.0"}
-            text={"Add subject"}
-            color={"white"}
-            type="button"
-            onClick={() => append("")}
-          />
-          <Text color={"primary.0"}>Timings</Text>
-          <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
-            <TextField
-              type={"time"}
-              name={"timing.startTime"}
-              errors={errors?.timing?.startTime?.message}
-              register={register}
-              placeholder={"Start time"}
-              label={"Start time"}
-              hasLabel={true}
-            />
-            <TextField
-              type={"time"}
-              name={"timing.endTime"}
-              errors={errors?.timing?.endTime?.message}
-              register={register}
-              placeholder={"End time"}
-              label={"End time"}
-              hasLabel={true}
-            />
-          </Grid>
-          <Input {...register("profilePicUrl")} type="file" accept="image/*" />
-          <Input {...register("nIdFrontUrl")} type="file" accept="image/*" />
-          <Input {...register("nIdBackUrl")} type="file" accept="image/*" />
-          <Input
-            {...register("teachingCertificateUrl")}
-            type="file"
-            accept="image/*"
-          />
           <NormalButton
             color={"white"}
             bgColor={"primary.0"}

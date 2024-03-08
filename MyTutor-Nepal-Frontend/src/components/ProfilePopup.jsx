@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { createImageFromInitials } from "./Utils";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import React from "react";
 
 const ProfilePopup = () => {
   const navigate = useNavigate();
@@ -75,18 +76,14 @@ const ProfilePopup = () => {
           {user?.fullName}
         </Flex>
         {popupItems.map((item) => (
-          <>
-            <MenuItem
-              key={item.id}
-              _hover={{ bgColor: "gray.0" }}
-              onClick={item.function}
-            >
+          <React.Fragment key={item.id}>
+            <MenuItem _hover={{ bgColor: "gray.0" }} onClick={item.function}>
               <HStack>
                 <i className={item.icon} />
                 <Text>{item.name}</Text>
               </HStack>
             </MenuItem>
-          </>
+          </React.Fragment>
         ))}
       </MenuList>
     </Menu>
