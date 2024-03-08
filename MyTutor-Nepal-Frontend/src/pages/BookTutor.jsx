@@ -37,7 +37,7 @@ const BookTutor = () => {
         { tutorId: params.tutorId },
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"), //Authorization must start with capital when posting to backend
+            Authorization: "Bearer " + localStorage.getItem("token"), 
           },
         }
       );

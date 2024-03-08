@@ -109,7 +109,7 @@ const PanelLayout = ({ children }) => {
                 </HStack>
               </HStack>
             </Box>
-            <Box minH={"86vh"} bgColor={"white"} mb={"20px"}>
+            <Box p={5} minH={"89vh"} bgColor={"white"} mb={"20px"}>
               {children}
             </Box>
           </Box>

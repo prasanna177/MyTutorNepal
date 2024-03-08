@@ -22,6 +22,7 @@ import UserAppointments from "./pages/UserAppointments";
 import TutorAppointments from "./pages/tutor/TutorAppointments";
 import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
+import TutorInfo from "./pages/admin/TutorInfo";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -87,6 +88,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Tutors />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/tutors/:tutorId"
+                element={
+                  <ProtectedRoute>
+                    <TutorInfo />
                   </ProtectedRoute>
                 }
               />

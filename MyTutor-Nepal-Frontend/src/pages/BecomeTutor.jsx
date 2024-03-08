@@ -145,7 +145,7 @@ const BecomeTutor = () => {
 
   return (
     <PanelLayout>
-      <Box p={5}>
+      <Box >
         <Heading mb={"20px"}>Become tutor</Heading>
         <Box
           as="form"

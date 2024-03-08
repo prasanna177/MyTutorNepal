@@ -5,9 +5,11 @@ import { Button, Heading } from "@chakra-ui/react";
 import { DataTable } from "../../components/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Tutors = () => {
   const [tutors, setTutors] = useState([]);
+  const navigate = useNavigate();
 
   const handleAcountStatus = async (tutorObj, status) => {
     try {
@@ -43,11 +45,20 @@ const Tutors = () => {
       header: "ACTION",
       cell: (row) => {
         return row.row.original.status === "Pending" ? (
-          <Button
-            onClick={() => handleAcountStatus(row.row.original, "Approved")}
-          >
-            Approve
-          </Button>
+          <>
+            <Button
+              onClick={() => handleAcountStatus(row.row.original, "Approved")}
+            >
+              Approve
+            </Button>
+            <Button
+              onClick={() => {
+                navigate(`/admin/tutors/${row.row.original._id}`);
+              }}
+            >
+              View
+            </Button>
+          </>
         ) : (
           <Button>Reject</Button>
         );
