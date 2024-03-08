@@ -1,9 +1,9 @@
 import {
   Box,
+  Flex,
   Grid,
   HStack,
   Heading,
-  Input,
   Text,
   Textarea,
   VStack,
@@ -31,7 +31,10 @@ const BecomeTutor = () => {
     lat: null,
     lng: null,
   });
-  const [image, setImage] = useState("");
+  const [profilePicImage, setProfilePicImage] = useState("");
+  const [nIdFrontImage, setNIdFrontImage] = useState("");
+  const [nIdBackImage, setNIdBackImage] = useState("");
+  const [teachingCertificateImage, setTeachingCertificateImage] = useState("");
 
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -69,10 +72,10 @@ const BecomeTutor = () => {
   });
 
   const onSubmit = async (data) => {
-    data.profilePicUrl = data.profilePicUrl[0];
-    data.nIdFrontUrl = data.nIdFrontUrl[0];
-    data.nIdBackUrl = data.nIdBackUrl[0];
-    data.teachingCertificateUrl = data.teachingCertificateUrl[0];
+    data.profilePicUrl = profilePicImage;
+    data.nIdFrontUrl = nIdFrontImage;
+    data.nIdBackUrl = nIdBackImage;
+    data.teachingCertificateUrl = teachingCertificateImage;
     const submissionData = { ...data, coordinates, address, userId: user._id };
     try {
       const formData = new FormData();
@@ -134,20 +137,11 @@ const BecomeTutor = () => {
     control,
   });
 
-  //   <ImageComponent
-  //   text={"Enter your photo here"}
-  //   image={image}
-  //   handleImageChange={handleImageChange}
-  //   handleImageClick={handleImageClick}
-  //   register={register}
-  //   name={"profilePicUrl"}
-  //   ref={profilePicRef}
-  //   isProfileImg={false}
-  // />
-
-  const handleImageChange = (e) => {
+  const handleImageChange = (e, setImage) => {
     setImage(e.target.files[0]);
   };
+
+  console.log(profilePicImage, nIdBackImage);
 
   return (
     <PanelLayout>
@@ -162,11 +156,13 @@ const BecomeTutor = () => {
             <VStack gap={7} alignItems={"stretch"}>
               <Text color={"primary.0"}>Personal Information</Text>
               <ImageComponent
+                width={"200px"}
+                height={"200px"}
                 text={"Enter your photo here"}
-                image={image}
-                handleImageChange={handleImageChange}
-                register={register}
-                name={"profilePicUrl"}
+                image={profilePicImage}
+                handleImageChange={(e) =>
+                  handleImageChange(e, setProfilePicImage)
+                }
                 isProfileImg={true}
               />
               <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
@@ -307,27 +303,43 @@ const BecomeTutor = () => {
 
             <VStack gap={7} alignItems={"stretch"}>
               <Text color={"primary.0"}>Submit your documents here</Text>
-
-              <Input
-                {...register("nIdFrontUrl")}
-                type="file"
-                accept="image/*"
-              />
-              <Input {...register("nIdBackUrl")} type="file" accept="image/*" />
-              <Input
-                {...register("teachingCertificateUrl")}
-                type="file"
-                accept="image/*"
-              />
+              <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+                <ImageComponent
+                  text={"National ID (Front)"}
+                  image={nIdFrontImage}
+                  handleImageChange={(e) =>
+                    handleImageChange(e, setNIdFrontImage)
+                  }
+                  isProfileImg={false}
+                />
+                <ImageComponent
+                  text={"National ID (Back)"}
+                  image={nIdBackImage}
+                  handleImageChange={(e) =>
+                    handleImageChange(e, setNIdBackImage)
+                  }
+                  isProfileImg={false}
+                />
+                <ImageComponent
+                  text={"Highest education/teaching certificate"}
+                  image={teachingCertificateImage}
+                  handleImageChange={(e) =>
+                    handleImageChange(e, setTeachingCertificateImage)
+                  }
+                  isProfileImg={false}
+                />
+              </Grid>
             </VStack>
+            <Flex w={"100%"} justifyContent={"center"}>
+              <NormalButton
+                color={"white"}
+                bgColor={"primary.0"}
+                text={"Submit"}
+                type="submit"
+                px={20}
+              />
+            </Flex>
           </VStack>
-
-          <NormalButton
-            color={"white"}
-            bgColor={"primary.0"}
-            text={"Submit"}
-            type="submit"
-          />
         </Box>
       </Box>
     </PanelLayout>

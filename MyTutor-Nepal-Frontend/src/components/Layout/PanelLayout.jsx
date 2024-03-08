@@ -56,7 +56,6 @@ const PanelLayout = ({ children }) => {
             p={4}
             pos={"fixed"}
             minH={"100%"}
-            ev
             w={"250px"}
             mr={"20px"}
             bgColor={"white"}

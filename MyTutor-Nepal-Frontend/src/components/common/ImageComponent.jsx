@@ -4,11 +4,11 @@ import ImagePlaceholder from "../../assets/images/image_placeholder.png";
 import { useRef } from "react";
 
 const ImageComponent = ({
+  width,
+  height,
   text,
   image,
   handleImageChange,
-  register,
-  name,
   isProfileImg,
 }) => {
   const inputRef = useRef(null);
@@ -18,40 +18,41 @@ const ImageComponent = ({
   };
   return (
     <>
-      <VStack alignItems={"stretch"}>
+      <VStack alignItems={"start"}>
         <Text fontSize={"md"} color={"black"}>
           {text}
         </Text>
         <Box
+          border={"1px"}
+          borderStyle={"dashed"}
           _hover={{ cursor: "pointer" }}
           onClick={handleImageClick}
         >
           {image ? (
             <Image
-              width={"200px"}
-              h={"200px"}
+              width={width}
+              h={height}
               objectFit={"cover"}
               src={URL.createObjectURL(image)}
             />
           ) : isProfileImg ? (
             <Image
-              width={"200px"}
-              h={"200px"}
+              width={width}
+              h={height}
               objectFit={"cover"}
               src={NoProfilePic}
             />
           ) : (
             <Image
-              width={"200px"}
-              h={"200px"}
+              width={width}
+              h={height}
               objectFit={"cover"}
               src={ImagePlaceholder}
             />
           )}
           <Input
-            {...register(name)}
-            hidden
             type="file"
+            hidden
             accept="image/*"
             onChange={handleImageChange}
             ref={inputRef}
