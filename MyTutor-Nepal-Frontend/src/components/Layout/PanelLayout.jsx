@@ -10,7 +10,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { AdminMenu, StudentMenu } from "../../data/sidebarData";
 import { useSelector } from "react-redux";
@@ -20,6 +20,7 @@ import ProfilePopup from "../ProfilePopup";
 
 const PanelLayout = ({ children, title }) => {
   const { user } = useSelector((state) => state.user);
+  const location = useLocation();
   const TutorMenu = [
     {
       name: "Home",
@@ -68,18 +69,23 @@ const PanelLayout = ({ children, title }) => {
               </Box>
               <Divider />
               <Box w={"100%"} color={"gray.700"} fontSize={"lg"}>
-                {SideBarMenu.map((menu, index) => (
-                  <Link key={index} to={menu.path}>
-                    <HStack
-                      p={"10px"}
-                      _hover={{ bgColor: "primary.100", color: "primary.0" }}
-                      borderRadius={"5px"}
-                    >
-                      <i className={menu.icon}></i>
-                      <Text>{menu.name}</Text>
-                    </HStack>
-                  </Link>
-                ))}
+                {SideBarMenu.map((menu, index) => {
+                  const isActive = location.pathname === menu.path;
+                  return (
+                    <Link key={index} to={menu.path}>
+                      <HStack
+                        bg={isActive ? "primary.0" : "white"}
+                        color={isActive ? "white" : "gray.700"}
+                        p={"10px"}
+                        _hover={{ bgColor: "primary.100", color: "primary.0" }}
+                        borderRadius={"5px"}
+                      >
+                        <i className={menu.icon}></i>
+                        <Text>{menu.name}</Text>
+                      </HStack>
+                    </Link>
+                  );
+                })}
               </Box>
             </VStack>
           </Box>

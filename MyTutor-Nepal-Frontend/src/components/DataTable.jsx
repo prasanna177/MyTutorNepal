@@ -9,6 +9,9 @@ import {
   Box,
   Text,
   Image,
+  VStack,
+  Flex,
+  Spinner,
 } from "@chakra-ui/react";
 import {
   useReactTable,
@@ -17,7 +20,7 @@ import {
 } from "@tanstack/react-table";
 import NoData from "../assets/images/NoData.png";
 
-export function DataTable({ data, columns }) {
+export function DataTable({ data, columns, isLoading }) {
   const table = useReactTable({
     columns,
     data,
@@ -51,23 +54,38 @@ export function DataTable({ data, columns }) {
             </Tr>
           ))}
         </Thead>
-        {data && data.length === 0 ? (
+        {isLoading ? (
+          <Tr>
+            <Td
+              border={"none"}
+              colSpan={table.getHeaderGroups()[0].headers.length}
+            >
+              <Flex justifyContent={"center"} m={8}>
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="primary.600"
+                  size="xl"
+                />
+              </Flex>
+            </Td>
+          </Tr>
+        ) : data?.length === 0 ? (
           <Tr>
             <Td
               border={"none"}
               colSpan={table.getHeaderGroups()[0].headers.length}
             >
               <Box fontSize={"14px"} fontWeight={500} color={"gray.400"}>
-                <Box
-                  display="flex"
-                  flexDirection="column"
+                <VStack
                   justifyContent="center"
                   alignItems="center"
                   height="100%"
                 >
                   <Image h={"400px"} src={NoData} />
-                  <Text>No Data Available</Text>
-                </Box>
+                  <Text variant={"overline"}>No Data Available</Text>
+                </VStack>
               </Box>
             </Td>
           </Tr>

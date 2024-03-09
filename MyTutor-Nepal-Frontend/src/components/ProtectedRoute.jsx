@@ -14,11 +14,11 @@ const ProtectedRoute = ({ children }) => {
     try {
       // dispatch(showLoading());
       const response = await axios.post(
-        "http://localhost:4000/api/user/getUserById",
+        "http://localhost:4000/api/user/getCurrentUser",
         {},
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"), //Authorization must start with capital when posting to backend
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         }
       );

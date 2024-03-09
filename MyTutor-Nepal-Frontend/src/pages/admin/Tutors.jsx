@@ -19,6 +19,7 @@ import { ViewIcon } from "@chakra-ui/icons";
 const Tutors = () => {
   const [pendingTutors, setPendingTutors] = useState([]);
   const [approvedTutors, setApprovedTutors] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const columnHelper = createColumnHelper();
@@ -65,62 +66,68 @@ const Tutors = () => {
     }),
   ];
 
-  const getTutor = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:4000/api/admin/getAllTutors",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (res.data.success) {
-        const pendingTutors = res.data.data.filter(
-          (tutor) => tutor.status === "Pending"
-        );
-        const approvedTutors = res.data.data.filter(
-          (tutor) => tutor.status === "Approved"
-        );
-        setApprovedTutors(approvedTutors);
-        setPendingTutors(pendingTutors);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const getTutor = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get(
+          "http://localhost:4000/api/admin/getAllTutors",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setIsLoading(false);
+        if (res.data.success) {
+          const pendingTutors = res.data.data.filter(
+            (tutor) => tutor.status === "Pending"
+          );
+          const approvedTutors = res.data.data.filter(
+            (tutor) => tutor.status === "Approved"
+          );
+          setApprovedTutors(approvedTutors);
+          setPendingTutors(pendingTutors);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
+    };
     getTutor();
   }, []);
   return (
     <PanelLayout title={"Tutors List"}>
-      <Tabs variant={"soft-rounded"}>
+      <Tabs variant={"soft-rounded"} colorScheme="purple">
         <TabList>
-          <Tab bg={"primary.0"} color={"white"}>
+          <Tab>
             <HStack>
               <Text>Pending Tutors</Text>
-              <Box px={2} borderRadius={20} bgColor={"primary.200"}>
-                {pendingTutors.length}
-              </Box>
+              <Box>({pendingTutors.length})</Box>
             </HStack>
           </Tab>
           <Tab>
             <HStack>
               <Text>Approved Tutors</Text>
-              <Box px={2} borderRadius={20} bgColor={"primary.200"}>
-                {approvedTutors.length}
-              </Box>
+              <Box>({approvedTutors.length})</Box>
             </HStack>
           </Tab>
         </TabList>
 
         <TabPanels>
           <TabPanel>
-            <DataTable columns={columns} data={[]} />
+            <DataTable
+              columns={columns}
+              data={pendingTutors}
+              isLoading={isLoading}
+            />
           </TabPanel>
           <TabPanel>
-            <DataTable columns={columns} data={approvedTutors} />
+            <DataTable
+              columns={columns}
+              data={approvedTutors}
+              isLoading={isLoading}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import axios from "axios";
-import { Button } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../../components/DataTable";
+import { ViewIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const columnHelper = createColumnHelper();
 
@@ -23,42 +27,46 @@ const Users = () => {
     columnHelper.accessor("action", {
       header: "ACTION",
       cell: (row) => (
-        <Button
+        <ViewIcon
+          color={"primary.0"}
+          _hover={{ cursor: "pointer" }}
           onClick={() => {
-            console.log(row.row.original._id);
+            navigate(`/admin/users/${row.row.original._id}`);
           }}
         >
-          Action
-        </Button>
+          View
+        </ViewIcon>
       ),
     }),
   ];
 
-  const getUsers = async () => {
-    try {
-      const res = await axios.get(
-        "http://localhost:4000/api/admin/getAllUsers",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (res.data.success) {
-        setUsers(res.data.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const getUsers = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get(
+          "http://localhost:4000/api/admin/getAllUsers",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setIsLoading(false);
+        if (res.data.success) {
+          setUsers(res.data.data);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
+    };
     getUsers();
   }, []);
 
   return (
     <PanelLayout title={"Users List"}>
-      <DataTable columns={columns} data={users} />
+      <DataTable columns={columns} data={users} isLoading={isLoading} />
     </PanelLayout>
   );
 };

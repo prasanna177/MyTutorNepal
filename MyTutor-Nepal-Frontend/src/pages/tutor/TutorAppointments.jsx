@@ -8,9 +8,11 @@ import toast from "react-hot-toast";
 
 const TutorAppointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getAppointments = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.get(
         "http://localhost:4000/api/tutor/getTutorAppointments",
         {
@@ -19,10 +21,12 @@ const TutorAppointments = () => {
           },
         }
       );
+      setIsLoading(false);
       if (res.data.success) {
         setAppointments(res.data.data);
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -87,7 +91,7 @@ const TutorAppointments = () => {
   return (
     <PanelLayout>
       <h1>My appointments</h1>
-      <DataTable columns={columns} data={appointments} />
+      <DataTable columns={columns} data={appointments} isLoading={isLoading} />
     </PanelLayout>
   );
 };

@@ -12,7 +12,6 @@ const TutorInfo = () => {
   const [tutor, setTutor] = useState([]);
   const params = useParams();
   const navigate = useNavigate();
-  console.log(tutor, "tutor");
 
   const getTutorInfo = async () => {
     console.log(params.tutorId);

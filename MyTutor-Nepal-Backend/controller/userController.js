@@ -137,24 +137,15 @@ module.exports.becomeTutor_post = async (req, res) => {
   }
 };
 
-module.exports.getUserById = async (req, res) => {
+module.exports.getCurrentUser = async (req, res) => {
   try {
-    const user =
-      (await User.findOne({ _id: req.body.userId })) ||
-      (await Tutor.findOne({ _id: req.body.userId }));
+    const user = await User.findOne({ _id: req.body.userId });
     console.log(req.body);
     if (user) {
       user.password = undefined;
-      const userData = user;
-      if (req.body.isParent) {
-        userData.role = "parent";
-      } else {
-        userData.role = user.role;
-      }
-
       res.status(200).send({
         success: true,
-        data: userData,
+        data: user,
       });
     } else {
       return res
@@ -166,6 +157,28 @@ module.exports.getUserById = async (req, res) => {
     res
       .status(500)
       .send({ message: "Error getting user info", success: false, error });
+  }
+};
+
+module.exports.getUserById = async(req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.body.clientId });
+    if (user) {
+      user.password = undefined;
+      res.status(200).send({
+        success: true,
+        data: user,
+      });
+    } else {
+      return res
+        .status(200)
+        .send({ message: "User does not exist", success: false });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send({ message: "Error getting user info", success: false, error })
   }
 };
 

@@ -42,6 +42,7 @@ router.post(
   userController.mark_notifications_as_seen
 );
 router.post("/delete-all-notifications",authMiddleware,userController.delete_all_notifications);
+router.post("/getCurrentUser", authMiddleware, userController.getCurrentUser);
 router.post("/getUserById", authMiddleware, userController.getUserById);
 router.get("/getAllTutors", authMiddleware, userController.getAllTutors);
 router.post("/book-tutor", authMiddleware, userController.bookTutor_post);

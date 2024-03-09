@@ -23,6 +23,7 @@ import TutorAppointments from "./pages/tutor/TutorAppointments";
 import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
 import TutorInfo from "./pages/admin/TutorInfo";
+import UserInfo from "./pages/admin/UserInfo";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -96,6 +97,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <TutorInfo />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users/:userId"
+                element={
+                  <ProtectedRoute>
+                    <UserInfo />
                   </ProtectedRoute>
                 }
               />

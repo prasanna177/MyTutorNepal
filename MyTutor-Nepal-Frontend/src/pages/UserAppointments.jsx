@@ -7,9 +7,11 @@ import moment from "moment";
 
 const UserAppointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getAppointments = async () => {
     try {
+      setIsLoading(true)
       const res = await axios.get(
         "http://localhost:4000/api/user/getAllAppointments",
         {
@@ -18,10 +20,12 @@ const UserAppointments = () => {
           },
         }
       );
+      setIsLoading(false)
       if (res.data.success) {
         setAppointments(res.data.data);
       }
     } catch (error) {
+      setIsLoading(false)
       console.log(error);
     }
   };
@@ -64,9 +68,8 @@ const UserAppointments = () => {
   }, []);
 
   return (
-    <PanelLayout>
-      <h1>Booking</h1>
-      <DataTable columns={columns} data={appointments} />
+    <PanelLayout title={'Booking'}>
+      <DataTable columns={columns} data={appointments} isLoading={isLoading} />
     </PanelLayout>
   );
 };
