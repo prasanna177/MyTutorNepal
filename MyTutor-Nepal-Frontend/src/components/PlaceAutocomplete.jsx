@@ -112,10 +112,10 @@ const PlaceAutocomplete = ({
         </PlacesAutocomplete>
       </Box>
       <NormalButton
-        bgColor={"primary.0"}
-        color={"white"}
+        bgColor={"primary.100"}
+        color={"primary.0"}
         onClick={getCurrentLocation}
-        type='button'
+        type="button"
         text={"Add location"}
       >
         Add location

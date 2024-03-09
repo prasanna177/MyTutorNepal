@@ -7,6 +7,7 @@ const router = Router();
 router.post("/getTutorInfo", authMiddleware, tutorController.getTutorInfo);
 router.post("/updateProfile", authMiddleware, tutorController.updateProfile);
 router.post("/getTutorById", authMiddleware, tutorController.getTutorById);
+router.post("/deleteTutorById", authMiddleware, tutorController.deleteTutorById);
 router.get(
   "/getTutorAppointments",
   authMiddleware,

@@ -201,13 +201,10 @@ const BecomeTutor = () => {
                   />
                 </VStack>
                 <VStack alignItems={"stretch"}>
-                  <Text variant={"subtitle1"}>
-                    Bio
-                  </Text>
+                  <Text variant={"subtitle1"}>Bio</Text>
                   <Textarea
                     {...register("bio")}
                     placeholder={"Write a short description about yourself"}
-                    w={"470px"}
                   />
                 </VStack>
               </Grid>
@@ -266,9 +263,9 @@ const BecomeTutor = () => {
                 </Grid>
                 <NormalButton
                   mt={"10px"}
-                  bgColor={"primary.0"}
+                  bgColor={"primary.100"}
                   text={"Add subject"}
-                  color={"white"}
+                  color={"primary.0"}
                   type="button"
                   onClick={() => append("")}
                 />

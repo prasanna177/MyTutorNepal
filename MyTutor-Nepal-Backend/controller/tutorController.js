@@ -72,6 +72,32 @@ module.exports.getTutorById = async (req, res) => {
   }
 };
 
+module.exports.deleteTutorById = async (req, res) => {
+  try {
+    const tutor = await Tutor.findOneAndDelete({ _id: req.body.tutorId });
+
+    if (!tutor) {
+      return res.status(200).send({
+        success: false,
+        message: "Tutor not found",
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Tutor rejected",
+      data: tutor,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while deleting tutor by id.",
+    });
+  }
+};
+
 module.exports.getTutorAppointments = async (req, res) => {
   try {
     const tutor = await Tutor.findOne({ userId: req.body.userId });

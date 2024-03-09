@@ -1,14 +1,17 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Grid, HStack, Text, VStack } from "@chakra-ui/react";
 import Bundle from "../../components/common/Bundle";
 import ImageComponent from "../../components/common/ImageComponent";
+import NormalButton from "../../components/common/Button";
+import toast from "react-hot-toast";
 
 const TutorInfo = () => {
   const [tutor, setTutor] = useState([]);
   const params = useParams();
+  const navigate = useNavigate();
   console.log(tutor, "tutor");
 
   const getTutorInfo = async () => {
@@ -35,6 +38,50 @@ const TutorInfo = () => {
     getTutorInfo();
     //eslint-disable-next-line
   }, []);
+
+  const handleAccountStatus = async (tutorObj, status) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/admin/changeAccountStatus",
+        { tutorId: tutorObj._id, userId: tutorObj.userId, status },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/admin/tutors");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const handleAccountRejection = async (tutorId) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/tutor/deleteTutorById",
+        { tutorId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/admin/tutors");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
   return (
     <PanelLayout title={"Tutor detail"}>
       <VStack alignItems={"stretch"} gap={7}>
@@ -122,6 +169,35 @@ const TutorInfo = () => {
             />
           </Grid>
         </VStack>
+
+        <HStack justifyContent={"space-between"}>
+          <NormalButton
+            color={"primary.0"}
+            bgColor={"primary.100"}
+            text={"Back"}
+            onClick={() => {
+              navigate("/admin/tutors");
+            }}
+          />
+          {tutor?.status === "Pending" && (
+            <>
+              <HStack gap={4}>
+                <NormalButton
+                  color={"error.100"}
+                  bgColor={"error.0"}
+                  text={"Reject"}
+                  onClick={() => handleAccountRejection(tutor._id)}
+                />
+                <NormalButton
+                  color={"white"}
+                  bgColor={"primary.0"}
+                  text={"Accept"}
+                  onClick={() => handleAccountStatus(tutor, "Approved")}
+                />
+              </HStack>
+            </>
+          )}
+        </HStack>
       </VStack>
     </PanelLayout>
   );

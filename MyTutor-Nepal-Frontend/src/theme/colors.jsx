@@ -14,18 +14,25 @@ const gray = {
   900: "#171923",
 };
 
+const error = {
+  0: "#FFEEEA",
+  100: "#FF5630",
+};
+
 const opaque = {
   0: "rgba(0,0,0,0.300)",
 };
 
 const primary = {
   0: "#685CFE",
+  100: "#D6D3FF",
 };
 
 const colors = {
   black,
   white,
   gray,
+  error,
   primary,
   opaque,
 };

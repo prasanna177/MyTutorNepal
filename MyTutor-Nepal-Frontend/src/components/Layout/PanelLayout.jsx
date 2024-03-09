@@ -72,7 +72,7 @@ const PanelLayout = ({ children, title }) => {
                   <Link key={index} to={menu.path}>
                     <HStack
                       p={"10px"}
-                      _hover={{ bgColor: "primary.0", color: "white" }}
+                      _hover={{ bgColor: "primary.100", color: "primary.0" }}
                       borderRadius={"5px"}
                     >
                       <i className={menu.icon}></i>
