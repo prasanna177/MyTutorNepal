@@ -18,7 +18,9 @@ const TutorCard = ({ tutor }) => {
           cursor={"pointer"}
           onClick={() => navigate(`/book-tutor/${tutor._id}`)}
         >
-          <CardHeader>{tutor.fullName}</CardHeader>
+          <CardHeader>
+            <Text variant={"heading4"}>{tutor.fullName}</Text>
+          </CardHeader>
           <CardBody>
             {tutor.profilePicUrl ? (
               <Image
@@ -28,12 +30,17 @@ const TutorCard = ({ tutor }) => {
                 src={`http://localhost:4000/${tutor.profilePicUrl}`}
               />
             ) : (
-              <Image objectFit={"cover"} w={"250px"} h={"200px"} src={NoProfilePic} />
+              <Image
+                objectFit={"cover"}
+                w={"250px"}
+                h={"200px"}
+                src={NoProfilePic}
+              />
             )}
-            <Text>
+            <Text variant={"heading4"}>
               Timing: {tutor.timing.startTime + "-" + tutor.timing.endTime}
             </Text>
-            <Text>Phone: {tutor.phone}</Text>
+            <Text variant={"heading4"}>Phone: {tutor.phone}</Text>
           </CardBody>
         </Card>
       </Stack>

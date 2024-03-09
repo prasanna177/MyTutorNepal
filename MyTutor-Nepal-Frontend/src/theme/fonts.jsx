@@ -1,6 +1,6 @@
 const fonts = {
   heading: "Plus Jakarta Sans",
-  body: "Plus Jakarta Sans"
+  body: "Plus Jakarta Sans",
 };
 
 const fontSizes = {
@@ -13,7 +13,7 @@ const fontSizes = {
   "3xl": "24px",
   "4xl": "32px",
   "5xl": "48px",
-  "6xl": "64px"
+  "6xl": "64px",
 };
 
 const fontWeights = {
@@ -25,7 +25,7 @@ const fontWeights = {
   semibold: 600,
   bold: 700,
   extrabold: 800,
-  black: 900
+  black: 900,
 };
 
 export { fonts, fontSizes, fontWeights };

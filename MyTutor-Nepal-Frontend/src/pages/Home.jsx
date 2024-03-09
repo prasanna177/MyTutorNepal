@@ -33,7 +33,7 @@ const Home = () => {
   }, []);
 
   return (
-    <PanelLayout title={"Home"}>
+    <PanelLayout>
       <Box pos={"relative"}>
         <Link to="/map">
           <Button

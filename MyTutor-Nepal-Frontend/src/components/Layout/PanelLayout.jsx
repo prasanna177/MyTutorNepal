@@ -83,7 +83,7 @@ const PanelLayout = ({ children, title }) => {
               </Box>
             </VStack>
           </Box>
-          <Box ml={"260px"} w={"100%"} h={"100%"}>
+          <Box ml={"270px"} w={"100%"} h={"100%"}>
             <Box
               py={3}
               pr={3}

@@ -28,6 +28,12 @@ const heading3 = defineStyle({
   color: "gray.500",
 });
 
+const heading4 = defineStyle({
+  fontSize: "xl",
+  fontWeight: "medium",
+  color: "black",
+});
+
 const subtitle1 = defineStyle({
   fontSize: "md",
   fontWeight: "medium",
@@ -41,6 +47,7 @@ const Text = defineStyleConfig({
     heading1,
     heading2,
     heading3,
+    heading4,
     subtitle1,
   },
 });
