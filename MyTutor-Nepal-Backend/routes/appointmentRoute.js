@@ -10,4 +10,8 @@ router.post(
   appointmentController.getAppointmentById
 );
 
+router.post(
+  '/deleteAppointmentById', authMiddleware, appointmentController.deleteAppointmentById
+)
+
 module.exports = router;

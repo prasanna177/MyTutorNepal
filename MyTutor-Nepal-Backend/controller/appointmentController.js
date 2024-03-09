@@ -25,3 +25,29 @@ module.exports.getAppointmentById = async (req, res) => {
     });
   }
 };
+
+module.exports.deleteAppointmentById = async (req, res) => {
+  try {
+    const appointment = await Appointment.findOneAndDelete({ _id: req.body.appointmentId });
+
+    if (!appointment) {
+      return res.status(200).send({
+        success: false,
+        message: "Appointment not found",
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Appointment rejected",
+      data: appointment,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while deleting appointment by id.",
+    });
+  }
+}

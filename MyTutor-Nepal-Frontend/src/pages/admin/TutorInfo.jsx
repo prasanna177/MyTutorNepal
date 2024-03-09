@@ -53,6 +53,10 @@ const TutorInfo = () => {
         toast.success(res.data.message);
         navigate("/admin/tutors");
         window.location.reload();
+      }else {
+        toast.error(res.data.message);
+        navigate("/admin/tutors");
+        window.location.reload();
       }
     } catch (error) {
       console.log(error);
@@ -73,6 +77,11 @@ const TutorInfo = () => {
       );
       if (res.data.success) {
         toast.success(res.data.message);
+        navigate("/admin/tutors");
+        window.location.reload();
+      }
+      else {
+        toast.error(res.data.message);
         navigate("/admin/tutors");
         window.location.reload();
       }

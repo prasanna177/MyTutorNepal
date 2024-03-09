@@ -3,61 +3,25 @@ import PanelLayout from "../../components/Layout/PanelLayout";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../../components/DataTable";
 import axios from "axios";
-import { Button, HStack, Text } from "@chakra-ui/react";
-import toast from "react-hot-toast";
+import {
+  Box,
+  HStack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { getDate } from "../../components/Utils";
+import { ViewIcon } from "@chakra-ui/icons";
 
 const TutorAppointments = () => {
-  const [appointments, setAppointments] = useState([]);
+  const [pendingAppointments, setPendingAppointments] = useState([]);
+  const [approvedAppointments, setApprovedAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  const getAppointments = async () => {
-    try {
-      setIsLoading(true);
-      const res = await axios.get(
-        "http://localhost:4000/api/tutor/getTutorAppointments",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      setIsLoading(false);
-      if (res.data.success) {
-        setAppointments(res.data.data);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-    }
-  };
-
-  const handleStatus = async (appointment) => {
-    try {
-      const res = await axios.post(
-        "http://localhost:4000/api/tutor/acceptAppointment",
-        { appointmentId: appointment._id },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (res.data.success) {
-        toast.success(res.data.message);
-        getAppointments();
-      }
-      else{
-        toast.error(res.data.message);
-        getAppointments();
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
-    }
-  };
 
   const columnHelper = createColumnHelper();
 
@@ -96,37 +60,91 @@ const TutorAppointments = () => {
       header: "ACTION",
       cell: (row) => {
         return (
-          row.row.original.status === "pending" && (
-            <HStack gap={2}>
-              <Button onClick={() => handleStatus(row.row.original)}>
-                Approve
-              </Button>
-              <Button
-                onClick={() =>
-                  navigate(`/tutor/appointments/${row.row.original._id}`)
-                }
-              >
-                View
-              </Button>
-              <Button
-                onClick={() => handleStatus(row.row.original, "rejected")}
-              >
-                Reject
-              </Button>
-            </HStack>
-          )
+          <HStack gap={2}>
+            {/* <Button onClick={() => handleStatus(row.row.original)}>
+              Approve
+            </Button> */}
+            <ViewIcon
+              _hover={{ cursor: "pointer" }}
+              color={"primary.0"}
+              onClick={() =>
+                navigate(`/tutor/appointments/${row.row.original._id}`)
+              }
+            >
+              View
+            </ViewIcon>
+          </HStack>
         );
       },
     }),
   ];
 
   useEffect(() => {
+    const getAppointments = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get(
+          "http://localhost:4000/api/tutor/getTutorAppointments",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setIsLoading(false);
+        if (res.data.success) {
+          const pendingAppointments = res.data.data.filter(
+            (appointment) => appointment.status === "pending"
+          );
+          const approvedAppointments = res.data.data.filter(
+            (appointment) => appointment.status === "approved"
+          );
+          setPendingAppointments(pendingAppointments);
+          setApprovedAppointments(approvedAppointments);
+        }
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+      }
+    };
     getAppointments();
   }, []);
 
   return (
     <PanelLayout title={"My appointments"}>
-      <DataTable columns={columns} data={appointments} isLoading={isLoading} />
+      <Tabs variant={"soft-rounded"} colorScheme="purple">
+        <TabList>
+          <Tab>
+            <HStack>
+              <Text>Pending Appointments</Text>
+              <Box>({pendingAppointments.length})</Box>
+            </HStack>
+          </Tab>
+          <Tab>
+            <HStack>
+              <Text>Approved Tutors</Text>
+              <Box>({approvedAppointments.length})</Box>
+            </HStack>
+          </Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <DataTable
+              columns={columns}
+              data={pendingAppointments}
+              isLoading={isLoading}
+            />
+          </TabPanel>
+          <TabPanel>
+            <DataTable
+              columns={columns}
+              data={approvedAppointments}
+              isLoading={isLoading}
+            />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </PanelLayout>
   );
 };
