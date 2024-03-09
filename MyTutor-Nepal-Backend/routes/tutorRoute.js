@@ -14,9 +14,9 @@ router.get(
   tutorController.getTutorAppointments
 );
 router.post(
-  "/updateAppointmentStatus",
+  "/acceptAppointment",
   authMiddleware,
-  tutorController.updateStatus
+  tutorController.acceptAppointment
 );
 
 module.exports = router;

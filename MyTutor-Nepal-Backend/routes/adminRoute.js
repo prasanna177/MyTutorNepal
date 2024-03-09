@@ -1,13 +1,13 @@
 const { Router } = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
-const { getAllUsers, getAllTutors, changeAccountStatus } = require("../controller/adminController");
+const adminController = require("../controller/adminController")
 
 const router = Router();
 
-router.get("/getAllUsers", authMiddleware, getAllUsers);
+router.get("/getAllUsers", authMiddleware, adminController.getAllUsers);
 
-router.get("/getAllTutors", authMiddleware, getAllTutors);
+router.get("/getAllTutors", authMiddleware, adminController.getAllTutors);
 
-router.post("/changeAccountStatus", authMiddleware, changeAccountStatus);
+router.post("/changeAccountStatus", authMiddleware, adminController.changeAccountStatus);
 
 module.exports = router;

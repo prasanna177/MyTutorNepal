@@ -57,6 +57,12 @@ module.exports.updateProfile = async (req, res) => {
 module.exports.getTutorById = async (req, res) => {
   try {
     const tutor = await Tutor.findOne({ _id: req.body.tutorId });
+    if (!tutor) {
+      return res.status(200).send({
+        success: false,
+        message: "Tutor not found",
+      });
+    }
     res.status(200).send({
       success: true,
       message: "Single tutor fetched",
@@ -75,6 +81,7 @@ module.exports.getTutorById = async (req, res) => {
 module.exports.deleteTutorById = async (req, res) => {
   try {
     const tutor = await Tutor.findOneAndDelete({ _id: req.body.tutorId });
+    console.log(tutor,'tutorafterdelete');
 
     if (!tutor) {
       return res.status(200).send({
@@ -117,24 +124,74 @@ module.exports.getTutorAppointments = async (req, res) => {
   }
 };
 
-module.exports.updateStatus = async (req, res) => {
+module.exports.acceptAppointment = async (req, res) => {
   try {
-    const { appointmentId, status } = req.body;
-    const appointments = await Appointment.findByIdAndUpdate(appointmentId, {
-      status,
-    });
-    const user = await User.findOne({ _id: appointments.userId });
-    user.unseenNotification.push({
-      type: "Status-Updated",
-      message: `Your appointment has been ${status}`,
-      onClickPath: "/tutor/appointments",
-      date: new Date()
-    });
-    await user.save();
-    res.status(200).send({
-      success: true,
-      message: "Appointment status updated",
-    });
+    const { appointmentId } = req.body;
+    const appointment = await Appointment.findById(appointmentId);
+
+    const currentDate = new Date();
+    const toDate = new Date(appointment.toDate);
+    const fromDate = new Date(appointment.fromDate);
+
+    //accepting between from date and to date
+    if (currentDate > fromDate && currentDate < toDate) {
+      const daysLeft = Math.ceil(
+        (toDate - currentDate) / (1000 * 60 * 60 * 24)
+      );
+      const updatedTotalPrice = daysLeft * appointment.feePerClass;
+
+      const appointments = await Appointment.findByIdAndUpdate(appointmentId, {
+        status: "approved",
+        totalPrice: updatedTotalPrice,
+      });
+      const user = await User.findOne({ _id: appointments.userId });
+      user.unseenNotification.push({
+        type: "Status-Updated",
+        message: `Your appointment has been accepted. Total price is now ${appointments.totalPrice}`,
+        onClickPath: "/student/appointments",
+        date: new Date(),
+      });
+      await user.save();
+      return res.status(200).send({
+        success: true,
+        message:
+          "Appointment accepted. Total price has been updated due to late accept.",
+      });
+    }
+    //accepting after to date
+    else if (currentDate > toDate) {
+      const appointments = await Appointment.findOneAndDelete({ _id: appointmentId });
+      const user = await User.findOne({ _id: appointments.userId });
+      user.unseenNotification.push({
+        type: "Status-Updated",
+        message: "Your appointment has been removed due to late acceptance.",
+        onClickPath: "/student/appointments",
+        date: new Date(),
+      });
+      await user.save();
+      return res.status(200).send({
+        success: false,
+        message: "Past to date. Appointment has been removed",
+      });
+    }
+    //accepting before from date
+    else {
+      const appointments = await Appointment.findByIdAndUpdate(appointmentId, {
+        status: "approved",
+      });
+      const user = await User.findOne({ _id: appointments.userId });
+      user.unseenNotification.push({
+        type: "Status-Updated",
+        message: "Your appointment has been accepted",
+        onClickPath: "/student/appointments",
+        date: new Date(),
+      });
+      await user.save();
+      return res.status(200).send({
+        success: true,
+        message: "Appointment accepted",
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send({
