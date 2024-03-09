@@ -7,6 +7,7 @@ import Bundle from "../../components/common/Bundle";
 import ImageComponent from "../../components/common/ImageComponent";
 import NormalButton from "../../components/common/Button";
 import toast from "react-hot-toast";
+import { getDateAndTime } from "../../components/Utils";
 
 const TutorInfo = () => {
   const [tutor, setTutor] = useState([]);
@@ -14,7 +15,6 @@ const TutorInfo = () => {
   const navigate = useNavigate();
 
   const getTutorInfo = async () => {
-    console.log(params.tutorId);
     try {
       const res = await axios.post(
         "http://localhost:4000/api/tutor/getTutorById",
@@ -107,14 +107,7 @@ const TutorInfo = () => {
             <Bundle title={"Bio"} subtitle={tutor?.bio} />
             <Bundle
               title={"Applied at"}
-              subtitle={new Date(tutor?.createdAt).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })}
+              subtitle={getDateAndTime(tutor?.createdAt)}
             />
           </Grid>
         </VStack>

@@ -26,23 +26,6 @@ const Notifications = () => {
   const [isUnseen, setIsUnseen] = useState(true);
   const { user } = useSelector((state) => state.user);
 
-  const convertDate = (date) => {
-    const options = {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    };
-    const formattedDateTime = new Date(date).toLocaleDateString(
-      "en-US",
-      options
-    );
-
-    return formattedDateTime;
-  };
-
   const markAllAsSeen = async () => {
     try {
       const response = await axios.post(
@@ -156,16 +139,10 @@ const Notifications = () => {
 
           <TabPanels>
             <TabPanel>
-              <NotificationList
-                notification={user?.unseenNotification}
-                convertDate={convertDate}
-              />
-          </TabPanel>
+              <NotificationList notification={user?.unseenNotification} />
+            </TabPanel>
             <TabPanel>
-              <NotificationList
-                notification={user?.seenNotification}
-                convertDate={convertDate}
-              />
+              <NotificationList notification={user?.seenNotification} />
             </TabPanel>
           </TabPanels>
         </Tabs>

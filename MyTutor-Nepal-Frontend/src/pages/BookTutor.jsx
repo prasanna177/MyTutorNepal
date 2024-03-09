@@ -66,6 +66,7 @@ const BookTutor = () => {
   });
 
   const handleBooking = async (data) => {
+    console.log(data)
     try {
       //to send total price to backend
       const fromDate = moment(data.fromDate, "YYYY-MM-DD");
@@ -146,7 +147,7 @@ const BookTutor = () => {
                   (item) => item.subject === e.target.value
                 );
                 setPrice(selectedSubjectInfo?.price || 0);
-                setSubject(selectedSubjectInfo?.price || "");
+                setSubject(selectedSubjectInfo?.subject || "");
               }}
             >
               {tutor?.teachingInfo?.map((item, index) => (

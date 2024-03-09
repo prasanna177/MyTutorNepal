@@ -1,7 +1,8 @@
 import { Box, Divider, HStack, MenuItem, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { getDateAndTime } from "../Utils";
 
-const NotificationList = ({ notification, convertDate }) => {
+const NotificationList = ({ notification }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -18,7 +19,7 @@ const NotificationList = ({ notification, convertDate }) => {
               </Box>
               <HStack fontSize={"sm"} color={"gray.100"}>
                 <i className="fa-regular fa-clock"></i>
-                <Text>{item.date && convertDate(item.date)}</Text>
+                <Text>{item.date && getDateAndTime(item.date)}</Text>
               </HStack>
             </VStack>
           </MenuItem>

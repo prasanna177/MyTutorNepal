@@ -24,6 +24,7 @@ import EmailVerify from "./pages/EmailVerify";
 import ResetPassword from "./pages/ResetPassword";
 import TutorInfo from "./pages/admin/TutorInfo";
 import UserInfo from "./pages/admin/UserInfo";
+import AppointmentInfo from "./pages/tutor/AppointmentInfo";
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -125,6 +126,22 @@ function App() {
                 }
               />
               <Route
+                path="/tutor/appointments"
+                element={
+                  <ProtectedRoute>
+                    <TutorAppointments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tutor/appointments/:appointmentId"
+                element={
+                  <ProtectedRoute>
+                    <AppointmentInfo />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/login"
                 element={
                   <PublicRoute>
@@ -151,14 +168,6 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <UserAppointments />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/tutor/appointments"
-                element={
-                  <ProtectedRoute>
-                    <TutorAppointments />
                   </ProtectedRoute>
                 }
               />

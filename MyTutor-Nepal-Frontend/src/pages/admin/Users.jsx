@@ -21,6 +21,9 @@ const Users = () => {
     columnHelper.accessor("email", {
       header: "Email",
     }),
+    // columnHelper.accessor("phone", {
+    //   header: "Email",
+    // }),
     columnHelper.accessor("role", {
       header: "Role",
     }),

@@ -3,12 +3,15 @@ import PanelLayout from "../../components/Layout/PanelLayout";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../../components/DataTable";
 import axios from "axios";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack, Text } from "@chakra-ui/react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { getDate } from "../../components/Utils";
 
 const TutorAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getAppointments = async () => {
     try {
@@ -31,11 +34,11 @@ const TutorAppointments = () => {
     }
   };
 
-  const handleStatus = async (appointment, status) => {
+  const handleStatus = async (appointment) => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/tutor/updateAppointmentStatus",
-        { appointmentId: appointment._id, status },
+        "http://localhost:4000/api/tutor/acceptAppointment",
+        { appointmentId: appointment._id },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -44,6 +47,10 @@ const TutorAppointments = () => {
       );
       if (res.data.success) {
         toast.success(res.data.message);
+        getAppointments();
+      }
+      else{
+        toast.error(res.data.message);
         getAppointments();
       }
     } catch (error) {
@@ -58,6 +65,30 @@ const TutorAppointments = () => {
     columnHelper.accessor("_id", {
       header: "id",
     }),
+    columnHelper.accessor("fromDate", {
+      header: "From Date",
+      cell: (row) => {
+        return (
+          <Text variant={"tableBody"}>
+            {getDate(row.row.original.fromDate)}
+          </Text>
+        );
+      },
+    }),
+    columnHelper.accessor("toDate", {
+      header: "To Date",
+      cell: (row) => {
+        return (
+          <Text variant={"tableBody"}>{getDate(row.row.original.toDate)}</Text>
+        );
+      },
+    }),
+    columnHelper.accessor("totalPrice", {
+      header: "Total Price",
+    }),
+    columnHelper.accessor("subject", {
+      header: "Subject",
+    }),
     columnHelper.accessor("status", {
       header: "Status",
     }),
@@ -67,10 +98,15 @@ const TutorAppointments = () => {
         return (
           row.row.original.status === "pending" && (
             <HStack gap={2}>
-              <Button
-                onClick={() => handleStatus(row.row.original, "approved")}
-              >
+              <Button onClick={() => handleStatus(row.row.original)}>
                 Approve
+              </Button>
+              <Button
+                onClick={() =>
+                  navigate(`/tutor/appointments/${row.row.original._id}`)
+                }
+              >
+                View
               </Button>
               <Button
                 onClick={() => handleStatus(row.row.original, "rejected")}
@@ -89,8 +125,7 @@ const TutorAppointments = () => {
   }, []);
 
   return (
-    <PanelLayout>
-      <h1>My appointments</h1>
+    <PanelLayout title={"My appointments"}>
       <DataTable columns={columns} data={appointments} isLoading={isLoading} />
     </PanelLayout>
   );
