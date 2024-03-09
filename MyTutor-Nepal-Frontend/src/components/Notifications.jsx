@@ -160,7 +160,7 @@ const Notifications = () => {
                 notification={user?.unseenNotification}
                 convertDate={convertDate}
               />
-            </TabPanel>
+          </TabPanel>
             <TabPanel>
               <NotificationList
                 notification={user?.seenNotification}

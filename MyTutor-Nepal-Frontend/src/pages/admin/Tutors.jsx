@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
-import { Button, Heading } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { DataTable } from "../../components/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import toast from "react-hot-toast";
@@ -88,8 +88,7 @@ const Tutors = () => {
     getTutor();
   }, []);
   return (
-    <PanelLayout>
-      <Heading>Tutors List</Heading>
+    <PanelLayout title={"Tutors List"}>
       <DataTable columns={columns} data={tutors} />
     </PanelLayout>
   );

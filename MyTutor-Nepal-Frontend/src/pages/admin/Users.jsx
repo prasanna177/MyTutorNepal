@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import axios from "axios";
-import { Button, Heading } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "../../components/DataTable";
 
@@ -57,8 +57,7 @@ const Users = () => {
   }, []);
 
   return (
-    <PanelLayout>
-      <Heading>Users List</Heading>
+    <PanelLayout title={"Users List"}>
       <DataTable columns={columns} data={users} />
     </PanelLayout>
   );

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Box, Button, Grid, Heading } from "@chakra-ui/react";
+import { Box, Button, Grid } from "@chakra-ui/react";
 import TutorCard from "../components/TutorCard";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,7 +33,7 @@ const Home = () => {
   }, []);
 
   return (
-    <PanelLayout>
+    <PanelLayout title={"Home"}>
       <Box pos={"relative"}>
         <Link to="/map">
           <Button
@@ -57,7 +57,6 @@ const Home = () => {
             Show Map
           </Button>
         </Link>
-        <Heading>Home</Heading>
         <Grid gap={"16px"} templateColumns="repeat(5, 1fr)">
           {tutors?.map((tutor) => (
             <TutorCard key={tutor._id} tutor={tutor} />

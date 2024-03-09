@@ -3,7 +3,6 @@ import {
   Flex,
   Grid,
   HStack,
-  Heading,
   Text,
   Textarea,
   VStack,
@@ -23,7 +22,7 @@ import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import PanelLayout from "../components/Layout/PanelLayout";
 import PlaceAutocomplete from "../components/PlaceAutocomplete";
 import NormalButton from "../components/common/Button";
-import ImageComponent from "../components/common/ImageComponent";
+import ImageInput from "../components/common/ImageInput";
 
 const BecomeTutor = () => {
   const [address, setAddress] = useState("");
@@ -144,9 +143,8 @@ const BecomeTutor = () => {
   console.log(profilePicImage, nIdBackImage);
 
   return (
-    <PanelLayout>
-      <Box >
-        <Heading mb={"20px"}>Become tutor</Heading>
+    <PanelLayout title={"Become tutor"}>
+      <Box>
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -154,8 +152,8 @@ const BecomeTutor = () => {
         >
           <VStack alignItems={"stretch"} gap={"30px"}>
             <VStack gap={7} alignItems={"stretch"}>
-              <Text color={"primary.0"}>Personal Information</Text>
-              <ImageComponent
+              <Text variant={"heading2"}>Personal Information</Text>
+              <ImageInput
                 width={"200px"}
                 height={"200px"}
                 text={"Enter your photo here"}
@@ -191,7 +189,7 @@ const BecomeTutor = () => {
                   hasLabel={true}
                 />
                 <VStack alignItems={"stretch"}>
-                  <Text fontSize={"md"} color={"black"}>
+                  <Text variant={"subtitle1"}>
                     <span style={{ color: "red" }}>* </span>
                     Enter your location
                   </Text>
@@ -203,7 +201,7 @@ const BecomeTutor = () => {
                   />
                 </VStack>
                 <VStack alignItems={"stretch"}>
-                  <Text fontSize={"md"} color={"black"}>
+                  <Text variant={"subtitle1"}>
                     Bio
                   </Text>
                   <Textarea
@@ -216,7 +214,7 @@ const BecomeTutor = () => {
             </VStack>
 
             <VStack gap={7} alignItems={"stretch"}>
-              <Text color={"primary.0"}>Services</Text>
+              <Text variant={"heading2"}>Services</Text>
               <Box>
                 <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
                   {fields.map((field, index) => (
@@ -278,7 +276,7 @@ const BecomeTutor = () => {
             </VStack>
 
             <VStack gap={7} alignItems={"stretch"}>
-              <Text color={"primary.0"}>Timings</Text>
+              <Text variant={"heading2"}>Timings</Text>
               <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
                 <TextField
                   type={"time"}
@@ -302,9 +300,9 @@ const BecomeTutor = () => {
             </VStack>
 
             <VStack gap={7} alignItems={"stretch"}>
-              <Text color={"primary.0"}>Submit your documents here</Text>
+              <Text variant={"heading2"}>Submit your documents here</Text>
               <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
-                <ImageComponent
+                <ImageInput
                   text={"National ID (Front)"}
                   image={nIdFrontImage}
                   handleImageChange={(e) =>
@@ -312,7 +310,7 @@ const BecomeTutor = () => {
                   }
                   isProfileImg={false}
                 />
-                <ImageComponent
+                <ImageInput
                   text={"National ID (Back)"}
                   image={nIdBackImage}
                   handleImageChange={(e) =>
@@ -320,7 +318,7 @@ const BecomeTutor = () => {
                   }
                   isProfileImg={false}
                 />
-                <ImageComponent
+                <ImageInput
                   text={"Highest education/teaching certificate"}
                   image={teachingCertificateImage}
                   handleImageChange={(e) =>

@@ -18,7 +18,7 @@ import { SearchIcon } from "@chakra-ui/icons";
 import Notifications from "../Notifications";
 import ProfilePopup from "../ProfilePopup";
 
-const PanelLayout = ({ children }) => {
+const PanelLayout = ({ children, title }) => {
   const { user } = useSelector((state) => state.user);
   const TutorMenu = [
     {
@@ -83,8 +83,14 @@ const PanelLayout = ({ children }) => {
               </Box>
             </VStack>
           </Box>
-          <Box pr={"20px"} ml={"255px"} w={"100%"} h={"100%"}>
-            <Box borderBottom={"gray.200"} mb={"20px"} bgColor={"white"}>
+          <Box ml={"260px"} w={"100%"} h={"100%"}>
+            <Box
+              py={3}
+              pr={3}
+              borderBottom={"gray.200"}
+              mb={"20px"}
+              bgColor={"white"}
+            >
               <HStack justifyContent={"space-between"} gap={"300px"}>
                 <HStack flex={"1"} maxW={"500px"}>
                   {user?.role === "student" && (
@@ -109,9 +115,12 @@ const PanelLayout = ({ children }) => {
                 </HStack>
               </HStack>
             </Box>
-            <Box p={5} minH={"89vh"} bgColor={"white"} mb={"20px"}>
-              {children}
-            </Box>
+            <VStack alignItems={"stretch"} gap={4}>
+              <Text variant={"heading1"}>{title}</Text>
+              <Box p={5} minH={"86vh"} bgColor={"white"}>
+                {children}
+              </Box>
+            </VStack>
           </Box>
         </Flex>
       </Box>
