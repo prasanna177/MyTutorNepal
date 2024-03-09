@@ -40,6 +40,19 @@ const subtitle1 = defineStyle({
   color: "gray.700",
 });
 
+const overline = defineStyle({
+  fontSize: "sm",
+  fontWeight: "bold",
+  fontcolor: "gray.700",
+  textTransform: "uppercase",
+});
+
+const tableBody = defineStyle({
+  fontSize: "md",
+  fontWeight: 'normal',
+  color: "gray.700",
+});
+
 const Text = defineStyleConfig({
   variants: {
     title1,
@@ -49,6 +62,8 @@ const Text = defineStyleConfig({
     heading3,
     heading4,
     subtitle1,
+    overline,
+    tableBody,
   },
 });
 

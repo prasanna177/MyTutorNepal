@@ -2,11 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import {
+  Box,
+  HStack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
 } from "@chakra-ui/react";
 import { DataTable } from "../../components/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -26,6 +29,23 @@ const Tutors = () => {
     }),
     columnHelper.accessor("email", {
       header: "Email",
+    }),
+    columnHelper.accessor("createdAt", {
+      header: "Applied date",
+      cell: (row) => {
+        return (
+          <Text variant={"tableBody"}>
+            {new Date(row.row.original.createdAt).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            })}
+          </Text>
+        );
+      },
     }),
     columnHelper.accessor("action", {
       header: "ACTION",
@@ -75,15 +95,29 @@ const Tutors = () => {
   }, []);
   return (
     <PanelLayout title={"Tutors List"}>
-      <Tabs>
+      <Tabs variant={"soft-rounded"}>
         <TabList>
-          <Tab>Pending Tutors</Tab>
-          <Tab>Approved Tutors</Tab>
+          <Tab bg={"primary.0"} color={"white"}>
+            <HStack>
+              <Text>Pending Tutors</Text>
+              <Box px={2} borderRadius={20} bgColor={"primary.200"}>
+                {pendingTutors.length}
+              </Box>
+            </HStack>
+          </Tab>
+          <Tab>
+            <HStack>
+              <Text>Approved Tutors</Text>
+              <Box px={2} borderRadius={20} bgColor={"primary.200"}>
+                {approvedTutors.length}
+              </Box>
+            </HStack>
+          </Tab>
         </TabList>
 
         <TabPanels>
           <TabPanel>
-            <DataTable columns={columns} data={pendingTutors} />
+            <DataTable columns={columns} data={[]} />
           </TabPanel>
           <TabPanel>
             <DataTable columns={columns} data={approvedTutors} />

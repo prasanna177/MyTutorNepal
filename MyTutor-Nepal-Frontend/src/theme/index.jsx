@@ -2,6 +2,8 @@ import { extendTheme } from "@chakra-ui/react";
 import colors from "./colors";
 import { fontSizes, fontWeights, fonts } from "./fonts";
 import Text from "./text";
+import Tab from "./tabs";
+
 
 export const theme = extendTheme({
   styles: {
@@ -19,5 +21,6 @@ export const theme = extendTheme({
   fontSizes,
   components: {
     Text,
+    Tab
   },
 });
