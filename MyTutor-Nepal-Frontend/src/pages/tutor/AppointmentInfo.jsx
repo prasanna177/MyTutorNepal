@@ -93,71 +93,77 @@ const AppointmentInfo = () => {
 
   return (
     <PanelLayout title={"Appointment Information"}>
-      <VStack gap={5} alignItems={"stretch"}>
-        <Text variant={"heading2"}>Student details</Text>
-        <Grid
-          p={5}
-          borderWidth={1}
-          borderRadius={"5px"}
-          templateColumns="repeat(3, 1fr)"
-          gap={"16px"}
-        >
-          <Bundle
-            title={"Full Name"}
-            subtitle={appointment?.userInfo?.fullName}
-          />
-          <Bundle title={"Email"} subtitle={appointment?.userInfo?.email} />
-          <Bundle title={"Phone"} subtitle={appointment?.userInfo?.phone} />
-        </Grid>
-      </VStack>
+      <VStack alignItems={"stretch"} gap={7}>
+        <VStack gap={5} alignItems={"stretch"}>
+          <Text variant={"heading2"}>Student details</Text>
+          <Grid
+            p={5}
+            borderWidth={1}
+            borderRadius={"5px"}
+            templateColumns="repeat(3, 1fr)"
+            gap={"16px"}
+          >
+            <Bundle
+              title={"Full Name"}
+              subtitle={appointment?.userInfo?.fullName}
+            />
+            <Bundle title={"Email"} subtitle={appointment?.userInfo?.email} />
+            <Bundle title={"Phone"} subtitle={appointment?.userInfo?.phone} />
+          </Grid>
+        </VStack>
 
-      <VStack gap={5} alignItems={"stretch"}>
-        <Text variant={"heading2"}>Appointment details</Text>
-        <Grid
-          p={5}
-          borderWidth={1}
-          borderRadius={"5px"}
-          templateColumns="repeat(3, 1fr)"
-          gap={"16px"}
-        >
-          <Bundle
-            title={"From date"}
-            subtitle={getDate(appointment?.fromDate)}
-          />
-          <Bundle title={"To date"} subtitle={getDate(appointment?.toDate)} />
-          <Bundle title={"Time"} subtitle={getTime(appointment?.time)} />
-          <Bundle title={"Subject"} subtitle={appointment?.subject} />
-          <Bundle title={"Fee per class"} subtitle={appointment?.feePerClass} />
-          <Bundle title={"Total Price"} subtitle={appointment?.totalPrice} />
-        </Grid>
-        <HStack justifyContent={"space-between"}>
-          <NormalButton
-            color={"primary.0"}
-            bgColor={"primary.100"}
-            text={"Back"}
-            onClick={() => {
-              navigate("/tutor/appointments");
-            }}
-          />
-          {appointment?.status === "pending" && (
-            <>
-              <HStack gap={4}>
-                <NormalButton
-                  color={"error.100"}
-                  bgColor={"error.0"}
-                  text={"Reject"}
-                  onClick={() => handleReject(appointment._id)}
-                />
-                <NormalButton
-                  color={"white"}
-                  bgColor={"primary.0"}
-                  text={"Accept"}
-                  onClick={() => handleAccept(appointment)}
-                />
-              </HStack>
-            </>
-          )}
-        </HStack>
+        <VStack gap={5} alignItems={"stretch"}>
+          <Text variant={"heading2"}>Appointment details</Text>
+          <Grid
+            p={5}
+            borderWidth={1}
+            borderRadius={"5px"}
+            templateColumns="repeat(3, 1fr)"
+            gap={"16px"}
+          >
+            <Bundle
+              title={"From date"}
+              subtitle={getDate(appointment?.fromDate)}
+            />
+            <Bundle title={"To date"} subtitle={getDate(appointment?.toDate)} />
+            <Bundle title={"Time"} subtitle={getTime(appointment?.time)} />
+            <Bundle title={"Subject"} subtitle={appointment?.subject} />
+            <Bundle
+              title={"Fee per class"}
+              subtitle={appointment?.feePerClass}
+            />
+            <Bundle title={"Total Price"} subtitle={appointment?.totalPrice} />
+            <Bundle title={"Message"} subtitle={appointment?.message} />
+          </Grid>
+          <HStack justifyContent={"space-between"}>
+            <NormalButton
+              color={"primary.0"}
+              bgColor={"primary.100"}
+              text={"Back"}
+              onClick={() => {
+                navigate("/tutor/appointments");
+              }}
+            />
+            {appointment?.status === "pending" && (
+              <>
+                <HStack gap={4}>
+                  <NormalButton
+                    color={"error.100"}
+                    bgColor={"error.0"}
+                    text={"Reject"}
+                    onClick={() => handleReject(appointment._id)}
+                  />
+                  <NormalButton
+                    color={"white"}
+                    bgColor={"primary.0"}
+                    text={"Accept"}
+                    onClick={() => handleAccept(appointment)}
+                  />
+                </HStack>
+              </>
+            )}
+          </HStack>
+        </VStack>
       </VStack>
     </PanelLayout>
   );

@@ -171,6 +171,14 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/student/appointments/:id"
+                element={
+                  <ProtectedRoute>
+                    <AppointmentInfo />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           )}
         </Router>

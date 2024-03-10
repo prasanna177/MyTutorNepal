@@ -1,21 +1,12 @@
 import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import { createColumnHelper } from "@tanstack/react-table";
-import { DataTable } from "../../components/DataTable";
 import axios from "axios";
-import {
-  Box,
-  HStack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
+import { HStack, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { getDate } from "../../components/Utils";
 import { ViewIcon } from "@chakra-ui/icons";
+import TabTable from "../../components/common/TabTable";
 
 const TutorAppointments = () => {
   const [pendingAppointments, setPendingAppointments] = useState([]);
@@ -26,8 +17,15 @@ const TutorAppointments = () => {
   const columnHelper = createColumnHelper();
 
   const columns = [
-    columnHelper.accessor("_id", {
-      header: "id",
+    columnHelper.accessor("studentName", {
+      header: "Student Name",
+      cell: (row) => {
+        return (
+          <Text variant={"tableBody"}>
+            {row.row.original.userInfo.fullName}
+          </Text>
+        );
+      },
     }),
     columnHelper.accessor("fromDate", {
       header: "From Date",
@@ -52,9 +50,6 @@ const TutorAppointments = () => {
     }),
     columnHelper.accessor("subject", {
       header: "Subject",
-    }),
-    columnHelper.accessor("status", {
-      header: "Status",
     }),
     columnHelper.accessor("action", {
       header: "ACTION",
@@ -112,39 +107,14 @@ const TutorAppointments = () => {
 
   return (
     <PanelLayout title={"My appointments"}>
-      <Tabs variant={"soft-rounded"} colorScheme="purple">
-        <TabList>
-          <Tab>
-            <HStack>
-              <Text>Pending Appointments</Text>
-              <Box>({pendingAppointments.length})</Box>
-            </HStack>
-          </Tab>
-          <Tab>
-            <HStack>
-              <Text>Approved Tutors</Text>
-              <Box>({approvedAppointments.length})</Box>
-            </HStack>
-          </Tab>
-        </TabList>
-
-        <TabPanels>
-          <TabPanel>
-            <DataTable
-              columns={columns}
-              data={pendingAppointments}
-              isLoading={isLoading}
-            />
-          </TabPanel>
-          <TabPanel>
-            <DataTable
-              columns={columns}
-              data={approvedAppointments}
-              isLoading={isLoading}
-            />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <TabTable
+        firstData={pendingAppointments}
+        secondData={approvedAppointments}
+        firstTab={"Pending appointments"}
+        secondTab={"Approved Tutors"}
+        columns={columns}
+        isLoading={isLoading}
+      />
     </PanelLayout>
   );
 };

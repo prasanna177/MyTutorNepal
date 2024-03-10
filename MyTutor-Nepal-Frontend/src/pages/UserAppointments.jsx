@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import PanelLayout from "../components/Layout/PanelLayout";
-import { DataTable } from "../components/DataTable";
 import { createColumnHelper } from "@tanstack/react-table";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { HStack, Text } from "@chakra-ui/react";
+import { ViewIcon } from "@chakra-ui/icons";
+import TabTable from "../components/common/TabTable";
+import { getDate } from "../components/Utils";
 
 const UserAppointments = () => {
-  const [appointments, setAppointments] = useState([]);
+  const [pendingAppointments, setPendingAppointments] = useState([]);
+  const [approvedAppointments, setApprovedAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   const getAppointments = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const res = await axios.get(
         "http://localhost:4000/api/user/getAllAppointments",
         {
@@ -20,12 +26,19 @@ const UserAppointments = () => {
           },
         }
       );
-      setIsLoading(false)
+      setIsLoading(false);
       if (res.data.success) {
-        setAppointments(res.data.data);
+        const pendingAppointments = res.data.data.filter(
+          (appointment) => appointment.status === "pending"
+        );
+        const approvedAppointments = res.data.data.filter(
+          (appointment) => appointment.status === "approved"
+        );
+        setPendingAppointments(pendingAppointments);
+        setApprovedAppointments(approvedAppointments);
       }
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -42,6 +55,24 @@ const UserAppointments = () => {
     columnHelper.accessor("subject", {
       header: "Subject",
     }),
+    columnHelper.accessor("fromDate", {
+      header: "From Date",
+      cell: (row) => {
+        return (
+          <Text variant={"tableBody"}>
+            {getDate(row.row.original.fromDate)}
+          </Text>
+        );
+      },
+    }),
+    columnHelper.accessor("toDate", {
+      header: "To Date",
+      cell: (row) => {
+        return (
+          <Text variant={"tableBody"}>{getDate(row.row.original.toDate)}</Text>
+        );
+      },
+    }),
     columnHelper.accessor(
       //will work later, tutorinfo is not an object rn
       (row) => {
@@ -52,6 +83,9 @@ const UserAppointments = () => {
         console.log(toDate, "to");
         console.log(nowDate, "now");
         const remainingDays = toDate.diff(nowDate, "days") + 1;
+        if (remainingDays <= 0) {
+          return 0;
+        }
         return remainingDays;
       },
       {
@@ -61,6 +95,27 @@ const UserAppointments = () => {
     columnHelper.accessor("status", {
       header: "Status",
     }),
+    columnHelper.accessor("action", {
+      header: "ACTION",
+      cell: (row) => {
+        return (
+          <HStack gap={2}>
+            {/* <Button onClick={() => handleStatus(row.row.original)}>
+              Approve
+            </Button> */}
+            <ViewIcon
+              _hover={{ cursor: "pointer" }}
+              color={"primary.0"}
+              onClick={() =>
+                navigate(`/tutor/appointments/${row.row.original._id}`)
+              }
+            >
+              View
+            </ViewIcon>
+          </HStack>
+        );
+      },
+    }),
   ];
 
   useEffect(() => {
@@ -68,8 +123,15 @@ const UserAppointments = () => {
   }, []);
 
   return (
-    <PanelLayout title={'Booking'}>
-      <DataTable columns={columns} data={appointments} isLoading={isLoading} />
+    <PanelLayout title={"Booking"}>
+      <TabTable
+        firstData={pendingAppointments}
+        secondData={approvedAppointments}
+        firstTab={"Pending appointments"}
+        secondTab={"Approved appointments"}
+        columns={columns}
+        isLoading={isLoading}
+      />
     </PanelLayout>
   );
 };

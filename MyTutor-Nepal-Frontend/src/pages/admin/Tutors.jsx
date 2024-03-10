@@ -1,21 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
-import {
-  Box,
-  HStack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
-import { DataTable } from "../../components/DataTable";
+import { Text } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import { ViewIcon } from "@chakra-ui/icons";
 import { getDateAndTime } from "../../components/Utils";
+import TabTable from "../../components/common/TabTable";
 
 const Tutors = () => {
   const [pendingTutors, setPendingTutors] = useState([]);
@@ -92,39 +83,14 @@ const Tutors = () => {
   }, []);
   return (
     <PanelLayout title={"Tutors List"}>
-      <Tabs variant={"soft-rounded"} colorScheme="purple">
-        <TabList>
-          <Tab>
-            <HStack>
-              <Text>Pending Tutors</Text>
-              <Box>({pendingTutors.length})</Box>
-            </HStack>
-          </Tab>
-          <Tab>
-            <HStack>
-              <Text>Approved Tutors</Text>
-              <Box>({approvedTutors.length})</Box>
-            </HStack>
-          </Tab>
-        </TabList>
-
-        <TabPanels>
-          <TabPanel>
-            <DataTable
-              columns={columns}
-              data={pendingTutors}
-              isLoading={isLoading}
-            />
-          </TabPanel>
-          <TabPanel>
-            <DataTable
-              columns={columns}
-              data={approvedTutors}
-              isLoading={isLoading}
-            />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <TabTable
+        firstData={pendingTutors}
+        secondData={approvedTutors}
+        firstTab={"Pending tutors"}
+        secondTab={"Approved tutors"}
+        columns={columns}
+        isLoading={isLoading}
+      />
     </PanelLayout>
   );
 };

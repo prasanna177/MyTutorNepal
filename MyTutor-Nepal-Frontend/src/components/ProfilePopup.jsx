@@ -73,7 +73,10 @@ const ProfilePopup = () => {
           fontSize={"sm"}
           justifyContent={"flex-end"}
         >
-          {user?.fullName}
+          <HStack>
+            <Text>{user?.fullName}</Text>
+            <Text>{user?.role}</Text>
+          </HStack>
         </Flex>
         {popupItems.map((item) => (
           <React.Fragment key={item.id}>
