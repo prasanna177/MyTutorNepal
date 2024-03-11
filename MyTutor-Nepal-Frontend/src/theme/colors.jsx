@@ -26,8 +26,8 @@ const opaque = {
 };
 
 const primary = {
-  0: "#685CFE",
-  100: "#D6D3FF",
+  0: "#5B3B8C",
+  100: "#C3B8D5",
   200: "#837AFE",
 };
 

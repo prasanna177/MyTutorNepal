@@ -85,24 +85,6 @@ const AppointmentInfo = () => {
               navigate("/tutor/appointments");
             }}
           />
-          {appointment?.status === "pending" && (
-            <>
-              <HStack gap={4}>
-                <NormalButton
-                  color={"error.100"}
-                  bgColor={"error.0"}
-                  text={"Reject"}
-                  onClick={() => handleReject(appointment._id)}
-                />
-                <NormalButton
-                  color={"white"}
-                  bgColor={"primary.0"}
-                  text={"Accept"}
-                  onClick={() => handleAccept(appointment)}
-                />
-              </HStack>
-            </>
-          )}
         </HStack>
       </VStack>
     </PanelLayout>

@@ -74,7 +74,6 @@ const UserAppointments = () => {
       },
     }),
     columnHelper.accessor(
-      //will work later, tutorinfo is not an object rn
       (row) => {
         const fromDate = moment(row.fromDate);
         const toDate = moment(row.toDate, "YYYY-MM-DD");
@@ -107,7 +106,7 @@ const UserAppointments = () => {
               _hover={{ cursor: "pointer" }}
               color={"primary.0"}
               onClick={() =>
-                navigate(`/tutor/appointments/${row.row.original._id}`)
+                navigate(`/student/appointments/${row.row.original._id}`)
               }
             >
               View
