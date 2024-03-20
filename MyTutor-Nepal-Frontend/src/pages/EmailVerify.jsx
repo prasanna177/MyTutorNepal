@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 const EmailVerify = () => {
-  const [validUrl, setValidUrl] = useState(false);
+  const [validUrl, setValidUrl] = useState(true);
   const params = useParams();
 
   useEffect(() => {

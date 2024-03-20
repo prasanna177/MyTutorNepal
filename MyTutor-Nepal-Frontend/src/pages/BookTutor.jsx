@@ -1,26 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  Heading,
-  Select,
-  Text,
-  Textarea,
-} from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import TextField from "../components/common/TextField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import toast from "react-hot-toast";
 import moment from "moment";
 import PanelLayout from "../components/Layout/PanelLayout";
+import BookingBox from "../components/BookingBox";
 
 const BookTutor = () => {
   const { user } = useSelector((state) => state.user);
@@ -37,7 +27,7 @@ const BookTutor = () => {
         { tutorId: params.tutorId },
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"), 
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         }
       );
@@ -66,7 +56,7 @@ const BookTutor = () => {
   });
 
   const handleBooking = async (data) => {
-    console.log(data)
+    console.log(data);
     try {
       //to send total price to backend
       const fromDate = moment(data.fromDate, "YYYY-MM-DD");
@@ -111,67 +101,38 @@ const BookTutor = () => {
 
   console.log(tutor, "tutor");
   return (
-    <PanelLayout>
-      <Heading>Booking Page</Heading>
-      <Text>Name: {tutor?.fullName}</Text>
-      <Text>Fee: {tutor?.feePerClass}</Text>
-      <Text>
-        Timing: {tutor?.timing?.startTime} - {tutor?.timing?.endTime}
-      </Text>
-      <Box as="form" onSubmit={handleSubmit(handleBooking)}>
-        <Flex flexDir={"column"} width={"400px"}>
-          <TextField
-            type={"date"}
-            name={"fromDate"}
-            errors={errors?.fromDate?.message}
+    <PanelLayout title={"Booking Page"}>
+      <Grid templateColumns="repeat(7, 1fr)">
+        <GridItem colSpan={{ lg: 5, sm: 7, md: 6 }}>
+          <Box>
+            <Text>Name: {tutor?.fullName}</Text>
+            <Text>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum
+              libero ab repudiandae minus, consequatur laudantium sit dolorum
+              atque repellendus! Magnam provident cum consequuntur quis
+              obcaecati accusamus amet error doloribus facilis eos, earum
+              explicabo voluptate inventore quos quibusdam exercitationem. Ex,
+              laborum!
+            </Text>
+            <Box h={"500px"}>asd</Box>
+            <Text>Fee: {tutor?.feePerClass}</Text>
+            <Text>
+              Timing: {tutor?.timing?.startTime} - {tutor?.timing?.endTime}
+            </Text>
+          </Box>
+        </GridItem>
+        <GridItem colSpan={{ lg: 2, sm: 0, md: 1 }}>
+          <BookingBox
+            setPrice={setPrice}
+            setSubject={setSubject}
+            errors={errors}
+            handleBooking={handleBooking}
+            handleSubmit={handleSubmit}
             register={register}
+            tutor={tutor}
           />
-          <TextField
-            type={"date"}
-            name={"toDate"}
-            errors={errors?.toDate?.message}
-            register={register}
-          />
-          <TextField
-            type={"time"}
-            name={"time"}
-            errors={errors?.time?.message}
-            register={register}
-          />
-          <FormControl isInvalid={Boolean(errors?.subject)}>
-            <Select
-              {...register("subject")}
-              placeholder={"Select your subject"}
-              onChange={(e) => {
-                const selectedSubjectInfo = tutor?.teachingInfo.find(
-                  (item) => item.subject === e.target.value
-                );
-                setPrice(selectedSubjectInfo?.price || 0);
-                setSubject(selectedSubjectInfo?.subject || "");
-              }}
-            >
-              {tutor?.teachingInfo?.map((item, index) => (
-                <option key={index} value={item.subject}>
-                  {item.subject} - Rs. {item.price} per class
-                </option>
-              ))}
-            </Select>
-            {errors && (
-              <FormErrorMessage>{errors?.subject?.message}</FormErrorMessage>
-            )}
-          </FormControl>
-          <FormControl isInvalid={Boolean(errors?.message)}>
-            <Textarea
-              {...register("message")}
-              placeholder={"Enter your message here"}
-            />
-            {errors && (
-              <FormErrorMessage>{errors?.message?.message}</FormErrorMessage>
-            )}
-          </FormControl>
-        </Flex>
-        <Button type="submit">Book now</Button>
-      </Box>
+        </GridItem>
+      </Grid>
     </PanelLayout>
   );
 };

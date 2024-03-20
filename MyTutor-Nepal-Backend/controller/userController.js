@@ -2,6 +2,7 @@ const User = require("../models/userModel");
 const Tutor = require("../models/tutorModel");
 const Appointment = require("../models/appointmentModel");
 const moment = require("moment");
+const crypto = require("crypto");
 
 module.exports.saveFilePath = async (req, res) => {
   try {
@@ -117,6 +118,7 @@ module.exports.becomeTutor_post = async (req, res) => {
     const adminUser = await User.findOne({ role: "admin" });
     const unseenNotification = adminUser.unseenNotification;
     unseenNotification.push({
+      id: crypto.randomBytes(16).toString("hex"),
       type: "Apply tutor request",
       message: `${newTutor.fullName} has applied for tutor account.`,
       onClickPath: "/admin/tutors",
@@ -160,7 +162,7 @@ module.exports.getCurrentUser = async (req, res) => {
   }
 };
 
-module.exports.getUserById = async(req, res) => {
+module.exports.getUserById = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.body.clientId });
     if (user) {
@@ -178,7 +180,7 @@ module.exports.getUserById = async(req, res) => {
     console.log(error);
     res
       .status(500)
-      .send({ message: "Error getting user info", success: false, error })
+      .send({ message: "Error getting user info", success: false, error });
   }
 };
 
@@ -202,12 +204,25 @@ module.exports.getAllTutors = async (req, res) => {
 
 module.exports.bookTutor_post = async (req, res) => {
   try {
-    console.log(req.body);
     const { fromDate, toDate, time, tutorInfo, userInfo } = req.body;
     const tutorStartTime = moment(tutorInfo.timing.startTime, "HH:mm");
     const tutorEndTime = moment(tutorInfo.timing.endTime, "HH:mm");
     const bookingTime = moment(time, "HH:mm");
 
+    //if fromDate is before the current date
+    const currentDate = moment().startOf("day");
+    const isFromDateValid = moment(fromDate, "YYYY-MM-DD").isSameOrAfter(
+      currentDate
+    );
+
+    if (!isFromDateValid) {
+      return res.status(200).send({
+        success: false,
+        message: "Start date has already passed.",
+      });
+    }
+
+    //booking outside of tutor's timings
     if (
       bookingTime.isBefore(tutorStartTime) ||
       bookingTime.isAfter(tutorEndTime)
@@ -218,6 +233,7 @@ module.exports.bookTutor_post = async (req, res) => {
       });
     }
 
+    //if to date is before from date
     const isDateValid = moment(toDate, "YYYY-MM-DD").isSameOrAfter(
       moment(fromDate, "YYYY-MM-DD")
     );
@@ -268,9 +284,10 @@ module.exports.bookTutor_post = async (req, res) => {
 
     const user = await User.findOne({ _id: tutorInfo.userId });
     user.unseenNotification.push({
+      id: crypto.randomBytes(16).toString("hex"),
       type: "New-appointment-request",
       message: `A new appointment request has been sent by ${userInfo.fullName}`,
-      onClickPath: "/user/appointments",
+      onClickPath: "/tutor/appointments",
       date: new Date(),
     });
     await user.save();

@@ -17,12 +17,11 @@ const PlaceAutocomplete = ({
   handleSelect,
   setCoordinates,
 }) => {
-  const API_KEY = "b67402f59aa24b6ea5b2b5b7309a6d66";
-  const apiEndpoint = "https://api.opencagedata.com/geocode/v1/json";
-
   const getUserCurrentAddress = async (lat, lng) => {
     let query = `${lat},${lng}`;
-    let apiUrl = `${apiEndpoint}?key=${API_KEY}&q=${query}&pretty=1`;
+    let apiUrl = `${import.meta.env.VITE_API_ENDPOINT}?key=${
+      import.meta.env.VITE_API_KEY
+    }&q=${query}&pretty=1`;
     try {
       const res = await axios.get(apiUrl);
       return res.data.results[0].formatted;

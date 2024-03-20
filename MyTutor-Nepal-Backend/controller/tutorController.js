@@ -1,6 +1,7 @@
 const Tutor = require("../models/tutorModel");
 const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
+const crypto = require("crypto");
 
 module.exports.getTutorInfo = async (req, res) => {
   try {
@@ -81,7 +82,7 @@ module.exports.getTutorById = async (req, res) => {
 module.exports.deleteTutorById = async (req, res) => {
   try {
     const tutor = await Tutor.findOneAndDelete({ _id: req.body.tutorId });
-    console.log(tutor,'tutorafterdelete');
+    console.log(tutor, "tutorafterdelete");
 
     if (!tutor) {
       return res.status(200).send({
@@ -146,6 +147,7 @@ module.exports.acceptAppointment = async (req, res) => {
       });
       const user = await User.findOne({ _id: appointments.userId });
       user.unseenNotification.push({
+        id: crypto.randomBytes(16).toString('hex'),
         type: "Status-Updated",
         message: `Your appointment has been accepted. Total price is now ${appointments.totalPrice}`,
         onClickPath: "/student/appointments",
@@ -160,9 +162,12 @@ module.exports.acceptAppointment = async (req, res) => {
     }
     //accepting after to date
     else if (currentDate > toDate) {
-      const appointments = await Appointment.findOneAndDelete({ _id: appointmentId });
+      const appointments = await Appointment.findOneAndDelete({
+        _id: appointmentId,
+      });
       const user = await User.findOne({ _id: appointments.userId });
       user.unseenNotification.push({
+        id: crypto.randomBytes(16).toString('hex'),
         type: "Status-Updated",
         message: "Your appointment has been removed due to late acceptance.",
         onClickPath: "/student/appointments",
@@ -181,6 +186,7 @@ module.exports.acceptAppointment = async (req, res) => {
       });
       const user = await User.findOne({ _id: appointments.userId });
       user.unseenNotification.push({
+        id: crypto.randomBytes(16).toString('hex'),
         type: "Status-Updated",
         message: "Your appointment has been accepted",
         onClickPath: "/student/appointments",

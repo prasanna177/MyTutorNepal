@@ -32,6 +32,7 @@ const Home = () => {
     getTutorData();
   }, []);
 
+  console.log(import.meta.env.VITE_API_KEY);
   return (
     <PanelLayout>
       <Box pos={"relative"}>
