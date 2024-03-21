@@ -48,7 +48,7 @@ const Users = () => {
       try {
         setIsLoading(true);
         const res = await axios.get(
-          "http://localhost:4000/api/admin/getAllUsers",
+          `${import.meta.env.VITE_SERVER_PORT}/api/admin/getAllUsers`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

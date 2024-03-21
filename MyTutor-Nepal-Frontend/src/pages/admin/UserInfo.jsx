@@ -12,7 +12,7 @@ const UserInfo = () => {
     const getUserInfo = async () => {
       try {
         const res = await axios.post(
-          "http://localhost:4000/api/user/getUserById",
+          `${import.meta.env.VITE_SERVER_PORT}/api/user/getUserById`,
           { clientId: params.userId },
           {
             headers: {

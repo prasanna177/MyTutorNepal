@@ -56,7 +56,7 @@ const Tutors = () => {
       try {
         setIsLoading(true);
         const res = await axios.get(
-          "http://localhost:4000/api/admin/getAllTutors",
+          `${import.meta.env.VITE_SERVER_PORT}/api/admin/getAllTutors`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

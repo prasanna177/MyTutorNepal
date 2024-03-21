@@ -41,7 +41,7 @@ const Login = () => {
     try {
       dispatch(showLoading());
       const response = await axios.post(
-        "http://localhost:4000/api/user/login",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/login`,
         data
       );
       // window.location.reload();
@@ -114,7 +114,7 @@ const Login = () => {
                 </HStack>
                 <Button
                   type="submit"
-                  rightIcon={<ArrowRightIcon/>}
+                  rightIcon={<ArrowRightIcon />}
                   _hover={{ opacity: 0.8 }}
                   _active={{}}
                   color={"white"}

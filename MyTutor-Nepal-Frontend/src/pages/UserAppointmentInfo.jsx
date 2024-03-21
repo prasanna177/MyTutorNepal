@@ -15,7 +15,7 @@ const AppointmentInfo = () => {
   const getAppointmentInfo = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/appointment/getAppointmentById",
+        `${import.meta.env.VITE_SERVER_PORT}/api/appointment/getAppointmentById`,
         { appointmentId: params.appointmentId },
         {
           headers: {

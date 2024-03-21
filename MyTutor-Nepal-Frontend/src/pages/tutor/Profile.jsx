@@ -64,7 +64,7 @@ const Profile = () => {
     try {
       dispatch(showLoading());
       const res = await axios.post(
-        "http://localhost:4000/api/tutor/updateProfile",
+        `${import.meta.env.VITE_SERVER_PORT}/api/tutor/updateProfile`,
         submissionData,
         {
           headers: {
@@ -130,7 +130,7 @@ const Profile = () => {
   const getTutorInfo = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/tutor/getTutorInfo",
+        `${import.meta.env.VITE_SERVER_PORT}/api/tutor/getTutorInfo`,
         { userId: params.id },
         {
           headers: {

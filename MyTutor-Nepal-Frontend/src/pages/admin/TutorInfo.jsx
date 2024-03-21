@@ -17,7 +17,7 @@ const TutorInfo = () => {
   const getTutorInfo = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/tutor/getTutorById",
+        `${import.meta.env.VITE_SERVER_PORT}/api/tutor/getTutorById`,
         { tutorId: params.tutorId },
         {
           headers: {
@@ -41,7 +41,7 @@ const TutorInfo = () => {
   const handleAccountStatus = async (tutorObj, status) => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/admin/changeAccountStatus",
+        `${import.meta.env.VITE_SERVER_PORT}/api/admin/changeAccountStatus`,
         { tutorId: tutorObj._id, userId: tutorObj.userId, status },
         {
           headers: {
@@ -67,7 +67,7 @@ const TutorInfo = () => {
   const handleAccountRejection = async (tutorId) => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/tutor/deleteTutorById",
+        `${import.meta.env.VITE_SERVER_PORT}/api/tutor/deleteTutorById`,
         { tutorId },
         {
           headers: {
@@ -97,7 +97,7 @@ const TutorInfo = () => {
           <Text variant={"heading2"}>Basic details</Text>
           <ImageComponent
             title={"Tutor's photo"}
-            src={`http://localhost:4000/${tutor?.profilePicUrl}`}
+            src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.profilePicUrl}`}
             isProfileImg={true}
             width={"300px"}
             height={"300px"}
@@ -155,17 +155,17 @@ const TutorInfo = () => {
           >
             <ImageComponent
               title={"National ID Card (Front)"}
-              src={`http://localhost:4000/${tutor?.nIdFrontUrl}`}
+              src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.nIdFrontUrl}`}
               isProfileImg={false}
             />
             <ImageComponent
               title={"National ID Card (Back)"}
-              src={`http://localhost:4000/${tutor?.nIdBackUrl}`}
+              src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.nIdBackUrl}`}
               isProfileImg={false}
             />
             <ImageComponent
               title={"Highest education qualification"}
-              src={`http://localhost:4000/${tutor?.teachingCertificateUrl}`}
+              src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.teachingCertificateUrl}`}
               isProfileImg={false}
             />
           </Grid>

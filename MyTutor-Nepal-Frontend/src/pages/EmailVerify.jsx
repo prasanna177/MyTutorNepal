@@ -12,7 +12,7 @@ const EmailVerify = () => {
       try {
         console.log(params);
         const res = await axios.get(
-          `http://localhost:4000/api/user/${params.id}/verify/${params.token}`
+          `${import.meta.env.VITE_SERVER_PORT}/api/user/${params.id}/verify/${params.token}`
         );
         console.log(res, "asd");
         setValidUrl(true);

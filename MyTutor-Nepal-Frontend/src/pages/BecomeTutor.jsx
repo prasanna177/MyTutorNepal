@@ -86,7 +86,7 @@ const BecomeTutor = () => {
         submissionData.teachingCertificateUrl
       );
       const filePathUrl = await axios.post(
-        "http://localhost:4000/api/user/saveFilePath",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/saveFilePath`,
         formData
       );
       filePathUrl.data.data.forEach((file) => {
@@ -97,7 +97,7 @@ const BecomeTutor = () => {
       });
       dispatch(showLoading());
       const res = await axios.post(
-        "http://localhost:4000/api/user/become-tutor",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/become-tutor`,
         submissionData,
         {
           headers: {

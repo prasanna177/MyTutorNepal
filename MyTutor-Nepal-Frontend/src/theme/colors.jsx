@@ -19,6 +19,7 @@ const gray = {
 const error = {
   0: "#FFEEEA",
   100: "#FF5630",
+  200: "#E53E3E",
 };
 
 const opaque = {

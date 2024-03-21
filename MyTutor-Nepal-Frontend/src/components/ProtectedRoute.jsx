@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
     try {
       // dispatch(showLoading());
       const response = await axios.post(
-        "http://localhost:4000/api/user/getCurrentUser",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/getCurrentUser`,
         {},
         {
           headers: {

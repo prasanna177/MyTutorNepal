@@ -27,7 +27,7 @@ const TutorCard = ({ tutor }) => {
                 w={"250px"}
                 h={"200px"}
                 objectFit={"cover"}
-                src={`http://localhost:4000/${tutor.profilePicUrl}`}
+                src={`${import.meta.env.VITE_SERVER_PORT}/${tutor.profilePicUrl}`}
               />
             ) : (
               <Image

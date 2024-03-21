@@ -25,7 +25,7 @@ module.exports.signup_post = async (req, res) => {
       userId: newUser._id,
       token: crypto.randomBytes(32).toString("hex"),
     }).save();
-    const url = `http://localhost:5173/users/${newUser._id}/verify/${token.token}`;
+    const url = `${process.env.CLIENT_PORT}/users/${newUser._id}/verify/${token.token}`;
     await sendEmail(
       newUser.email,
       "Verify email",
@@ -69,7 +69,7 @@ module.exports.login_post = async (req, res) => {
             userId: user._id,
             token: crypto.randomBytes(32).toString("hex"),
           }).save();
-          const url = `http://localhost:5173/users/${user._id}/verify/${token.token}`;
+          const url = `${process.env.CLIENT_PORT}/users/${user._id}/verify/${token.token}`;
           await sendEmail(
             user.email,
             "Verify email",
@@ -119,7 +119,7 @@ module.exports.forgotPassword = async (req, res) => {
       expiresIn: "1d",
     });
     console.log(token, "token");
-    const url = `http://localhost:5173/reset-password/${user._id}/${token}`;
+    const url = `${process.env.CLIENT_PORT}/reset-password/${user._id}/${token}`;
     await sendEmail(
       user.email,
       "Reset your password",

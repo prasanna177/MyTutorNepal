@@ -22,7 +22,7 @@ const ForgotPassword = () => {
       dispatch(showLoading());
       console.log("start");
       const response = await axios.post(
-        "http://localhost:4000/api/user/forgot-password",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/forgot-password`,
         data
       );
       console.log("end");

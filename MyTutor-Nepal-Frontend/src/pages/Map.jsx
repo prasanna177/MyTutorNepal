@@ -24,7 +24,7 @@ const MapPage = () => {
   const getTutorData = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/user/getAllTutors",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/getAllTutors`,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"), //Authorization must start with capital when posting to backend

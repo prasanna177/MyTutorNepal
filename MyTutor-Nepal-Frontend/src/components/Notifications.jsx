@@ -29,7 +29,7 @@ const Notifications = () => {
   const markAllAsSeen = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/user/mark-notification-as-seen",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/mark-notification-as-seen`,
         {
           userId: user._id,
         },
@@ -52,7 +52,7 @@ const Notifications = () => {
   const deleteAll = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/user/delete-all-notifications",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/delete-all-notifications`,
         {
           userId: user._id,
         },

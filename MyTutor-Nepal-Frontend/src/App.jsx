@@ -26,6 +26,7 @@ import TutorInfo from "./pages/admin/TutorInfo";
 import UserInfo from "./pages/admin/UserInfo";
 import AppointmentInfo from "./pages/tutor/AppointmentInfo";
 import RatingModal from "./components/RatingModal";
+import "./App.css";
 
 function App() {
   const { ratingModal } = useSelector((state) => state.ratings);
@@ -183,9 +184,7 @@ function App() {
               />
             </Routes>
           )}
-          {ratingModal && (
-            <RatingModal ratingModal={ratingModal}/>
-          )}
+          {ratingModal && <RatingModal ratingModal={ratingModal} />}
         </Router>
       </ChakraProvider>
     </>

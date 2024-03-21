@@ -23,7 +23,7 @@ const BookTutor = () => {
   const getTutorData = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/tutor/getTutorById",
+        `${import.meta.env.VITE_SERVER_PORT}/api/tutor/getTutorById`,
         { tutorId: params.tutorId },
         {
           headers: {
@@ -64,7 +64,7 @@ const BookTutor = () => {
       const numberOfDays = toDate.diff(fromDate, "days") + 1;
       dispatch(showLoading());
       const res = await axios.post(
-        "http://localhost:4000/api/user/book-tutor",
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/book-tutor`,
         {
           tutorId: params.tutorId,
           userId: user._id,

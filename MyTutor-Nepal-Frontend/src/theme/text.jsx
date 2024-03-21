@@ -40,6 +40,12 @@ const subtitle1 = defineStyle({
   color: "gray.700",
 });
 
+const subtitle2 = defineStyle({
+  fontSize: "md",
+  fontWeight: "medium",
+  color: "gray.400",
+});
+
 const overline = defineStyle({
   fontSize: "sm",
   fontWeight: "bold",
@@ -49,8 +55,14 @@ const overline = defineStyle({
 
 const tableBody = defineStyle({
   fontSize: "md",
-  fontWeight: 'normal',
+  fontWeight: "normal",
   color: "gray.700",
+});
+
+const error = defineStyle({
+  fontSize: "sm",
+  fontWeight: "normal",
+  color: "error.200",
 });
 
 const Text = defineStyleConfig({
@@ -62,8 +74,10 @@ const Text = defineStyleConfig({
     heading3,
     heading4,
     subtitle1,
+    subtitle2,
     overline,
     tableBody,
+    error,
   },
 });
 
