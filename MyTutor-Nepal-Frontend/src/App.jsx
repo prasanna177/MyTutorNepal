@@ -25,8 +25,10 @@ import ResetPassword from "./pages/ResetPassword";
 import TutorInfo from "./pages/admin/TutorInfo";
 import UserInfo from "./pages/admin/UserInfo";
 import AppointmentInfo from "./pages/tutor/AppointmentInfo";
+import RatingModal from "./components/RatingModal";
 
 function App() {
+  const { ratingModal } = useSelector((state) => state.ratings);
   const { loading } = useSelector((state) => state.alerts);
   return (
     <>
@@ -180,6 +182,9 @@ function App() {
                 }
               />
             </Routes>
+          )}
+          {ratingModal && (
+            <RatingModal ratingModal={ratingModal}/>
           )}
         </Router>
       </ChakraProvider>

@@ -1,16 +1,20 @@
 import { Box, Divider, HStack, MenuItem, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { getDateAndTime } from "../Utils";
-// import { useDispatch } from "react-redux";
-// import { hideLoading, showLoading } from "../../redux/features/alertSlice"
+import { useDispatch } from "react-redux";
+import { showRatingModal } from "../../redux/features/ratingSlice";
+import { setTutor } from "../../redux/features/tutorSlice";
 
 const NotificationList = ({ notification }) => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleNotificationClick = (item) => {
     if (item.type === "Appointment-completion") {
-      console.log('asd')
+      console.log("asd");
+      dispatch(setTutor(item.tutor))
+      dispatch(showRatingModal());
+
     } else {
       navigate(item.onClickPath && item.onClickPath);
     }
