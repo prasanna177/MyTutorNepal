@@ -66,6 +66,30 @@ const RatingModal = ({ ratingModal }) => {
       handleClose();
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const handleSkipRating = async () => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/skip-tutor-rating`,
+        {
+          userId: appointment.userId,
+          notificationId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
+      handleClose();
+    } catch (error) {
+      toast.error("Something went wrong");
     }
   };
 
@@ -107,6 +131,7 @@ const RatingModal = ({ ratingModal }) => {
               onClick={handleSubmit}
             />
             <Text
+              onClick={handleSkipRating}
               _hover={{ cursor: "pointer", textDecoration: "underline" }}
               variant={"subtitle2"}
             >

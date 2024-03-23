@@ -47,6 +47,7 @@ router.post("/getUserById", authMiddleware, userController.getUserById);
 router.get("/getAllTutors", authMiddleware, userController.getAllTutors);
 router.post("/book-tutor", authMiddleware, userController.bookTutor_post);
 router.post("/rate-tutor", authMiddleware, userController.rateTutor);
+router.post("/skip-tutor-rating", authMiddleware, userController.skipRating);
 router.get(
   "/getAllAppointments",
   authMiddleware,

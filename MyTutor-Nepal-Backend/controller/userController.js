@@ -369,6 +369,32 @@ module.exports.rateTutor = async (req, res) => {
     console.log(error);
     res
       .status(500)
-      .send({ message: "Error creating user", success: false, error });
+      .send({ message: "Error rating tutor", success: false, error });
   }
 };
+
+module.exports.skipRating = async (req, res) => {
+  try {
+    const { userId, notificationId } = req.body;
+    const user = await User.findById(userId);
+    const unseenIndex = user.unseenNotification.findIndex(
+      (item) => item.id === notificationId
+    );
+    user.unseenNotification.splice(unseenIndex, 1);
+
+    const seenIndex = user.seenNotification.findIndex(
+      (item) => item.id === notificationId
+    );
+    user.seenNotification.splice(seenIndex, 1);
+    await user.save();
+    res.status(200).send({
+      message: "Rating skipped",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send({ message: "Error skipping tutor rating", success: false, error });
+  }
+}
