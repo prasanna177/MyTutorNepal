@@ -42,7 +42,9 @@ const AppointmentInfo = () => {
   const handleReject = async (appointmentId) => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/appointment/deleteAppointmentById`,
+        `${
+          import.meta.env.VITE_SERVER_PORT
+        }/api/appointment/deleteAppointmentById`,
         { appointmentId },
         {
           headers: {
@@ -68,7 +70,9 @@ const AppointmentInfo = () => {
   const getAppointmentInfo = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/appointment/getAppointmentById`,
+        `${
+          import.meta.env.VITE_SERVER_PORT
+        }/api/appointment/getAppointmentById`,
         { appointmentId: params.appointmentId },
         {
           headers: {

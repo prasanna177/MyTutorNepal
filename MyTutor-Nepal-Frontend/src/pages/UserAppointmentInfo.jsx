@@ -1,22 +1,27 @@
 import { useNavigate, useParams } from "react-router-dom";
-import PanelLayout from "../../components/Layout/PanelLayout";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Grid, HStack, Text, VStack } from "@chakra-ui/react";
-import Bundle from "../../components/common/Bundle";
-import { getDate, getTime } from "../../components/Utils";
-import NormalButton from "../../components/common/Button";
+import PanelLayout from "../components/Layout/PanelLayout";
+import Bundle from "../components/common/Bundle";
+import { getDate, getTime } from "../components/Utils";
+import NormalButton from "../components/common/Button";
+import ImageComponent from "../components/common/ImageComponent";
 
 const AppointmentInfo = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [appointment, setAppointment] = useState([]);
 
+  console.log(params, "param");
+
   const getAppointmentInfo = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/appointment/getAppointmentById`,
-        { appointmentId: params.appointmentId },
+        `${
+          import.meta.env.VITE_SERVER_PORT
+        }/api/appointment/getAppointmentById`,
+        { appointmentId: params.id },
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -40,6 +45,14 @@ const AppointmentInfo = () => {
     <PanelLayout title={"Appointment Information"}>
       <VStack gap={5} alignItems={"stretch"}>
         <Text variant={"heading2"}>Tutor details</Text>
+        <ImageComponent
+          src={`${import.meta.env.VITE_SERVER_PORT}/${
+            appointment?.tutorInfo?.profilePicUrl
+          }`}
+          isProfileImg={true}
+          width={"300px"}
+          height={"300px"}
+        />
         <Grid
           p={5}
           borderWidth={1}
@@ -49,10 +62,10 @@ const AppointmentInfo = () => {
         >
           <Bundle
             title={"Full Name"}
-            subtitle={appointment?.userInfo?.fullName}
+            subtitle={appointment?.tutorInfo?.fullName}
           />
-          <Bundle title={"Email"} subtitle={appointment?.userInfo?.email} />
-          <Bundle title={"Phone"} subtitle={appointment?.userInfo?.phone} />
+          <Bundle title={"Email"} subtitle={appointment?.tutorInfo?.email} />
+          <Bundle title={"Phone"} subtitle={appointment?.tutorInfo?.phone} />
         </Grid>
       </VStack>
 
@@ -82,7 +95,7 @@ const AppointmentInfo = () => {
             bgColor={"primary.100"}
             text={"Back"}
             onClick={() => {
-              navigate("/tutor/appointments");
+              navigate("/student/appointments");
             }}
           />
         </HStack>

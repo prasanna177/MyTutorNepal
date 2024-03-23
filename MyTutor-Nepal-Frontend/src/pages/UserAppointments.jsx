@@ -12,6 +12,7 @@ import { getDate } from "../components/Utils";
 const UserAppointments = () => {
   const [pendingAppointments, setPendingAppointments] = useState([]);
   const [approvedAppointments, setApprovedAppointments] = useState([]);
+  const [completedAppointments, setCompletedAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -34,8 +35,12 @@ const UserAppointments = () => {
         const approvedAppointments = res.data.data.filter(
           (appointment) => appointment.status === "approved"
         );
+        const completedAppointments = res.data.data.filter(
+          (appointment) => appointment.status === "completed"
+        );
         setPendingAppointments(pendingAppointments);
         setApprovedAppointments(approvedAppointments);
+        setCompletedAppointments(completedAppointments);
       }
     } catch (error) {
       setIsLoading(false);
@@ -46,6 +51,9 @@ const UserAppointments = () => {
   const columnHelper = createColumnHelper();
 
   const columns = [
+    columnHelper.accessor((row) => row.tutorInfo.fullName, {
+      header: "Tutor name",
+    }),
     columnHelper.accessor((row) => row.tutorInfo.email, {
       header: "Tutor email",
     }),
@@ -126,9 +134,12 @@ const UserAppointments = () => {
       <TabTable
         firstData={pendingAppointments}
         secondData={approvedAppointments}
+        thirdData={completedAppointments}
         firstTab={"Pending appointments"}
         secondTab={"Approved appointments"}
+        thirdTab={"Completed appointments"}
         columns={columns}
+        hasThreeTabs={true}
         isLoading={isLoading}
       />
     </PanelLayout>

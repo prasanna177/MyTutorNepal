@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getDateAndTime } from "../Utils";
 import { useDispatch } from "react-redux";
 import { showRatingModal } from "../../redux/features/ratingSlice";
-import { setTutor } from "../../redux/features/tutorSlice";
+import { setAppointment } from "../../redux/features/appointmentSlice";
 import { setNotification } from "../../redux/features/notificationIdSlice";
 
 const NotificationList = ({ notification }) => {
@@ -12,8 +12,7 @@ const NotificationList = ({ notification }) => {
 
   const handleNotificationClick = (item) => {
     if (item.type === "Appointment-completion") {
-      console.log("asd");
-      dispatch(setTutor(item.tutor));
+      dispatch(setAppointment(item.appointment));
       dispatch(setNotification(item.id));
       dispatch(showRatingModal());
     } else {

@@ -13,10 +13,13 @@ import { DataTable } from "../DataTable";
 const TabTable = ({
   firstTab,
   secondTab,
+  thirdTab,
   firstData,
   secondData,
+  thirdData,
   columns,
   isLoading,
+  hasThreeTabs,
 }) => {
   return (
     <Tabs variant={"soft-rounded"} colorScheme="purple">
@@ -33,6 +36,14 @@ const TabTable = ({
             <Box>({secondData.length})</Box>
           </HStack>
         </Tab>
+        {hasThreeTabs && (
+          <Tab>
+            <HStack>
+              <Text>{thirdTab}</Text>
+              <Box>({thirdData.length})</Box>
+            </HStack>
+          </Tab>
+        )}
       </TabList>
 
       <TabPanels>
@@ -46,6 +57,15 @@ const TabTable = ({
             isLoading={isLoading}
           />
         </TabPanel>
+        {hasThreeTabs && (
+          <TabPanel>
+            <DataTable
+              columns={columns}
+              data={thirdData}
+              isLoading={isLoading}
+            />
+          </TabPanel>
+        )}
       </TabPanels>
     </Tabs>
   );

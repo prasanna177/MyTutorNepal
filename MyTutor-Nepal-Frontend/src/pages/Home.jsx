@@ -6,11 +6,9 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMap } from "@fortawesome/free-solid-svg-icons";
 import PanelLayout from "../components/Layout/PanelLayout";
-import { useSelector } from "react-redux";
 
 const Home = () => {
   const [tutors, setTutors] = useState([]);
-  const { tutor } = useSelector((state) => state.tutor);
 
   const getTutorData = async () => {
     try {
@@ -33,7 +31,6 @@ const Home = () => {
   useEffect(() => {
     getTutorData();
   }, []);
-  console.log(tutor, "asd");
   return (
     <PanelLayout>
       <Box pos={"relative"}>

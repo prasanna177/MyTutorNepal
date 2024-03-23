@@ -10,6 +10,10 @@ const ratingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    appointmentId: {
+      type: String,
+      required: true,
+    },
     rating: {
       type: Number,
       required: true,

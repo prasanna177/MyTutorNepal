@@ -15,7 +15,7 @@ import {
 import { hideRatingModal } from "../redux/features/ratingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import NormalButton from "./common/Button";
-import { removeTutor } from "../redux/features/tutorSlice";
+import { removeAppointment } from "../redux/features/appointmentSlice";
 import { useState } from "react";
 import RatingStar from "./RatingStar";
 import { removeNotification } from "../redux/features/notificationIdSlice";
@@ -27,13 +27,12 @@ const RatingModal = ({ ratingModal }) => {
   const [review, setReview] = useState("");
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
-  const { tutor } = useSelector((state) => state.tutor);
-  const { user } = useSelector((state) => state.user);
+  const { appointment } = useSelector((state) => state.appointment);
   const { notificationId } = useSelector((state) => state.notificationId);
 
   const handleClose = () => {
     dispatch(hideRatingModal());
-    dispatch(removeTutor());
+    dispatch(removeAppointment());
     dispatch(removeNotification());
   };
 
@@ -41,13 +40,13 @@ const RatingModal = ({ ratingModal }) => {
     try {
       if (!rating) {
         setError(true);
-        return;
       }
       const data = {
         rating,
         review,
-        tutorId: tutor._id,
-        userId: user._id,
+        appointmentId: appointment._id,
+        tutorId: appointment.tutorId,
+        userId: appointment.userId,
         notificationId,
       };
       const res = await axios.post(
@@ -80,11 +79,11 @@ const RatingModal = ({ ratingModal }) => {
               <Avatar
                 size={"md"}
                 src={`${import.meta.env.VITE_SERVER_PORT}/${
-                  tutor?.profilePicUrl
+                  appointment?.tutorInfo?.profilePicUrl
                 }`}
               />
               <Text variant={"heading3"} color={"primary.0"}>
-                Provide rating and review for {tutor.fullName}
+                Provide rating and review for {appointment?.tutorInfo?.fullName}
               </Text>
             </HStack>
           </ModalHeader>

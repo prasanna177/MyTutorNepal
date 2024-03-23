@@ -327,8 +327,17 @@ module.exports.getAllAppointments = async (req, res) => {
 
 module.exports.rateTutor = async (req, res) => {
   try {
-    const { userId, tutorId, rating, review, notificationId } = req.body;
-    const tutorRating = new Rating({ userId, tutorId, rating, review });
+    const { userId, tutorId, rating, review, notificationId, appointmentId } = req.body;
+
+    //send failure message if rating exists for tutor by user for that specific appointment
+    const existingRating = await Rating.findOne({ userId, tutorId, appointmentId });
+    if (existingRating) {
+      return res.status(200).send({
+        success: false,
+        message: "Rating already provided for this tutor for this appointment"
+      });
+    }
+    const tutorRating = new Rating({ userId, tutorId, appointmentId, rating, review });
     await tutorRating.save();
     const tutor = await Tutor.findById(tutorId);
     const tutorUser = await User.findById(tutor.userId);
@@ -342,11 +351,15 @@ module.exports.rateTutor = async (req, res) => {
 
     //delete the notification
     const user = await User.findById(userId);
-    const index = user.unseenNotification.findIndex(
+    const unseenIndex = user.unseenNotification.findIndex(
       (item) => item.id === notificationId
     );
-    user.unseenNotification.splice(index, 1);
-    user.seenNotification.splice(index, 1);
+    user.unseenNotification.splice(unseenIndex, 1);
+
+    const seenIndex = user.seenNotification.findIndex(
+      (item) => item.id === notificationId
+    );
+    user.seenNotification.splice(seenIndex, 1);
     await user.save();
     res.status(200).send({
       message: "Rating successfully provided",

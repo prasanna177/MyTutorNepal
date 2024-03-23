@@ -25,6 +25,7 @@ import ResetPassword from "./pages/ResetPassword";
 import TutorInfo from "./pages/admin/TutorInfo";
 import UserInfo from "./pages/admin/UserInfo";
 import AppointmentInfo from "./pages/tutor/AppointmentInfo";
+import UserAppointmentInfo from "./pages/UserAppointmentInfo";
 import RatingModal from "./components/RatingModal";
 import "./App.css";
 
@@ -178,7 +179,7 @@ function App() {
                 path="/student/appointments/:id"
                 element={
                   <ProtectedRoute>
-                    <AppointmentInfo />
+                    <UserAppointmentInfo />
                   </ProtectedRoute>
                 }
               />

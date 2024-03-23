@@ -11,6 +11,7 @@ import TabTable from "../../components/common/TabTable";
 const TutorAppointments = () => {
   const [pendingAppointments, setPendingAppointments] = useState([]);
   const [approvedAppointments, setApprovedAppointments] = useState([]);
+  const [completedAppointments, setCompletedAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -95,8 +96,12 @@ const TutorAppointments = () => {
           const approvedAppointments = res.data.data.filter(
             (appointment) => appointment.status === "approved"
           );
+          const completedAppointments = res.data.data.filter(
+            (appointment) => appointment.status === "completed"
+          );
           setPendingAppointments(pendingAppointments);
           setApprovedAppointments(approvedAppointments);
+          setCompletedAppointments(completedAppointments);
         }
       } catch (error) {
         setIsLoading(false);
@@ -111,8 +116,11 @@ const TutorAppointments = () => {
       <TabTable
         firstData={pendingAppointments}
         secondData={approvedAppointments}
+        thirdData={completedAppointments}
         firstTab={"Pending appointments"}
         secondTab={"Approved Tutors"}
+        thirdTab={"Completed Appointments"}
+        hasThreeTabs={true}
         columns={columns}
         isLoading={isLoading}
       />
