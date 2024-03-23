@@ -4,6 +4,7 @@ import { getDateAndTime } from "../Utils";
 import { useDispatch } from "react-redux";
 import { showRatingModal } from "../../redux/features/ratingSlice";
 import { setTutor } from "../../redux/features/tutorSlice";
+import { setNotification } from "../../redux/features/notificationIdSlice";
 
 const NotificationList = ({ notification }) => {
   const navigate = useNavigate();
@@ -12,9 +13,9 @@ const NotificationList = ({ notification }) => {
   const handleNotificationClick = (item) => {
     if (item.type === "Appointment-completion") {
       console.log("asd");
-      dispatch(setTutor(item.tutor))
+      dispatch(setTutor(item.tutor));
+      dispatch(setNotification(item.id));
       dispatch(showRatingModal());
-
     } else {
       navigate(item.onClickPath && item.onClickPath);
     }

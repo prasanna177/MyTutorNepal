@@ -3,6 +3,7 @@ import { alertSlice } from "./features/alertSlice";
 import { userSlice } from "./features/userSlice";
 import { tutorSlice } from "./features/tutorSlice";
 import { ratingSlice } from "./features/ratingSlice";
+import { notificationIdSlice } from "./features/notificationIdSlice";
 
 export default configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export default configureStore({
     user: userSlice.reducer,
     tutor: tutorSlice.reducer,
     ratings: ratingSlice.reducer,
+    notificationId: notificationIdSlice.reducer,
   },
 });

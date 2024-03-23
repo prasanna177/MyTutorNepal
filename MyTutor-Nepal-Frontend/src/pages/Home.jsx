@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 const Home = () => {
   const [tutors, setTutors] = useState([]);
   const { tutor } = useSelector((state) => state.tutor);
+
   const getTutorData = async () => {
     try {
       const res = await axios.get(

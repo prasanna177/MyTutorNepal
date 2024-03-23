@@ -41,7 +41,6 @@ const Notifications = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message);
-        dispatch(setUser(response.data.data));
       } else {
         toast.error(response.data.message);
       }

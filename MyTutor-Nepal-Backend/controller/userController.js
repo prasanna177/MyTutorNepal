@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const Tutor = require("../models/tutorModel");
 const Appointment = require("../models/appointmentModel");
+const Rating = require("../models/ratingModel");
 const moment = require("moment");
 const crypto = require("crypto");
 
@@ -95,7 +96,6 @@ module.exports.delete_all_notifications = async (req, res) => {
 };
 
 module.exports.becomeTutor_post = async (req, res) => {
-  console.log(req.body, "body");
   try {
     if (!req.body.nIdFrontUrl || !req.body.nIdBackUrl) {
       return res.status(200).send({
@@ -322,5 +322,40 @@ module.exports.getAllAppointments = async (req, res) => {
       error,
       message: "Error in fetching user appointments",
     });
+  }
+};
+
+module.exports.rateTutor = async (req, res) => {
+  try {
+    const { userId, tutorId, rating, review, notificationId } = req.body;
+    const tutorRating = new Rating({ userId, tutorId, rating, review });
+    await tutorRating.save();
+    const tutor = await Tutor.findById(tutorId);
+    const tutorUser = await User.findById(tutor.userId);
+    tutorUser.unseenNotification.push({
+      id: crypto.randomBytes(16).toString("hex"),
+      type: "Rating-received",
+      message: "A new rating was provided.",
+      date: new Date(),
+    });
+    await tutorUser.save();
+
+    //delete the notification
+    const user = await User.findById(userId);
+    const index = user.unseenNotification.findIndex(
+      (item) => item.id === notificationId
+    );
+    user.unseenNotification.splice(index, 1);
+    user.seenNotification.splice(index, 1);
+    await user.save();
+    res.status(200).send({
+      message: "Rating successfully provided",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send({ message: "Error creating user", success: false, error });
   }
 };

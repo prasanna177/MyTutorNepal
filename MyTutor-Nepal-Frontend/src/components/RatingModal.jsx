@@ -18,6 +18,9 @@ import NormalButton from "./common/Button";
 import { removeTutor } from "../redux/features/tutorSlice";
 import { useState } from "react";
 import RatingStar from "./RatingStar";
+import { removeNotification } from "../redux/features/notificationIdSlice";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const RatingModal = ({ ratingModal }) => {
   const [rating, setRating] = useState(null);
@@ -26,19 +29,47 @@ const RatingModal = ({ ratingModal }) => {
   const dispatch = useDispatch();
   const { tutor } = useSelector((state) => state.tutor);
   const { user } = useSelector((state) => state.user);
+  const { notificationId } = useSelector((state) => state.notificationId);
 
   const handleClose = () => {
     dispatch(hideRatingModal());
     dispatch(removeTutor());
+    dispatch(removeNotification());
   };
 
-  const handleSubmit = () => {
-    if (!rating) {
-      setError(true);
+  const handleSubmit = async () => {
+    try {
+      if (!rating) {
+        setError(true);
+        return;
+      }
+      const data = {
+        rating,
+        review,
+        tutorId: tutor._id,
+        userId: user._id,
+        notificationId,
+      };
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/rate-tutor`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+      handleClose();
+    } catch (error) {
+      console.log(error);
     }
-    const data = { rating, review, tutorId: tutor._id, userId: user._id };
-    console.log(data);
   };
+
   return (
     <>
       <Modal isOpen={ratingModal} onClose={handleClose}>

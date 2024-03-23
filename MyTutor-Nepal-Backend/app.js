@@ -4,6 +4,7 @@ const userRoute = require("./routes/userRoute");
 const adminRoute = require("./routes/adminRoute");
 const tutorRoute = require("./routes/tutorRoute");
 const appointmentRoute = require("./routes/appointmentRoute");
+const ratingRoute = require("./routes/ratingRoute");
 const dbCongfig = require("./config/dbConfig");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -22,6 +23,7 @@ app.use("/api/user", userRoute); //whenever api request comes with the user keyw
 app.use("/api/admin", adminRoute);
 app.use("/api/tutor", tutorRoute);
 app.use("/api/appointment", appointmentRoute);
+app.use("/api/rating", ratingRoute);
 
 app.get("/", (req, res) => {
   console.log("Hello from the server");

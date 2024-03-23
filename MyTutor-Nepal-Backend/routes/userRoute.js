@@ -46,6 +46,7 @@ router.post("/getCurrentUser", authMiddleware, userController.getCurrentUser);
 router.post("/getUserById", authMiddleware, userController.getUserById);
 router.get("/getAllTutors", authMiddleware, userController.getAllTutors);
 router.post("/book-tutor", authMiddleware, userController.bookTutor_post);
+router.post("/rate-tutor", authMiddleware, userController.rateTutor);
 router.get(
   "/getAllAppointments",
   authMiddleware,

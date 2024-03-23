@@ -1,7 +1,7 @@
 const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
 const cron = require("node-cron");
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 // runs every 1 hour (as of now)
 cron.schedule("0 0 */1 * * *", async () => {
@@ -11,7 +11,7 @@ cron.schedule("0 0 */1 * * *", async () => {
     //find appointments less than current date and status that is not completed
     const appointments = await Appointment.find({
       toDate: { $lt: currentDate },
-      status: { $ne: "completed" }, // Exclude appointments with status "completed"
+      status: "approved",
     });
     console.log(appointments);
     for (const appointment of appointments) {
@@ -21,7 +21,7 @@ cron.schedule("0 0 */1 * * *", async () => {
       const user = await User.findOne({ _id: appointment.userId });
 
       user.unseenNotification.push({
-        id: crypto.randomBytes(16).toString('hex'),
+        id: crypto.randomBytes(16).toString("hex"),
         type: "Appointment-completion",
         message: `Your tutoring lessons with ${appointment.tutorInfo.fullName} is over. Click to provide rating.`,
         tutor: appointment.tutorInfo,
