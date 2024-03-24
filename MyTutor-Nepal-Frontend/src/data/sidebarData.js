@@ -20,7 +20,7 @@ export const StudentMenu = [
   {
     name: "Home",
     path: "/",
-    icon: "fa-solid fa-users",
+    icon: "fa-solid fa-house",
   },
   {
     name: "My Tutor",

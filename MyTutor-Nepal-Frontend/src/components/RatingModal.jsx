@@ -49,21 +49,22 @@ const RatingModal = ({ ratingModal }) => {
         userId: appointment.userId,
         notificationId,
       };
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/rate-tutor`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (res.data.success) {
-        toast.success(res.data.message);
-      } else {
-        toast.error(res.data.message);
-      }
-      handleClose();
+      console.log(data);
+      // const res = await axios.post(
+      //   `${import.meta.env.VITE_SERVER_PORT}/api/user/rate-tutor`,
+      //   data,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //     },
+      //   }
+      // );
+      // if (res.data.success) {
+      //   toast.success(res.data.message);
+      // } else {
+      //   toast.error(res.data.message);
+      // }
+      // handleClose();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -120,6 +121,7 @@ const RatingModal = ({ ratingModal }) => {
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 placeholder="Provide your review"
+                maxLength={1613}
               />
             </VStack>
           </ModalBody>

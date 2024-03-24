@@ -4,6 +4,7 @@ const Appointment = require("../models/appointmentModel");
 const Rating = require("../models/ratingModel");
 const moment = require("moment");
 const crypto = require("crypto");
+const query = require("../utils/getSentiment");
 
 module.exports.saveFilePath = async (req, res) => {
   try {
@@ -327,9 +328,13 @@ module.exports.getAllAppointments = async (req, res) => {
 
 module.exports.rateTutor = async (req, res) => {
   try {
-    const { userId, tutorId, rating, review, notificationId, appointmentId } = req.body;
+  const { userId, tutorId, rating, review, notificationId, appointmentId } =
+    req.body;
+  console.log(review);
+  const sentiment = await query(review); //get sentiment from review
+  console.log(sentiment);
 
-    //send failure message if rating exists for tutor by user for that specific appointment
+  //send failure message if rating exists for tutor by user for that specific appointment
     const existingRating = await Rating.findOne({ userId, tutorId, appointmentId });
     if (existingRating) {
       return res.status(200).send({
@@ -337,7 +342,7 @@ module.exports.rateTutor = async (req, res) => {
         message: "Rating already provided for this tutor for this appointment"
       });
     }
-    const tutorRating = new Rating({ userId, tutorId, appointmentId, rating, review });
+    const tutorRating = new Rating({ userId, tutorId, appointmentId, rating, review, sentiment });
     await tutorRating.save();
     const tutor = await Tutor.findById(tutorId);
     const tutorUser = await User.findById(tutor.userId);
@@ -397,4 +402,4 @@ module.exports.skipRating = async (req, res) => {
       .status(500)
       .send({ message: "Error skipping tutor rating", success: false, error });
   }
-}
+};

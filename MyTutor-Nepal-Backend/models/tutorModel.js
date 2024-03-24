@@ -52,9 +52,9 @@ const tutorSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    teachingCertificateUrl: {
-      type: String,
-    },
+    teachingCertificateUrl: String,
+
+    sentiment: Number,
   },
   { timestamps: true }
 );
