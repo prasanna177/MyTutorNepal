@@ -17,13 +17,29 @@ import {
   useReactTable,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
-import NoData from "../assets/images/NoData.png";
+import NoData from "../../assets/images/NoData.png";
+import { useState } from "react";
+import Filter from "./Filter";
+import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
 export function DataTable({ data, columns, isLoading }) {
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const table = useReactTable({
     columns,
     data,
+    debugTable: true,
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -44,10 +60,21 @@ export function DataTable({ data, columns, isLoading }) {
                     key={header.id}
                     pl={5}
                   >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                    <Box
+                      _hover={
+                        header.column.getCanSort() ? { cursor: "pointer" } : {}
+                      }
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                      {{
+                        asc: <TriangleUpIcon color={"primary.0"} />,
+                        desc: <TriangleDownIcon color={"primary.0"} />,
+                      }[header.column.getIsSorted()] ?? null}
+                    </Box>
                   </Th>
                 );
               })}

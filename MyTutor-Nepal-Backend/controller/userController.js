@@ -104,15 +104,18 @@ module.exports.becomeTutor_post = async (req, res) => {
         message: "Please provide the National ID pictures",
       });
     }
-    const { address, coordinates } = req.body;
+    const { address, coordinates, userId } = req.body;
     if (!(address || coordinates.lat || coordinates.lng)) {
       return res.status(200).send({
         success: false,
         message: "Please enter an address",
       });
     }
+    const tutorUser = await User.findById(userId)
     const newTutor = await Tutor({
       ...req.body,
+      fullName: tutorUser.fullName,
+      email: tutorUser.email,
       status: "Pending",
     });
     await newTutor.save();
@@ -328,23 +331,61 @@ module.exports.getAllAppointments = async (req, res) => {
 
 module.exports.rateTutor = async (req, res) => {
   try {
-  const { userId, tutorId, rating, review, notificationId, appointmentId } =
-    req.body;
-  console.log(review);
-  const sentiment = await query(review); //get sentiment from review
-  console.log(sentiment);
+    const { userId, tutorId, rating, review, notificationId, appointmentId } =
+      req.body;
+    const sentiment = await query(review); //get sentiment from review
+    console.log(sentiment);
 
-  //send failure message if rating exists for tutor by user for that specific appointment
-    const existingRating = await Rating.findOne({ userId, tutorId, appointmentId });
+    //send failure message if rating exists for tutor by user for that specific appointment
+    const existingRating = await Rating.findOne({
+      userId,
+      tutorId,
+      appointmentId,
+    });
     if (existingRating) {
       return res.status(200).send({
         success: false,
-        message: "Rating already provided for this tutor for this appointment"
+        message: "Rating already provided for this tutor for this appointment",
       });
     }
-    const tutorRating = new Rating({ userId, tutorId, appointmentId, rating, review, sentiment });
+    const tutorRating = new Rating({
+      userId,
+      tutorId,
+      appointmentId,
+      rating,
+      review,
+      sentiment,
+    });
     await tutorRating.save();
     const tutor = await Tutor.findById(tutorId);
+
+    //calculate average rating
+    const allRatings = await Rating.find({ tutorId });
+    console.log(allRatings);
+    const totalRatings = allRatings.length;
+    const averageRating = Math.round(
+      allRatings.reduce((acc, curr) => {
+        return acc + curr.rating;
+      }, 0) / totalRatings
+    );
+    console.log(averageRating, "avgRating");
+
+    //calculate average sentiment
+    const totalSentiment = allRatings.reduce((acc, curr) => {
+      return acc + curr.sentiment;
+    }, 0);
+    let averageSentiment;
+    if (totalSentiment > 0) {
+      averageSentiment = "positive";
+    } else if (totalSentiment < 0) {
+      averageSentiment = "negative";
+    } else {
+      averageSentiment = "neutral";
+    }
+    console.log(averageSentiment, "avgRating");
+    //update to tutor database
+    await Tutor.findByIdAndUpdate(tutorId, { averageSentiment, averageRating });
+    // send notification
     const tutorUser = await User.findById(tutor.userId);
     tutorUser.unseenNotification.push({
       id: crypto.randomBytes(16).toString("hex"),

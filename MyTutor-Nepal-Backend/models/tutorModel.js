@@ -53,8 +53,15 @@ const tutorSchema = new mongoose.Schema(
       required: true,
     },
     teachingCertificateUrl: String,
-
-    sentiment: Number,
+    averageSentiment: {
+      type: String,
+      enum: ["positive", "negative", "neutral"],
+      default: "neutral",
+    },
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

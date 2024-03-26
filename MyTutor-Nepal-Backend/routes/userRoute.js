@@ -5,14 +5,16 @@ const authMiddleware = require("../middleware/authMiddleware");
 const authController = require("../controller/authController");
 const tokenController = require("../controller/tokenController");
 const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
+    const uniqueSuffix =
+      Math.round(Math.random() * 1e9) + "-" + file.originalname;
+    cb(null, uniqueSuffix);
   },
 });
 
@@ -25,7 +27,7 @@ const fileFilter = (req, file, cb) => {
 };
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 5 * 1024 * 1024 }, //5mb
   fileFilter: fileFilter,
 });
 
@@ -41,7 +43,11 @@ router.post(
   authMiddleware,
   userController.mark_notifications_as_seen
 );
-router.post("/delete-all-notifications",authMiddleware,userController.delete_all_notifications);
+router.post(
+  "/delete-all-notifications",
+  authMiddleware,
+  userController.delete_all_notifications
+);
 router.post("/getCurrentUser", authMiddleware, userController.getCurrentUser);
 router.post("/getUserById", authMiddleware, userController.getUserById);
 router.get("/getAllTutors", authMiddleware, userController.getAllTutors);

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import axios from "axios";
 import { createColumnHelper } from "@tanstack/react-table";
-import { DataTable } from "../../components/DataTable";
 import { ViewIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { DataTable } from "../../components/DataTable";
 
 const Users = () => {
   const [users, setUsers] = useState([]);

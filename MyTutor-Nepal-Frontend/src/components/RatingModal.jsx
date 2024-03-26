@@ -50,21 +50,21 @@ const RatingModal = ({ ratingModal }) => {
         notificationId,
       };
       console.log(data);
-      // const res = await axios.post(
-      //   `${import.meta.env.VITE_SERVER_PORT}/api/user/rate-tutor`,
-      //   data,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //     },
-      //   }
-      // );
-      // if (res.data.success) {
-      //   toast.success(res.data.message);
-      // } else {
-      //   toast.error(res.data.message);
-      // }
-      // handleClose();
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/rate-tutor`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+      handleClose();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");

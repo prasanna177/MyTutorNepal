@@ -56,7 +56,14 @@ const Home = () => {
             Show Map
           </Button>
         </Link>
-        <Grid gap={"16px"} templateColumns="repeat(5, 1fr)">
+        <Grid
+          gap={"16px"}
+          templateColumns={{
+            lg: "repeat(5, 1fr)",
+            md: "repeat(3, 1fr)",
+            sm: "repeat(1, 1fr)",
+          }}
+        >
           {tutors?.map((tutor) => (
             <TutorCard key={tutor._id} tutor={tutor} />
           ))}

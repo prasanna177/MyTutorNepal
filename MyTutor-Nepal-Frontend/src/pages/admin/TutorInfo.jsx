@@ -53,7 +53,7 @@ const TutorInfo = () => {
         toast.success(res.data.message);
         navigate("/admin/tutors");
         window.location.reload();
-      }else {
+      } else {
         toast.error(res.data.message);
         navigate("/admin/tutors");
         window.location.reload();
@@ -79,8 +79,7 @@ const TutorInfo = () => {
         toast.success(res.data.message);
         navigate("/admin/tutors");
         window.location.reload();
-      }
-      else {
+      } else {
         toast.error(res.data.message);
         navigate("/admin/tutors");
         window.location.reload();
@@ -157,16 +156,21 @@ const TutorInfo = () => {
               title={"National ID Card (Front)"}
               src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.nIdFrontUrl}`}
               isProfileImg={false}
+              openable={true}
             />
             <ImageComponent
               title={"National ID Card (Back)"}
               src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.nIdBackUrl}`}
               isProfileImg={false}
+              openable={true}
             />
             <ImageComponent
               title={"Highest education qualification"}
-              src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.teachingCertificateUrl}`}
+              src={`${import.meta.env.VITE_SERVER_PORT}/${
+                tutor?.teachingCertificateUrl
+              }`}
               isProfileImg={false}
+              openable={true}
             />
           </Grid>
         </VStack>

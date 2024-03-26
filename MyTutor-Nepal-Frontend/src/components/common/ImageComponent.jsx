@@ -2,12 +2,30 @@ import { Image, Text, VStack } from "@chakra-ui/react";
 import NoProfilePic from "../../assets/images/NoProfilePic.png";
 import ImagePlaceholder from "../../assets/images/image_placeholder.png";
 
-const ImageComponent = ({ title, src, isProfileImg, width, height }) => {
+const ImageComponent = ({
+  title,
+  src,
+  isProfileImg,
+  width,
+  height,
+  openable,
+}) => {
+  const handleClick = () => {
+    // Open the image in a new tab when clicked
+    window.open(src, "_blank");
+  };
   return (
     <VStack alignItems={"start"}>
       <Text variant={"title1"}>{title}</Text>
       {src ? (
-        <Image width={width} h={height} objectFit={"cover"} src={src} />
+        <Image
+          width={width}
+          height={height}
+          objectFit={"cover"}
+          src={src}
+          onClick={openable && handleClick}
+          _hover={openable && { cursor: "pointer", filter: "blur(4px)" }}
+        />
       ) : isProfileImg ? (
         <Image
           width={width}

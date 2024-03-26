@@ -118,7 +118,7 @@ const TutorAppointments = () => {
         secondData={approvedAppointments}
         thirdData={completedAppointments}
         firstTab={"Pending appointments"}
-        secondTab={"Approved Tutors"}
+        secondTab={"Approved appointments"}
         thirdTab={"Completed Appointments"}
         hasThreeTabs={true}
         columns={columns}

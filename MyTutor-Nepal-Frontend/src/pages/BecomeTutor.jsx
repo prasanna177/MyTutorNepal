@@ -47,8 +47,6 @@ const BecomeTutor = () => {
   };
 
   const schema = yup.object({
-    fullName: yup.string().required("Full Name is required"),
-    email: yup.string().required("Email address is required"),
     phone: yup.string().required("Phone number is required"),
     timing: yup.object().shape({
       startTime: yup.string().required("Start Time is required"),
@@ -77,24 +75,26 @@ const BecomeTutor = () => {
     data.teachingCertificateUrl = teachingCertificateImage;
     const submissionData = { ...data, coordinates, address, userId: user._id };
     try {
-      const formData = new FormData();
-      formData.append("profilePicUrl", submissionData.profilePicUrl);
-      formData.append("nIdFrontUrl", submissionData.nIdFrontUrl);
-      formData.append("nIdBackUrl", submissionData.nIdBackUrl);
-      formData.append(
-        "teachingCertificateUrl",
-        submissionData.teachingCertificateUrl
-      );
-      const filePathUrl = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/saveFilePath`,
-        formData
-      );
-      filePathUrl.data.data.forEach((file) => {
-        const { fieldname, path } = file;
+    const formData = new FormData();
+    formData.append("profilePicUrl", submissionData.profilePicUrl);
+    formData.append("nIdFrontUrl", submissionData.nIdFrontUrl);
+    formData.append("nIdBackUrl", submissionData.nIdBackUrl);
+    formData.append(
+      "teachingCertificateUrl",
+      submissionData.teachingCertificateUrl
+    );
+    const filePathUrl = await axios.post(
+      `${import.meta.env.VITE_SERVER_PORT}/api/user/saveFilePath`,
+      formData
+    );
+    console.log(filePathUrl, "fpu");
+    filePathUrl.data.data.forEach((file) => {
+      const { fieldname, path } = file;
 
-        // Update the corresponding URL in submissionData
-        submissionData[fieldname] = path;
-      });
+      // Update the corresponding URL in submissionData
+      submissionData[fieldname] = path;
+    });
+    console.log(submissionData);
       dispatch(showLoading());
       const res = await axios.post(
         `${import.meta.env.VITE_SERVER_PORT}/api/user/become-tutor`,
@@ -164,22 +164,6 @@ const BecomeTutor = () => {
                 isProfileImg={true}
               />
               <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
-                <TextField
-                  name={"fullName"}
-                  errors={errors?.fullName?.message}
-                  register={register}
-                  placeholder={"Full Name"}
-                  label={"Full name"}
-                  hasLabel={true}
-                />
-                <TextField
-                  name={"email"}
-                  errors={errors?.email?.message}
-                  register={register}
-                  placeholder={"Email"}
-                  label={"Email"}
-                  hasLabel={true}
-                />
                 <TextField
                   name={"phone"}
                   errors={errors?.phone?.message}
