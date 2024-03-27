@@ -31,7 +31,14 @@ const ImageInput = ({
               width={width}
               h={height}
               objectFit={"cover"}
-              src={URL.createObjectURL(image)}
+              src={
+                typeof image === "object"
+                  ? URL.createObjectURL(image)
+                  : typeof image === "string"
+                  ? `${import.meta.env.VITE_SERVER_PORT}/${image}`
+                  : true
+              }
+              // src={URL.createObjectURL(image)}
             />
           ) : isProfileImg ? (
             <Image

@@ -62,7 +62,7 @@ module.exports.changeAccountStatus = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Error ifn account status",
+      message: "Error in account status",
       error,
     });
   }

@@ -28,6 +28,7 @@ import AppointmentInfo from "./pages/tutor/AppointmentInfo";
 import UserAppointmentInfo from "./pages/UserAppointmentInfo";
 import RatingModal from "./components/RatingModal";
 import "./App.css";
+import Students from "./pages/tutor/Students";
 
 function App() {
   const { ratingModal } = useSelector((state) => state.ratings);
@@ -118,6 +119,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <TutorHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tutor/students"
+                element={
+                  <ProtectedRoute>
+                    <Students />
                   </ProtectedRoute>
                 }
               />

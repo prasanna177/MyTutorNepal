@@ -23,24 +23,17 @@ module.exports.getTutorInfo = async (req, res) => {
 
 module.exports.updateProfile = async (req, res) => {
   try {
-    const { subjects, address, coordinates } = req.body;
-    const uniqueSubjects = new Set(subjects);
-    if (uniqueSubjects.size !== subjects.length) {
-      return res.status(200).send({
-        success: false,
-        message: "Subjects must be unique",
-      });
-    }
+    const { address, coordinates, userId, fullName, email } = req.body;
     if (!(address || coordinates.lat || coordinates.lng)) {
       return res.status(200).send({
         success: false,
         message: "Please enter an address",
       });
     }
-    const tutor = await Tutor.findOneAndUpdate(
-      { userId: req.body.userId },
-      req.body
-    );
+    const tutor = await Tutor.findOneAndUpdate({ userId }, req.body);
+    await User.findByIdAndUpdate(userId, {
+      fullName,
+    });
     res.status(201).send({
       success: true,
       message: "Profile updated",
@@ -82,7 +75,6 @@ module.exports.getTutorById = async (req, res) => {
 module.exports.deleteTutorById = async (req, res) => {
   try {
     const tutor = await Tutor.findOneAndDelete({ _id: req.body.tutorId });
-    console.log(tutor, "tutorafterdelete");
 
     if (!tutor) {
       return res.status(200).send({
@@ -90,7 +82,14 @@ module.exports.deleteTutorById = async (req, res) => {
         message: "Tutor not found",
       });
     }
-
+    const tutorUser = await User.findById(tutor.userId);
+    tutorUser.unseenNotification.push({
+      id: crypto.randomBytes(16).toString("hex"),
+      type: "Application-rejected",
+      message: "Your tutor application has been rejected.",
+      date: new Date(),
+    });
+    await tutorUser.save();
     res.status(200).send({
       success: true,
       message: "Tutor rejected",
@@ -147,7 +146,7 @@ module.exports.acceptAppointment = async (req, res) => {
       });
       const user = await User.findOne({ _id: appointments.userId });
       user.unseenNotification.push({
-        id: crypto.randomBytes(16).toString('hex'),
+        id: crypto.randomBytes(16).toString("hex"),
         type: "Status-Updated",
         message: `Your appointment has been accepted. Total price is now ${appointments.totalPrice}`,
         onClickPath: "/student/appointments",
@@ -167,7 +166,7 @@ module.exports.acceptAppointment = async (req, res) => {
       });
       const user = await User.findOne({ _id: appointments.userId });
       user.unseenNotification.push({
-        id: crypto.randomBytes(16).toString('hex'),
+        id: crypto.randomBytes(16).toString("hex"),
         type: "Status-Updated",
         message: "Your appointment has been removed due to late acceptance.",
         onClickPath: "/student/appointments",
@@ -186,7 +185,7 @@ module.exports.acceptAppointment = async (req, res) => {
       });
       const user = await User.findOne({ _id: appointments.userId });
       user.unseenNotification.push({
-        id: crypto.randomBytes(16).toString('hex'),
+        id: crypto.randomBytes(16).toString("hex"),
         type: "Status-Updated",
         message: "Your appointment has been accepted",
         onClickPath: "/student/appointments",

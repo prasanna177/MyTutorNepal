@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Tutor = require("./tutorModel");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -35,6 +36,18 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+});
+
+userSchema.pre("save", async function (next) {
+  // Check if the fullName or email field has changed
+  if (this.isModified("fullName") || this.isModified("email")) {
+    // Update associated Tutor documents
+    await Tutor.updateMany(
+      { userId: this._id },
+      { fullName: this.fullName, email: this.email }
+    );
+  }
+  next();
 });
 
 const User = mongoose.model("user", userSchema);

@@ -56,12 +56,6 @@ module.exports.login_post = async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      if (isParent && !user.hasParentPanel) {
-        return res.status(200).send({
-          message: "This account does not have a parent panel",
-          success: false,
-        });
-      }
       if (!user.verified) {
         let token = await Token.findOne({ userId: user._id });
         if (!token) {

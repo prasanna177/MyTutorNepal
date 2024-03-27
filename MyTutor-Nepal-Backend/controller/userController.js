@@ -98,20 +98,20 @@ module.exports.delete_all_notifications = async (req, res) => {
 
 module.exports.becomeTutor_post = async (req, res) => {
   try {
-    if (!req.body.nIdFrontUrl || !req.body.nIdBackUrl) {
+    const { address, nIdFrontUrl, nIdBackUrl, coordinates, userId } = req.body;
+    if (!nIdFrontUrl || !nIdBackUrl) {
       return res.status(200).send({
         success: false,
         message: "Please provide the National ID pictures",
       });
     }
-    const { address, coordinates, userId } = req.body;
     if (!(address || coordinates.lat || coordinates.lng)) {
       return res.status(200).send({
         success: false,
         message: "Please enter an address",
       });
     }
-    const tutorUser = await User.findById(userId)
+    const tutorUser = await User.findById(userId);
     const newTutor = await Tutor({
       ...req.body,
       fullName: tutorUser.fullName,
@@ -333,7 +333,10 @@ module.exports.rateTutor = async (req, res) => {
   try {
     const { userId, tutorId, rating, review, notificationId, appointmentId } =
       req.body;
-    const sentiment = await query(review); //get sentiment from review
+    let sentiment = 0;
+    if (review) {
+      sentiment = await query(review); //get sentiment from review
+    }
     console.log(sentiment);
 
     //send failure message if rating exists for tutor by user for that specific appointment
@@ -385,7 +388,7 @@ module.exports.rateTutor = async (req, res) => {
     console.log(averageSentiment, "avgRating");
     //update to tutor database
     await Tutor.findByIdAndUpdate(tutorId, { averageSentiment, averageRating });
-    // send notification
+    // send notification to tutor
     const tutorUser = await User.findById(tutor.userId);
     tutorUser.unseenNotification.push({
       id: crypto.randomBytes(16).toString("hex"),
@@ -395,7 +398,7 @@ module.exports.rateTutor = async (req, res) => {
     });
     await tutorUser.save();
 
-    //delete the notification
+    //delete the notification from user
     const user = await User.findById(userId);
     const unseenIndex = user.unseenNotification.findIndex(
       (item) => item.id === notificationId

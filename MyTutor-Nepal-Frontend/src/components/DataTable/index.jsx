@@ -18,28 +18,16 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
 } from "@tanstack/react-table";
 import NoData from "../../assets/images/NoData.png";
-import { useState } from "react";
-import Filter from "./Filter";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
 export function DataTable({ data, columns, isLoading }) {
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-
   const table = useReactTable({
     columns,
     data,
     debugTable: true,
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
   });
 

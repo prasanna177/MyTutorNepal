@@ -2,6 +2,7 @@ const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
 const cron = require("node-cron");
 const crypto = require("crypto");
+const Tutor = require("../models/tutorModel");
 
 // runs every 1 hour (as of now)
 cron.schedule("0 0 */1 * * *", async () => {
@@ -73,6 +74,16 @@ module.exports.deleteAppointmentById = async (req, res) => {
         message: "Appointment not found",
       });
     }
+    const user = await User.findById(appointment.userId);
+    const tutor = await Tutor.findById(appointment.tutorId);
+    user.unseenNotification.push({
+      id: crypto.randomBytes(16).toString("hex"),
+      type: "Appointment-Rejected",
+      message: `Your appointment with ${tutor.fullName} has been rejected.`,
+      onClickPath: "/student/appointments",
+      date: new Date(),
+    });
+    await user.save();
 
     res.status(200).send({
       success: true,

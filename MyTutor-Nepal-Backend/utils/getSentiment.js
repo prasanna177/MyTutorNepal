@@ -6,7 +6,7 @@ async function query(data) {
   });
   const result = await response.json();
   result;
-  const highestSentiment = result[0].reduce((prev, current) => {
+  const highestSentiment = result[0]?.reduce((prev, current) => {
     return prev.score > current.score ? prev : current;
   });
   if (highestSentiment.label === 'positive') {
