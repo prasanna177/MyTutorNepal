@@ -12,23 +12,24 @@ const ImageComponent = ({
 }) => {
   const handleClick = () => {
     // Open the image in a new tab when clicked
-    window.open(src, "_blank");
+    window.open(`${import.meta.env.VITE_SERVER_PORT}/${src}`, "_blank");
   };
   return (
     <VStack alignItems={"start"}>
       <Text variant={"title1"}>{title}</Text>
       {src ? (
         <Image
-          width={width}
-          height={height}
+          borderRadius={10}
+          w={width}
+          h={height}
           objectFit={"cover"}
-          src={src}
+          src={`${import.meta.env.VITE_SERVER_PORT}/${src}`}
           onClick={openable && handleClick}
           _hover={openable && { cursor: "pointer", filter: "blur(4px)" }}
         />
       ) : isProfileImg ? (
         <Image
-          width={width}
+          w={width}
           h={height}
           objectFit={"cover"}
           src={NoProfilePic}

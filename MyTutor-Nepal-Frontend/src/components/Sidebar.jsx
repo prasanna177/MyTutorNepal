@@ -28,6 +28,11 @@ const Sidebar = () => {
       path: `/tutor/profile/${user?._id}`,
       icon: "fa-regular fa-user",
     },
+    {
+      name: "Edit Profile",
+      path: `/tutor/edit-profile/${user?._id}`,
+      icon: "fa-regular fa-user",
+    },
   ];
   const SideBarMenu =
     user?.role === "admin"

@@ -46,9 +46,7 @@ const AppointmentInfo = () => {
       <VStack gap={5} alignItems={"stretch"}>
         <Text variant={"heading2"}>Tutor details</Text>
         <ImageComponent
-          src={`${import.meta.env.VITE_SERVER_PORT}/${
-            appointment?.tutorInfo?.profilePicUrl
-          }`}
+          src={appointment?.tutorInfo?.profilePicUrl}
           isProfileImg={true}
           width={"300px"}
           height={"300px"}

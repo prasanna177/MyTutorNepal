@@ -44,7 +44,7 @@ module.exports.changeAccountStatus = async (req, res) => {
     const tutor = await Tutor.findByIdAndUpdate(tutorId, { status });
     const user = await User.findOne({ _id: tutor.userId });
     const unseenNotification = user.unseenNotification;
-    unseenNotification.push({
+    unseenNotification.unshift({
       id: crypto.randomBytes(16).toString("hex"),
       type: "tutor-account-request-accepted",
       message: `Your tutor account request has been ${status}`,

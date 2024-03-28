@@ -96,7 +96,7 @@ const TutorInfo = () => {
           <Text variant={"heading2"}>Basic details</Text>
           <ImageComponent
             title={"Tutor's photo"}
-            src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.profilePicUrl}`}
+            src={tutor?.profilePicUrl}
             isProfileImg={true}
             width={"300px"}
             height={"300px"}
@@ -154,21 +154,19 @@ const TutorInfo = () => {
           >
             <ImageComponent
               title={"National ID Card (Front)"}
-              src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.nIdFrontUrl}`}
+              src={tutor?.nIdFrontUrl}
               isProfileImg={false}
               openable={true}
             />
             <ImageComponent
               title={"National ID Card (Back)"}
-              src={`${import.meta.env.VITE_SERVER_PORT}/${tutor?.nIdBackUrl}`}
+              src={tutor?.nIdBackUrl}
               isProfileImg={false}
               openable={true}
             />
             <ImageComponent
               title={"Highest education qualification"}
-              src={`${import.meta.env.VITE_SERVER_PORT}/${
-                tutor?.teachingCertificateUrl
-              }`}
+              src={tutor?.teachingCertificateUrl}
               isProfileImg={false}
               openable={true}
             />

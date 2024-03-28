@@ -2,10 +2,14 @@ const Tutor = require("../models/tutorModel");
 const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
 const crypto = require("crypto");
+const Rating = require("../models/ratingModel");
 
 module.exports.getTutorInfo = async (req, res) => {
   try {
     const tutor = await Tutor.findOne({ userId: req.body.userId });
+    const tutorRatings = await Rating.find({ tutor: tutor._id });
+    const newTutor = { ...tutor, tutorRatings };
+    console.log(newTutor, "nt");
     res.status(200).send({
       success: true,
       message: "Tutor data fetched successfully",
@@ -23,8 +27,8 @@ module.exports.getTutorInfo = async (req, res) => {
 
 module.exports.updateProfile = async (req, res) => {
   try {
-    const { address, coordinates, userId, fullName, email } = req.body;
-    if (!(address || coordinates.lat || coordinates.lng)) {
+    const { address, coordinates, userId, fullName } = req.body;
+    if (!address || !coordinates.lat || !coordinates.lng) {
       return res.status(200).send({
         success: false,
         message: "Please enter an address",
@@ -83,7 +87,7 @@ module.exports.deleteTutorById = async (req, res) => {
       });
     }
     const tutorUser = await User.findById(tutor.userId);
-    tutorUser.unseenNotification.push({
+    tutorUser.unseenNotification.unshift({
       id: crypto.randomBytes(16).toString("hex"),
       type: "Application-rejected",
       message: "Your tutor application has been rejected.",
@@ -145,7 +149,7 @@ module.exports.acceptAppointment = async (req, res) => {
         totalPrice: updatedTotalPrice,
       });
       const user = await User.findOne({ _id: appointments.userId });
-      user.unseenNotification.push({
+      user.unseenNotification.unshift({
         id: crypto.randomBytes(16).toString("hex"),
         type: "Status-Updated",
         message: `Your appointment has been accepted. Total price is now ${appointments.totalPrice}`,
@@ -165,7 +169,7 @@ module.exports.acceptAppointment = async (req, res) => {
         _id: appointmentId,
       });
       const user = await User.findOne({ _id: appointments.userId });
-      user.unseenNotification.push({
+      user.unseenNotification.unshift({
         id: crypto.randomBytes(16).toString("hex"),
         type: "Status-Updated",
         message: "Your appointment has been removed due to late acceptance.",
@@ -184,7 +188,7 @@ module.exports.acceptAppointment = async (req, res) => {
         status: "approved",
       });
       const user = await User.findOne({ _id: appointments.userId });
-      user.unseenNotification.push({
+      user.unseenNotification.unshift({
         id: crypto.randomBytes(16).toString("hex"),
         type: "Status-Updated",
         message: "Your appointment has been accepted",

@@ -105,7 +105,7 @@ module.exports.becomeTutor_post = async (req, res) => {
         message: "Please provide the National ID pictures",
       });
     }
-    if (!(address || coordinates.lat || coordinates.lng)) {
+    if (!address || !coordinates.lat || !coordinates.lng) {
       return res.status(200).send({
         success: false,
         message: "Please enter an address",
@@ -121,7 +121,7 @@ module.exports.becomeTutor_post = async (req, res) => {
     await newTutor.save();
     const adminUser = await User.findOne({ role: "admin" });
     const unseenNotification = adminUser.unseenNotification;
-    unseenNotification.push({
+    unseenNotification.unshift({
       id: crypto.randomBytes(16).toString("hex"),
       type: "Apply tutor request",
       message: `${newTutor.fullName} has applied for tutor account.`,
@@ -287,7 +287,7 @@ module.exports.bookTutor_post = async (req, res) => {
     await newAppointment.save();
 
     const user = await User.findOne({ _id: tutorInfo.userId });
-    user.unseenNotification.push({
+    user.unseenNotification.unshift({
       id: crypto.randomBytes(16).toString("hex"),
       type: "New-appointment-request",
       message: `A new appointment request has been sent by ${userInfo.fullName}`,
@@ -390,7 +390,7 @@ module.exports.rateTutor = async (req, res) => {
     await Tutor.findByIdAndUpdate(tutorId, { averageSentiment, averageRating });
     // send notification to tutor
     const tutorUser = await User.findById(tutor.userId);
-    tutorUser.unseenNotification.push({
+    tutorUser.unseenNotification.unshift({
       id: crypto.randomBytes(16).toString("hex"),
       type: "Rating-received",
       message: "A new rating was provided.",

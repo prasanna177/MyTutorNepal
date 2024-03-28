@@ -3,34 +3,45 @@ const User = require("../models/userModel");
 const cron = require("node-cron");
 const crypto = require("crypto");
 const Tutor = require("../models/tutorModel");
+const moment = require("moment");
 
 // runs every 1 hour (as of now)
 cron.schedule("0 0 */1 * * *", async () => {
   console.log("start");
   try {
-    const currentDate = new Date();
+    //make currentdate the same format as toDate
+    const currentDate = moment(
+      moment().startOf("day").toDate(),
+      "YYYY-MM-DD"
+    ).toISOString();
     //find appointments less than current date and status that is not completed
     const appointments = await Appointment.find({
       toDate: { $lt: currentDate },
       status: "approved",
     });
-    console.log(appointments);
-    for (const appointment of appointments) {
-      await Appointment.findByIdAndUpdate(appointment._id, {
-        status: "completed",
-      });
-      const user = await User.findOne({ _id: appointment.userId });
+    console.log(appointments, "app");
+    const toDate = appointments.toDate;
+    console.log(toDate, "td");
+    console.log(currentDate, "cd");
+    console.log(currentDate > toDate);
 
-      user.unseenNotification.push({
-        id: crypto.randomBytes(16).toString("hex"),
-        type: "Appointment-completion",
-        message: `Your tutoring lessons with ${appointment.tutorInfo.fullName} is over. Click to provide rating.`,
-        appointment: appointment,
-        date: new Date(),
-      });
-      await user.save();
-      console.log("completed");
-    }
+    // console.log(appointments);
+    // for (const appointment of appointments) {
+    //   await Appointment.findByIdAndUpdate(appointment._id, {
+    //     status: "completed",
+    //   });
+    //   const user = await User.findOne({ _id: appointment.userId });
+
+    //   user.unseenNotification.unshift({
+    //     id: crypto.randomBytes(16).toString("hex"),
+    //     type: "Appointment-completion",
+    //     message: `Your tutoring lessons with ${appointment.tutorInfo.fullName} is over. Click to provide rating.`,
+    //     appointment: appointment,
+    //     date: new Date(),
+    //   });
+    //   await user.save();
+    //   console.log("completed");
+    // }
   } catch (error) {
     console.error("Error processing appointments:", error);
   }
@@ -76,7 +87,7 @@ module.exports.deleteAppointmentById = async (req, res) => {
     }
     const user = await User.findById(appointment.userId);
     const tutor = await Tutor.findById(appointment.tutorId);
-    user.unseenNotification.push({
+    user.unseenNotification.unshift({
       id: crypto.randomBytes(16).toString("hex"),
       type: "Appointment-Rejected",
       message: `Your appointment with ${tutor.fullName} has been rejected.`,

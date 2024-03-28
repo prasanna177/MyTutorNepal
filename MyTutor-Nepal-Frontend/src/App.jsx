@@ -29,6 +29,7 @@ import UserAppointmentInfo from "./pages/UserAppointmentInfo";
 import RatingModal from "./components/RatingModal";
 import "./App.css";
 import Students from "./pages/tutor/Students";
+import EditProfile from "./pages/tutor/EditProfile";
 
 function App() {
   const { ratingModal } = useSelector((state) => state.ratings);
@@ -135,6 +136,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tutor/edit-profile/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditProfile />
                   </ProtectedRoute>
                 }
               />

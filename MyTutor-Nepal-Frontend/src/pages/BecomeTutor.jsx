@@ -14,7 +14,7 @@ import TextField from "../components/common/TextField";
 import { CloseIcon } from "@chakra-ui/icons";
 import toast from "react-hot-toast";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -76,50 +76,50 @@ const BecomeTutor = () => {
     data.nIdBackUrl = nIdBackImage;
     data.teachingCertificateUrl = teachingCertificateImage;
     const submissionData = { ...data, coordinates, address, userId: user._id };
-    // try {
-    const formData = new FormData();
-    formData.append("profilePicUrl", submissionData.profilePicUrl);
-    formData.append("nIdFrontUrl", submissionData.nIdFrontUrl);
-    formData.append("nIdBackUrl", submissionData.nIdBackUrl);
-    formData.append(
-      "teachingCertificateUrl",
-      submissionData.teachingCertificateUrl
-    );
-    //jugaad
-    const filePathUrl = await axios.post(
-      `${import.meta.env.VITE_SERVER_PORT}/api/user/saveFilePath`,
-      formData
-    );
-    console.log(filePathUrl, "fpu");
-    filePathUrl.data.data.forEach((file) => {
-      const { fieldname, path } = file;
+    try {
+      const formData = new FormData();
+      formData.append("profilePicUrl", submissionData.profilePicUrl);
+      formData.append("nIdFrontUrl", submissionData.nIdFrontUrl);
+      formData.append("nIdBackUrl", submissionData.nIdBackUrl);
+      formData.append(
+        "teachingCertificateUrl",
+        submissionData.teachingCertificateUrl
+      );
+      //jugaad
+      const filePathUrl = await axios.post(
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/saveFilePath`,
+        formData
+      );
+      console.log(filePathUrl, "fpu");
+      filePathUrl.data.data.forEach((file) => {
+        const { fieldname, path } = file;
 
-      // Update the corresponding URL in submissionData
-      submissionData[fieldname] = path;
-    });
-    console.log(submissionData, "sdsd");
-    //   dispatch(showLoading());
-    //   const res = await axios.post(
-    //     `${import.meta.env.VITE_SERVER_PORT}/api/user/become-tutor`,
-    //     submissionData,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //       },
-    //     }
-    //   );
-    //   dispatch(hideLoading());
-    //   if (res.data.success) {
-    //     toast.success(res.data.message);
-    //     navigate("/");
-    //   } else {
-    //     toast.error(res.data.message);
-    //   }
-    // } catch (error) {
-    //   dispatch(hideLoading());
-    //   console.log(error);
-    //   toast.error("Something went wrong");
-    // }
+        // Update the corresponding URL in submissionData
+        submissionData[fieldname] = path;
+      });
+      console.log(submissionData, "sdsd");
+      dispatch(showLoading());
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/become-tutor`,
+        submissionData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      dispatch(hideLoading());
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/");
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      dispatch(hideLoading());
+      console.log(error);
+      toast.error("Something went wrong");
+    }
   };
 
   const {
@@ -143,12 +143,6 @@ const BecomeTutor = () => {
     setImage(e.target.files[0]);
   };
 
-  console.log(fields, "f");
-
-  // useEffect(() => {
-
-  //   append({subject: 'asd', price: 123, proficiency: 'asd'})
-  // })
   return (
     <PanelLayout title={"Become tutor"}>
       <Box>
