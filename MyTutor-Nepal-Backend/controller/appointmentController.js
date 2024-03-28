@@ -25,23 +25,23 @@ cron.schedule("0 0 */1 * * *", async () => {
     console.log(currentDate, "cd");
     console.log(currentDate > toDate);
 
-    // console.log(appointments);
-    // for (const appointment of appointments) {
-    //   await Appointment.findByIdAndUpdate(appointment._id, {
-    //     status: "completed",
-    //   });
-    //   const user = await User.findOne({ _id: appointment.userId });
+    console.log(appointments);
+    for (const appointment of appointments) {
+      await Appointment.findByIdAndUpdate(appointment._id, {
+        status: "completed",
+      });
+      const user = await User.findOne({ _id: appointment.userId });
 
-    //   user.unseenNotification.unshift({
-    //     id: crypto.randomBytes(16).toString("hex"),
-    //     type: "Appointment-completion",
-    //     message: `Your tutoring lessons with ${appointment.tutorInfo.fullName} is over. Click to provide rating.`,
-    //     appointment: appointment,
-    //     date: new Date(),
-    //   });
-    //   await user.save();
-    //   console.log("completed");
-    // }
+      user.unseenNotification.unshift({
+        id: crypto.randomBytes(16).toString("hex"),
+        type: "Appointment-completion",
+        message: `Your tutoring lessons with ${appointment.tutorInfo.fullName} is over. Click to provide rating.`,
+        appointment: appointment,
+        date: new Date(),
+      });
+      await user.save();
+      console.log("completed");
+    }
   } catch (error) {
     console.error("Error processing appointments:", error);
   }
@@ -109,12 +109,4 @@ module.exports.deleteAppointmentById = async (req, res) => {
       message: "Error while deleting appointment by id.",
     });
   }
-};
-
-module.exports.handleAppointmentEnd = async (req, res) => {
-  try {
-    const expiredAppointments = await Appointment.find({
-      endDate: { $lte: currentDate },
-    });
-  } catch (error) {}
 };

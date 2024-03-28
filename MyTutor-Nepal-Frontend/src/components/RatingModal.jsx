@@ -21,6 +21,7 @@ import RatingStar from "./RatingStar";
 import { removeNotification } from "../redux/features/notificationIdSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { hideLoading, showLoading } from "../redux/features/alertSlice";
 
 const RatingModal = ({ ratingModal }) => {
   const [rating, setRating] = useState(null);
@@ -50,6 +51,8 @@ const RatingModal = ({ ratingModal }) => {
         notificationId,
       };
       console.log(data);
+      handleClose();
+      dispatch(showLoading());
       const res = await axios.post(
         `${import.meta.env.VITE_SERVER_PORT}/api/user/rate-tutor`,
         data,
@@ -59,12 +62,12 @@ const RatingModal = ({ ratingModal }) => {
           },
         }
       );
+      dispatch(hideLoading());
       if (res.data.success) {
         toast.success(res.data.message);
       } else {
         toast.error(res.data.message);
       }
-      handleClose();
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");

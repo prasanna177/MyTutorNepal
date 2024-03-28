@@ -351,7 +351,10 @@ module.exports.rateTutor = async (req, res) => {
         message: "Rating already provided for this tutor for this appointment",
       });
     }
+    const user = await User.findById(userId);
+    const userName = user.fullName;
     const tutorRating = new Rating({
+      userName,
       userId,
       tutorId,
       appointmentId,
@@ -359,6 +362,7 @@ module.exports.rateTutor = async (req, res) => {
       review,
       sentiment,
     });
+    console.log(tutorRating);
     await tutorRating.save();
     const tutor = await Tutor.findById(tutorId);
 
@@ -394,12 +398,12 @@ module.exports.rateTutor = async (req, res) => {
       id: crypto.randomBytes(16).toString("hex"),
       type: "Rating-received",
       message: "A new rating was provided.",
+      onClickPath: `/tutor/profile/${tutorUser._id}`,
       date: new Date(),
     });
     await tutorUser.save();
 
     //delete the notification from user
-    const user = await User.findById(userId);
     const unseenIndex = user.unseenNotification.findIndex(
       (item) => item.id === notificationId
     );

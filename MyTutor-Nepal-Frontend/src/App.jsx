@@ -30,6 +30,7 @@ import RatingModal from "./components/RatingModal";
 import "./App.css";
 import Students from "./pages/tutor/Students";
 import EditProfile from "./pages/tutor/EditProfile";
+import "react-tooltip/dist/react-tooltip.css";
 
 function App() {
   const { ratingModal } = useSelector((state) => state.ratings);

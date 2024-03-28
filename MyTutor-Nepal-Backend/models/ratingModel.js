@@ -6,6 +6,10 @@ const ratingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    userName: {
+      type: String,
+      required: true,
+    },
     tutorId: {
       type: String,
       required: true,
@@ -19,7 +23,7 @@ const ratingSchema = new mongoose.Schema(
       required: true,
     },
     review: String,
-    sentiment: Number
+    sentiment: Number,
   },
   { timestamps: true }
 );

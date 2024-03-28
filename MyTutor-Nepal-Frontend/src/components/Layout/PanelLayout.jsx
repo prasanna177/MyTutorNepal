@@ -9,7 +9,7 @@ const PanelLayout = ({ children, title }) => {
       <Box h={"100vh"} pt={2}>
         <Flex>
           <Sidebar />
-          <Box ml={"270px"} w={"100%"} h={"100%"}>
+          <Box ml={"260px"} w={"100%"} h={"100%"}>
             <Navbar />
             <VStack alignItems={"stretch"} gap={4}>
               <Text variant={"heading1"}>{title}</Text>

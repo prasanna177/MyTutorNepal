@@ -15,10 +15,9 @@ import toast from "react-hot-toast";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { hideLoading, showLoading } from "../../redux/features/alertSlice";
 import TextField from "../../components/common/TextField";
 import PlaceAutocomplete from "../../components/PlaceAutocomplete";
@@ -39,6 +38,7 @@ const EditProfile = () => {
 
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSelect = async (value) => {
     const results = await geocodeByAddress(value);
@@ -110,6 +110,7 @@ const EditProfile = () => {
       );
       dispatch(hideLoading());
       if (res.data.success) {
+        navigate(`/tutor/profile/${params.id}`);
         toast.success(res.data.message);
       } else {
         toast.error(res.data.message);
@@ -198,7 +199,6 @@ const EditProfile = () => {
     }
   }, [tutor, setValue, append]);
 
-  console.log(tutor, "t");
   // useEffect(() => {
   //   // Add default fields to form fields array when component mounts
   //   tutor?.teachingInfo.forEach((defaultField) => {

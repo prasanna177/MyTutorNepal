@@ -6,10 +6,12 @@ const Rating = require("../models/ratingModel");
 
 module.exports.getTutorInfo = async (req, res) => {
   try {
-    const tutor = await Tutor.findOne({ userId: req.body.userId });
-    const tutorRatings = await Rating.find({ tutor: tutor._id });
-    const newTutor = { ...tutor, tutorRatings };
-    console.log(newTutor, "nt");
+    //because tutorDocument is immutable we need to convert it into object
+    const tutorDocument = await Tutor.findOne({ userId: req.body.userId });
+    const tutor = tutorDocument.toObject();
+    const tutorRatings = await Rating.find({ tutorId: tutor._id });
+    tutor.ratings = tutorRatings;
+
     res.status(200).send({
       success: true,
       message: "Tutor data fetched successfully",
@@ -54,13 +56,18 @@ module.exports.updateProfile = async (req, res) => {
 
 module.exports.getTutorById = async (req, res) => {
   try {
-    const tutor = await Tutor.findOne({ _id: req.body.tutorId });
-    if (!tutor) {
+    //because tutorDocument is immutable we need to convert it into object
+    const tutorDocument = await Tutor.findOne({ _id: req.body.tutorId });
+    if (!tutorDocument) {
       return res.status(200).send({
         success: false,
         message: "Tutor not found",
       });
     }
+    const tutor = tutorDocument.toObject();
+    const tutorRatings = await Rating.find({ tutorId: tutor._id });
+    const ratingUser = await User.findById(tutorRatings.userId)
+    tutor.ratings = tutorRatings;
     res.status(200).send({
       success: true,
       message: "Single tutor fetched",

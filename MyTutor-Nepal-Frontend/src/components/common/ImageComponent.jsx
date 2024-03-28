@@ -9,6 +9,7 @@ const ImageComponent = ({
   width,
   height,
   openable,
+  borderRadius,
 }) => {
   const handleClick = () => {
     // Open the image in a new tab when clicked
@@ -19,7 +20,7 @@ const ImageComponent = ({
       <Text variant={"title1"}>{title}</Text>
       {src ? (
         <Image
-          borderRadius={10}
+          borderRadius={borderRadius}
           w={width}
           h={height}
           objectFit={"cover"}
@@ -28,12 +29,7 @@ const ImageComponent = ({
           _hover={openable && { cursor: "pointer", filter: "blur(4px)" }}
         />
       ) : isProfileImg ? (
-        <Image
-          w={width}
-          h={height}
-          objectFit={"cover"}
-          src={NoProfilePic}
-        />
+        <Image w={width} h={height} objectFit={"cover"} src={NoProfilePic} />
       ) : (
         <Image
           width={width}
