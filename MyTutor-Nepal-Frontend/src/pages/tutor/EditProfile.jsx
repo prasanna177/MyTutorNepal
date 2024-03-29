@@ -87,7 +87,12 @@ const EditProfile = () => {
     //jugaad
     const filePathUrl = await axios.post(
       `${import.meta.env.VITE_SERVER_PORT}/api/user/saveFilePath`,
-      formData
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
     );
     console.log(filePathUrl, "fpu");
     filePathUrl.data.data.forEach((file) => {

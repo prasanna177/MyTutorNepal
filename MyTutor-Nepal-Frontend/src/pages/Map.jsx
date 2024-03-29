@@ -27,7 +27,7 @@ const MapPage = () => {
         `${import.meta.env.VITE_SERVER_PORT}/api/user/getAllTutors`,
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"), //Authorization must start with capital when posting to backend
+            Authorization: "Bearer " + localStorage.getItem("token"), 
           },
         }
       );

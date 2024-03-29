@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-// import { hideLoading, showLoading } from "../redux/features/alertSlice";
+import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import { setUser } from "../redux/features/userSlice";
 import { useEffect } from "react";
 
@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getUser = async () => {
     try {
-      // dispatch(showLoading());
+      dispatch(showLoading());
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_PORT}/api/user/getCurrentUser`,
         {},
@@ -22,14 +22,14 @@ const ProtectedRoute = ({ children }) => {
           },
         }
       );
-      // dispatch(hideLoading());
+      dispatch(hideLoading());
       if (response.data.success) {
         dispatch(setUser(response.data.data));
       } else {
         <Navigate to="/login" />;
       }
     } catch (error) {
-      // dispatch(hideLoading());
+      dispatch(hideLoading());
       console.log(error);
     }
   };
