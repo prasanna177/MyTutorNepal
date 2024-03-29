@@ -132,6 +132,7 @@ const Profile = () => {
             </Box>
             <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
               <Bundle title={"Full Name"} subtitle={tutor?.fullName} />
+              <Bundle title={"Phone"} subtitle={tutor?.phone} />
               <Bundle title={"Email"} subtitle={tutor?.email} />
               <Bundle title={"Address"} subtitle={tutor?.address} />
               <Bundle title={"Bio"} subtitle={tutor?.bio} />

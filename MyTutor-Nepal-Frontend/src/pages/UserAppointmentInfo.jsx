@@ -8,7 +8,7 @@ import { getDate, getTime } from "../components/Utils";
 import NormalButton from "../components/common/Button";
 import ImageComponent from "../components/common/ImageComponent";
 
-const AppointmentInfo = () => {
+const UserAppointmentInfo = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [appointment, setAppointment] = useState([]);
@@ -102,4 +102,4 @@ const AppointmentInfo = () => {
   );
 };
 
-export default AppointmentInfo;
+export default UserAppointmentInfo;
