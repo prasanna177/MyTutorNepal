@@ -47,7 +47,7 @@ module.exports.signup_post = async (req, res) => {
 module.exports.login_post = async (req, res) => {
   const maxAge = 6 * 24 * 60 * 60;
   try {
-    let { email, password, isParent } = req.body;
+    let { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
       return res
@@ -77,7 +77,7 @@ module.exports.login_post = async (req, res) => {
         });
       }
       const token = jwt.sign(
-        { id: user._id, isParent: isParent && user.hasParentPanel },
+        { id: user._id },
         process.env.JWT_SECRET,
         {
           expiresIn: maxAge,

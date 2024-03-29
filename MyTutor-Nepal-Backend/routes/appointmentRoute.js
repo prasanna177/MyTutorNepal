@@ -6,12 +6,16 @@ const router = Router();
 
 router.post(
   "/getAppointmentById",
-  authMiddleware,
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutorOrStudent,
   appointmentController.getAppointmentById
 );
 
 router.post(
-  '/deleteAppointmentById', authMiddleware, appointmentController.deleteAppointmentById
-)
+  "/deleteAppointmentById",
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutor,
+  appointmentController.deleteAppointmentById
+);
 
 module.exports = router;

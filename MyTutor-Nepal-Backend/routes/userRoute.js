@@ -30,56 +30,82 @@ const upload = multer({
   limits: { fileSize: 3 * 1024 * 1024 }, //3mb
   fileFilter: fileFilter,
 });
+const uploadFields = [
+  { name: "profilePicUrl", maxCount: 1 },
+  { name: "nIdFrontUrl", maxCount: 1 },
+  { name: "nIdBackUrl", maxCount: 1 },
+  { name: "teachingCertificateUrl", maxCount: 1 },
+];
 
 const router = Router();
 
 router.post("/signup", authController.signup_post);
-router.post("/become-tutor", authMiddleware, userController.becomeTutor_post);
+router.post(
+  "/become-tutor",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.becomeTutor_post
+);
 router.post("/login", authController.login_post);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password/:id/:token", authController.resetPassword);
 router.post(
   "/mark-notification-as-seen",
-  authMiddleware,
+  authMiddleware.authMiddleware,
   userController.mark_notifications_as_seen
 );
 router.post(
   "/delete-all-notifications",
-  authMiddleware,
+  authMiddleware.authMiddleware,
   userController.delete_all_notifications
 );
-router.post("/getCurrentUser", authMiddleware, userController.getCurrentUser);
-router.post("/getUserById", authMiddleware, userController.getUserById);
-router.get("/getAllTutors", authMiddleware, userController.getAllTutors);
-router.post("/book-tutor", authMiddleware, userController.bookTutor_post);
-router.post("/rate-tutor", authMiddleware, userController.rateTutor);
-router.post("/skip-tutor-rating", authMiddleware, userController.skipRating);
+router.post(
+  "/getCurrentUser",
+  authMiddleware.authMiddleware,
+  userController.getCurrentUser
+);
+router.post(
+  "/getUserById",
+  authMiddleware.authMiddleware,
+  authMiddleware.isAdmin,
+  userController.getUserById
+);
+router.get(
+  "/getAllTutors",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.getAllTutors
+);
+router.post(
+  "/book-tutor",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.bookTutor_post
+);
+router.post(
+  "/rate-tutor",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.rateTutor
+);
+router.post(
+  "/skip-tutor-rating",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.skipRating
+);
 router.get(
   "/getAllAppointments",
-  authMiddleware,
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
   userController.getAllAppointments
 );
 router.get("/:id/verify/:token", tokenController.verify_token);
 router.post(
   "/saveFilePath",
-  upload.fields([
-    {
-      name: "profilePicUrl",
-      maxCount: 1,
-    },
-    {
-      name: "nIdFrontUrl",
-      maxCount: 1,
-    },
-    {
-      name: "nIdBackUrl",
-      maxCount: 1,
-    },
-    {
-      name: "teachingCertificateUrl",
-      maxCount: 1,
-    },
-  ]),
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutorOrStudent,
+  upload.fields(uploadFields),
   userController.saveFilePath
 );
 

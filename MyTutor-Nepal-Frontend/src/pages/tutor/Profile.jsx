@@ -57,6 +57,7 @@ const Profile = () => {
           <VStack alignItems={"stretch"}>
             <HStack>
               <ImageComponent
+                isProfileImg={true}
                 borderRadius={"50%"}
                 width={"100px"}
                 height={"100px"}
@@ -165,25 +166,31 @@ const Profile = () => {
               <Text variant={"heading2"}>Reviews</Text>
             </Box>
 
-            {tutor?.ratings?.map((rating) => (
-              <Box key={rating._id}>
-                <VStack mb={2} alignItems={"stretch"}>
-                  <HStack>
-                    <Text variant={"heading3"}>{rating.userName}</Text>
-                    <Text variant={"subtitle2"}>
-                      {getDateAndTime(rating.createdAt)}
-                    </Text>
-                  </HStack>
-                  <HStack>
-                    <SentimentFace sentimentNum={rating.sentiment} />
-                    <DisplayStars rating={rating.rating} />
-                  </HStack>
-                  <Text variant={"subtitle2"}>{rating.review}</Text>
-                </VStack>
+            {tutor?.ratings?.length > 0 ? (
+              tutor.ratings.map((rating) => (
+                <Box key={rating._id}>
+                  <VStack mb={2} alignItems={"stretch"}>
+                    <HStack>
+                      <Text variant={"heading3"}>{rating.userName}</Text>
+                      <Text variant={"subtitle2"}>
+                        {getDateAndTime(rating.createdAt)}
+                      </Text>
+                    </HStack>
+                    <HStack>
+                      <SentimentFace sentiment={rating.sentiment} />
+                      <DisplayStars rating={rating.rating} />
+                    </HStack>
+                    <Text variant={"subtitle2"}>{rating.review}</Text>
+                  </VStack>
 
-                <Divider />
-              </Box>
-            ))}
+                  <Divider />
+                </Box>
+              ))
+            ) : (
+              <Text textAlign={"center"} variant={"overline"}>
+                No reviews
+              </Text>
+            )}
           </VStack>
         </Box>
       </VStack>
