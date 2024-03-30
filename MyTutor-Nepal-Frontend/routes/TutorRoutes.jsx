@@ -9,31 +9,31 @@ export const tutorRoutes = [
   {
     path: "/tutor",
     element: <TutorHome />,
-    availability: "tutor",
+    availability: ["tutor"],
   },
   {
     path: "/tutor/students",
     element: <Students />,
-    availability: "tutor",
+    availability: ["tutor"],
   },
   {
     path: "/tutor/profile/:id",
     element: <Profile />,
-    availability: "tutor",
+    availability: ["tutor"],
   },
   {
     path: "/tutor/edit-profile/:id",
     element: <EditProfile />,
-    availability: "tutor",
+    availability: ["tutor"],
   },
   {
     path: "/tutor/appointments",
     element: <TutorAppointments />,
-    availability: "tutor",
+    availability: ["tutor"],
   },
   {
     path: "/tutor/appointments/:appointmentId",
     element: <AppointmentInfo />,
-    availability: "tutor",
+    availability: ["tutor"],
   },
 ];

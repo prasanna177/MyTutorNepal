@@ -4,8 +4,6 @@ import { setUser } from "../../src/redux/features/userSlice";
 import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-import { Box, Image, Text, VStack } from "@chakra-ui/react";
-import NoData from "../../src/assets/images/NoData.png";
 
 const RequireAuth = ({ children, userRoles }) => {
   const dispatch = useDispatch();
@@ -47,18 +45,13 @@ const RequireAuth = ({ children, userRoles }) => {
   if (localStorage.getItem("token")) {
     currentUserRole = user?.role;
   }
-  console.log(user, "crr");
+  console.log(currentUserRole, "crr");
   if (currentUserRole) {
     if (userRoles) {
-      if (userRoles === currentUserRole) {
+      if (userRoles.includes(currentUserRole)) {
         return children;
       } else {
-        <Box fontSize={"14px"} fontWeight={500} color={"gray.400"}>
-          <VStack justifyContent="center" alignItems="center" height="100%">
-            <Image h={"400px"} src={NoData} />
-            <Text variant={"overline"}>No Data Available</Text>
-          </VStack>
-        </Box>;
+        return <Navigate to={"/access-denied"} />;
       }
     } else {
       return children;

@@ -25,4 +25,5 @@ export const authRoutes = [
     path: "/reset-password/:id/:token",
     element: <ResetPassword />,
   },
+
 ];

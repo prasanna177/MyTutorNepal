@@ -1,3 +1,4 @@
+import AccessDenied from "../src/pages/AccessDenied";
 import BecomeTutor from "../src/pages/BecomeTutor";
 import BookTutor from "../src/pages/BookTutor";
 import Home from "../src/pages/Home";
@@ -9,31 +10,36 @@ export const studentRoutes = [
   {
     path: "/",
     element: <Home />,
-    availability: "student",
+    availability: ["student"],
   },
   {
     path: "/map",
     element: <MapPage />,
-    availability: "student",
+    availability: ["student"],
   },
   {
     path: "/become-tutor",
     element: <BecomeTutor />,
-    availability: "student",
+    availability: ["student"],
   },
   {
     path: "/book-tutor/:tutorId",
     element: <BookTutor />,
-    availability: "student",
+    availability: ["student"],
   },
   {
     path: "/student/appointments",
     element: <UserAppointments />,
-    availability: "student",
+    availability: ["student"],
   },
   {
     path: "/student/appointments/:id",
     element: <UserAppointmentInfo />,
-    availability: "student",
+    availability: ["student"],
+  },
+  {
+    path: "/access-denied",
+    element: <AccessDenied />,
+    availability: ["student", "tutor", "admin"],
   },
 ];

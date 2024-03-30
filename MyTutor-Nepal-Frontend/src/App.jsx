@@ -3,6 +3,7 @@ import { theme } from "./theme";
 import { Toaster } from "react-hot-toast";
 import "react-tooltip/dist/react-tooltip.css";
 import AppRoute from "../routes/AppRoute";
+import "./App.css";
 
 function App() {
   return (

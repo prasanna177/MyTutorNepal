@@ -92,7 +92,11 @@ export function DataTable({ data, columns, isLoading }) {
               border={"none"}
               colSpan={table.getHeaderGroups()[0].headers.length}
             >
-              <Box fontSize={"14px"} fontWeight={500} color={"gray.400"}>
+              <Box
+                fontSize={"14px"}
+                fontWeight={500}
+                color={"gray.400"}
+              >
                 <VStack
                   justifyContent="center"
                   alignItems="center"

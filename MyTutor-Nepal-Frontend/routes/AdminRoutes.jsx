@@ -8,26 +8,26 @@ export const adminRoutes = [
   {
     path: "/admin",
     element: <Admin />,
-    availability: "admin",
+    availability: ["admin"],
   },
   {
     path: "/admin/users",
     element: <Users />,
-    availability: "admin",
+    availability: ["admin"],
   },
   {
     path: "/admin/tutors",
     element: <Tutors />,
-    availability: "admin",
+    availability: ["admin"],
   },
   {
     path: "/admin/tutors/:tutorId",
     element: <TutorInfo />,
-    availability: "admin",
+    availability: ["admin"],
   },
   {
     path: "/admin/users/:userId",
     element: <UserInfo />,
-    availability: "admin",
+    availability: ["admin"],
   },
 ];
