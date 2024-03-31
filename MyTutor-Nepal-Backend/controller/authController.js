@@ -76,13 +76,9 @@ module.exports.login_post = async (req, res) => {
           success: false,
         });
       }
-      const token = jwt.sign(
-        { id: user._id },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: maxAge,
-        }
-      );
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: maxAge,
+      });
       res
         .status(200)
         .send({ message: "Login successful", success: true, token });
@@ -153,6 +149,35 @@ module.exports.resetPassword = async (req, res) => {
         });
       }
     });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
+  }
+};
+
+module.exports.changePassword = async (req, res) => {
+  try {
+    const { newPassword, oldPassword, userId } = req.body;
+    const user = await User.findById(userId);
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (isMatch) {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+      await User.findByIdAndUpdate(user._id, { password: hashedPassword });
+      return res.status(200).send({
+        success: true,
+        message: "Password changed successfully"
+      })
+    }
+    else {
+      return res.status(200).send({
+        success: false,
+        message: "Old password entered was wrong."
+      })
+    }
   } catch (error) {
     res.status(500).send({
       success: false,

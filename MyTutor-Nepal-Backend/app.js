@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const userRoute = require("./routes/userRoute");
+const authRoute = require("./routes/authRoute");
 const adminRoute = require("./routes/adminRoute");
 const tutorRoute = require("./routes/tutorRoute");
 const appointmentRoute = require("./routes/appointmentRoute");
@@ -19,7 +20,8 @@ app.use(express.json()); //this is used to destructure username and password sen
 const PORT = 4000;
 
 //routes
-app.use("/api/user", userRoute); //whenever api request comes with the user keyword, it will search in the userRoute
+app.use("/api/user", userRoute);
+app.use("/api/auth", authRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/tutor", tutorRoute);
 app.use("/api/appointment", appointmentRoute);

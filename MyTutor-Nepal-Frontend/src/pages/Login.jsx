@@ -41,7 +41,7 @@ const Login = () => {
     try {
       dispatch(showLoading());
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/login`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/auth/login`,
         data
       );
       // window.location.reload();

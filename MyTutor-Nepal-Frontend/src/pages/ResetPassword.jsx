@@ -29,7 +29,7 @@ const ResetPassword = () => {
     try {
       dispatch(showLoading());
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/reset-password/${id}/${token}`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/auth/reset-password/${id}/${token}`,
         data
       );
       dispatch(hideLoading());

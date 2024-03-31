@@ -19,7 +19,7 @@ const TextField = ({
   width,
 }) => {
   return (
-    <VStack alignItems={"start"}>
+    <VStack alignItems={"start"} w={"100%"}>
       <Text variant={"subtitle1"}>
         {hasLabel && !isNotRequired && <span style={{ color: "red" }}>* </span>}
         {label}

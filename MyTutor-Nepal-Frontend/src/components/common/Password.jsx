@@ -10,16 +10,22 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-const Password = ({ register, name, errors, placeholder, autocomplete, label }) => {
+const Password = ({
+  register,
+  name,
+  errors,
+  placeholder,
+  autocomplete,
+  label,
+  width,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <VStack alignItems={"start"}>
-      <Text variant={"subtitle1"}>
-        {label}
-      </Text>
+    <VStack alignItems={"start"} w={"100%"}>
+      <Text variant={"subtitle1"}>{label}</Text>
       <FormControl isInvalid={Boolean(errors)}>
-        <InputGroup>
+        <InputGroup maxW={width}>
           <Input
             type={showPassword ? "text" : "password"}
             autoComplete={autocomplete}
