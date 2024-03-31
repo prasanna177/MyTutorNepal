@@ -28,21 +28,36 @@ const ProfilePopup = () => {
     navigate("/become-tutor");
   };
 
+  const handleChangePassword = () => {
+    navigate("/change-password");
+  };
+
   const { user } = useSelector((state) => state.user);
   const popupItems = [
     {
       id: 1,
-      name: "Become Tutor",
-      function: handleBecomeTutor,
-      icon: "fa-solid fa-graduation-cap",
-    },
-    {
-      id: 2,
       name: "Logout",
       function: handleLogout,
       icon: "fa-solid fa-arrow-right-from-bracket",
     },
   ];
+
+  if (user?.role === "student") {
+    popupItems.unshift({
+      id: 2,
+      name: "Become Tutor",
+      function: handleBecomeTutor,
+      icon: "fa-solid fa-graduation-cap",
+    });
+  }
+  if (user?.role === "student" || user?.role === "tutor") {
+    popupItems.unshift({
+      id: 3,
+      name: "Change password",
+      function: handleChangePassword,
+      icon: "fa-solid fa-lock",
+    });
+  }
   return (
     <Menu>
       <MenuButton>

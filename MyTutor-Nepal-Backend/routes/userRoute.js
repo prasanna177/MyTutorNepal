@@ -67,7 +67,7 @@ router.post(
 router.post(
   "/getUserById",
   authMiddleware.authMiddleware,
-  authMiddleware.isAdmin,
+  authMiddleware.isAdminOrStudent,
   userController.getUserById
 );
 router.get(
@@ -75,6 +75,12 @@ router.get(
   authMiddleware.authMiddleware,
   authMiddleware.isStudent,
   userController.getAllTutors
+);
+router.post(
+  "/update-profile",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.updateProfile
 );
 router.post(
   "/book-tutor",

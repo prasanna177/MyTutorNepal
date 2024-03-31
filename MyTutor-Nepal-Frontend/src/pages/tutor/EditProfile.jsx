@@ -12,7 +12,6 @@ import * as yup from "yup";
 import { useFieldArray, useForm } from "react-hook-form";
 import { CloseIcon } from "@chakra-ui/icons";
 import toast from "react-hot-toast";
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import PanelLayout from "../../components/Layout/PanelLayout";
@@ -40,12 +39,6 @@ const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSelect = async (value) => {
-    const results = await geocodeByAddress(value);
-    const ll = await getLatLng(results[0]);
-    setAddress(value);
-    setCoordinates(ll);
-  };
   const schema = yup.object({
     fullName: yup.string().required("Full name is required"),
     phone: yup.string().required("Phone number is required"),
@@ -263,7 +256,6 @@ const EditProfile = () => {
                     <PlaceAutocomplete
                       address={address}
                       setAddress={setAddress}
-                      handleSelect={handleSelect}
                       setCoordinates={setCoordinates}
                     />
                   </VStack>

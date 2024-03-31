@@ -10,13 +10,9 @@ import {
 import axios from "axios";
 import PlacesAutocomplete from "react-places-autocomplete";
 import NormalButton from "./common/Button";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
-const PlaceAutocomplete = ({
-  address,
-  setAddress,
-  handleSelect,
-  setCoordinates,
-}) => {
+const PlaceAutocomplete = ({ address, setAddress, setCoordinates, width }) => {
   const getUserCurrentAddress = async (lat, lng) => {
     let query = `${lat},${lng}`;
     let apiUrl = `${import.meta.env.VITE_API_ENDPOINT}?key=${
@@ -28,6 +24,13 @@ const PlaceAutocomplete = ({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleSelect = async (value) => {
+    const results = await geocodeByAddress(value);
+    const ll = await getLatLng(results[0]);
+    setAddress(value);
+    setCoordinates(ll);
   };
 
   const getCurrentLocation = () => {
@@ -54,8 +57,8 @@ const PlaceAutocomplete = ({
   };
 
   return (
-    <HStack>
-      <Box flex={1}>
+    <HStack gap={1}>
+      <Box>
         <PlacesAutocomplete
           value={address}
           onChange={setAddress}
@@ -68,8 +71,9 @@ const PlaceAutocomplete = ({
             loading,
           }) => (
             <Box pos={"relative"}>
-              <VStack>
+              <VStack alignItems={"start"}>
                 <Input
+                  width={width}
                   {...getInputProps({
                     placeholder: "Search Places ...",
                   })}

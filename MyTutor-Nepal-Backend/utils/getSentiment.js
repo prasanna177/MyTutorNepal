@@ -9,14 +9,13 @@ async function query(data) {
     const highestSentiment = result[0]?.reduce((prev, current) => {
       return prev.score > current.score ? prev : current;
     });
-    if (!highestSentiment) {
-      throw new Error("Error fetching sentiment: " + error.message);
-    }
     if (highestSentiment.label === "positive") {
       return 1;
     } else if (highestSentiment.label === "negative") {
       return -1;
     } else if (highestSentiment.label === "neutral") {
+      return 0;
+    } else {
       return 0;
     }
   } catch (error) {

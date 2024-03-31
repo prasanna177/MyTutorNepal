@@ -10,11 +10,17 @@ import { authRoutes } from "./PublicRoutes";
 import ErrorPage from "../src/components/ErrorPage";
 import { ErrorBoundary } from "react-error-boundary";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { hybridRoutes } from "./HybridRoutes";
 
 const AppRoute = () => {
   const { loading } = useSelector((state) => state.alerts);
   const { ratingModal } = useSelector((state) => state.ratings);
-  const protectedRoutes = [...adminRoutes, ...tutorRoutes, ...studentRoutes];
+  const protectedRoutes = [
+    ...adminRoutes,
+    ...tutorRoutes,
+    ...studentRoutes,
+    ...hybridRoutes,
+  ];
 
   const publicRoutes = [...authRoutes];
   console.log(protectedRoutes, "protected");

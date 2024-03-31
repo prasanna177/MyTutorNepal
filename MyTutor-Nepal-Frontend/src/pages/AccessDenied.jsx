@@ -1,6 +1,6 @@
 import { Box, Button, Image, Text, VStack } from "@chakra-ui/react";
 import NoAccess from "../assets/images/NoAccess.png";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const AccessDenied = () => {
   // const navigate = useNavigate();

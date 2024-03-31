@@ -206,9 +206,35 @@ module.exports.getAllTutors = async (req, res) => {
   }
 };
 
+module.exports.updateProfile = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    await User.findOneAndUpdate({ _id: userId }, req.body);
+    res.status(201).send({
+      success: true,
+      message: "Profile updated",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "User profile could not be updated.",
+    });
+  }
+};
+
 module.exports.bookTutor_post = async (req, res) => {
   try {
     const { fromDate, toDate, time, tutorInfo, userInfo } = req.body;
+    const { phone, coordinates } = userInfo;
+    if (!phone || !coordinates) {
+      return res.status(200).send({
+        success: false,
+        message:
+          "User must enter their phone number and address in edit profile before booking.",
+        type: 'no-phone-or-address'
+      });
+    }
     const tutorStartTime = moment(tutorInfo.timing.startTime, "HH:mm");
     const tutorEndTime = moment(tutorInfo.timing.endTime, "HH:mm");
     const bookingTime = moment(time, "HH:mm");

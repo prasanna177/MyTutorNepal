@@ -2,7 +2,7 @@ import { Box, Divider, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
-import { AdminMenu, StudentMenu } from "../data/sidebarData";
+import { AdminMenu } from "../data/sidebarData";
 
 const Sidebar = () => {
   const { user } = useSelector((state) => state.user);
@@ -27,7 +27,35 @@ const Sidebar = () => {
       name: "Profile",
       path: `/tutor/profile/${user?._id}`,
       icon: "fa-regular fa-user",
-    }
+    },
+  ];
+
+  const StudentMenu = [
+    {
+      name: "Home",
+      path: "/",
+      icon: "fa-solid fa-house",
+    },
+    {
+      name: "My Tutor",
+      path: "/student/mytutor",
+      icon: "fa-solid fa-graduation-cap",
+    },
+    {
+      name: "Payment",
+      path: "/student/payment",
+      icon: "fa-solid fa-money-bill",
+    },
+    {
+      name: "Bookings",
+      path: "/student/appointments",
+      icon: "fa-solid fa-book",
+    },
+    {
+      name: "Profile",
+      path: `/student/profile/${user?._id}`,
+      icon: "fa-regular fa-user",
+    },
   ];
   const SideBarMenu =
     user?.role === "admin"

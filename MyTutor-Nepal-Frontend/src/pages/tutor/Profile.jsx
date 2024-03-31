@@ -140,6 +140,31 @@ const Profile = () => {
           </VStack>
         </Box>
 
+        <div style={{ width: "100%" }}>
+          <iframe
+            width="100%"
+            height="600"
+            frameBorder="0"
+            scrolling="no"
+            marginHeight="0"
+            marginWidth="0"
+            src={`https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=${tutor?.coordinates?.lat},%20${tutor?.coordinates?.lng}+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed`}
+          ></iframe>
+        </div>
+
+        {/* <div style={{ width: "100%" }}>
+          <iframe
+            width="100%"
+            height="600"
+            frameBorder="0"
+            scrolling="no"
+            marginHeight="0"
+            marginWidth="0"
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCSpdfk2kgBCDaZQHdqxuGNmPIiisl-v6o
+            &q=${tutor?.coordinates?.lat},${tutor?.coordinates?.lng}`}
+          ></iframe>
+        </div> */}
+
         <Box borderRadius={10} p={5} borderWidth={1}>
           <VStack gap={4} alignItems={"stretch"}>
             <Box>

@@ -1,6 +1,14 @@
 import { Button } from "@chakra-ui/react";
 
-const NormalButton = ({ text, color, bgColor, onClick, mt, type, px }) => {
+const NormalButton = ({
+  text,
+  color,
+  bgColor,
+  onClick,
+  mt,
+  type,
+  px,
+}) => {
   return (
     <Button
       mt={mt}

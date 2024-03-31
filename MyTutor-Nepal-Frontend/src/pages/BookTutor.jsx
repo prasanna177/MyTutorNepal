@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,12 +13,14 @@ import PanelLayout from "../components/Layout/PanelLayout";
 import BookingBox from "../components/BookingBox";
 
 const BookTutor = () => {
-  const { user } = useSelector((state) => state.user);
-  const params = useParams();
-  const dispatch = useDispatch();
   const [tutor, setTutor] = useState([]);
   const [price, setPrice] = useState(0);
   const [subject, setSubject] = useState("");
+
+  const { user } = useSelector((state) => state.user);
+  const params = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const getTutorData = async () => {
     try {
@@ -85,6 +87,9 @@ const BookTutor = () => {
       if (res.data.success) {
         toast.success(res.data.message);
       } else {
+        if (res.data.type && res.data.type === "no-phone-or-address") {
+          navigate(`/student/profile/${user._id}`);
+        }
         toast.error(res.data.message);
       }
     } catch (error) {
@@ -102,7 +107,7 @@ const BookTutor = () => {
   console.log(tutor, "tutor");
   return (
     <PanelLayout title={"Booking Page"}>
-      <Grid templateColumns="repeat(7, 1fr)">
+      <Grid templateColumns="repeat(7, 1fr)" gap={4}>
         <GridItem colSpan={{ lg: 5, sm: 7, md: 6 }}>
           <Box>
             <Text>Name: {tutor?.fullName}</Text>
@@ -114,7 +119,6 @@ const BookTutor = () => {
               explicabo voluptate inventore quos quibusdam exercitationem. Ex,
               laborum!
             </Text>
-            <Box h={"500px"}>asd</Box>
             <Text>Fee: {tutor?.feePerClass}</Text>
             <Text>
               Timing: {tutor?.timing?.startTime} - {tutor?.timing?.endTime}

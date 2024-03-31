@@ -12,17 +12,26 @@ const TextField = ({
   register,
   placeholder,
   type,
+  disabled,
   label,
   hasLabel,
+  isNotRequired,
+  width,
 }) => {
   return (
-    <VStack alignItems={"start"} w={"100%"}>
+    <VStack alignItems={"start"}>
       <Text variant={"subtitle1"}>
-        {hasLabel && <span style={{ color: "red" }}>* </span>}
+        {hasLabel && !isNotRequired && <span style={{ color: "red" }}>* </span>}
         {label}
       </Text>
       <FormControl isInvalid={Boolean(errors)}>
-        <Input type={type} {...register(name)} placeholder={placeholder} />
+        <Input
+          maxW={width}
+          disabled={disabled}
+          type={type}
+          {...register(name)}
+          placeholder={placeholder}
+        />
         {errors && <FormErrorMessage>{errors}</FormErrorMessage>}
       </FormControl>
     </VStack>
