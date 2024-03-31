@@ -58,7 +58,7 @@ const PlaceAutocomplete = ({ address, setAddress, setCoordinates, width }) => {
 
   return (
     <HStack gap={1}>
-      <Box>
+      <Box flex={1}>
         <PlacesAutocomplete
           value={address}
           onChange={setAddress}
@@ -71,7 +71,7 @@ const PlaceAutocomplete = ({ address, setAddress, setCoordinates, width }) => {
             loading,
           }) => (
             <Box pos={"relative"}>
-              <VStack alignItems={"start"}>
+              <VStack alignItems={"start"} w={"100%"}>
                 <Input
                   width={width}
                   {...getInputProps({

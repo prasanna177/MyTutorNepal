@@ -14,7 +14,7 @@ import TextField from "../components/common/TextField";
 import { CloseIcon } from "@chakra-ui/icons";
 import toast from "react-hot-toast";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -131,6 +131,7 @@ const BecomeTutor = () => {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -147,6 +148,18 @@ const BecomeTutor = () => {
   const handleImageChange = (e, setImage) => {
     setImage(e.target.files[0]);
   };
+
+  useEffect(() => {
+    // Set default values after getting tutor information
+    setValue("phone", user?.phone || "");
+    setAddress(user?.address || "");
+    setCoordinates(
+      user?.coordinates || {
+        lat: null,
+        lng: null,
+      }
+    );
+  }, [user, setValue]);
 
   return (
     <PanelLayout title={"Become tutor"}>

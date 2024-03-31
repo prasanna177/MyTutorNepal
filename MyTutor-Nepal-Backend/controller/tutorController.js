@@ -29,7 +29,7 @@ module.exports.getTutorInfo = async (req, res) => {
 
 module.exports.updateProfile = async (req, res) => {
   try {
-    const { address, coordinates, userId, fullName } = req.body;
+    const { address, coordinates, userId, fullName, phone } = req.body;
     if (!address || !coordinates.lat || !coordinates.lng) {
       return res.status(200).send({
         success: false,
@@ -39,6 +39,9 @@ module.exports.updateProfile = async (req, res) => {
     const tutor = await Tutor.findOneAndUpdate({ userId }, req.body);
     await User.findByIdAndUpdate(userId, {
       fullName,
+      phone,
+      address,
+      coordinates,
     });
     res.status(201).send({
       success: true,
@@ -66,7 +69,7 @@ module.exports.getTutorById = async (req, res) => {
     }
     const tutor = tutorDocument.toObject();
     const tutorRatings = await Rating.find({ tutorId: tutor._id });
-    const ratingUser = await User.findById(tutorRatings.userId)
+    const ratingUser = await User.findById(tutorRatings.userId);
     tutor.ratings = tutorRatings;
     res.status(200).send({
       success: true,
