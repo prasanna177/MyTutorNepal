@@ -24,6 +24,10 @@ const Signup = () => {
       .required("Email address is required")
       .matches(emailRegex, "Email address is not valid"),
     password: yup.string().required("Password is required"),
+    confirmPassword: yup
+      .string()
+      .required("Please type your password")
+      .oneOf([yup.ref("password")], "Passwords do not match"),
   });
 
   const {
@@ -95,6 +99,12 @@ const Signup = () => {
                 name={"password"}
                 errors={errors?.password?.message}
                 placeholder={"Password"}
+              />
+              <Password
+                register={register}
+                name={"confirmPassword"}
+                errors={errors?.confirmPassword?.message}
+                placeholder={"Confirm password"}
               />
               <Checkbox
                 _checked={{

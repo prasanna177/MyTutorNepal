@@ -7,7 +7,8 @@ const User = require("../models/userModel");
 
 module.exports.signup_post = async (req, res) => {
   try {
-    let { email, password } = req.body;
+    console.log(req.body, "req");
+    let { email, password, fullName } = req.body;
     const user = await User.findOne({ email });
     if (user) {
       return res
@@ -16,8 +17,7 @@ module.exports.signup_post = async (req, res) => {
     }
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    req.body.password = hashedPassword;
-    const newUser = new User(req.body);
+    const newUser = new User({ email, fullName, password: hashedPassword });
     await newUser.save(); //save to database
 
     //verification email
@@ -169,14 +169,13 @@ module.exports.changePassword = async (req, res) => {
       await User.findByIdAndUpdate(user._id, { password: hashedPassword });
       return res.status(200).send({
         success: true,
-        message: "Password changed successfully"
-      })
-    }
-    else {
+        message: "Password changed successfully",
+      });
+    } else {
       return res.status(200).send({
         success: false,
-        message: "Old password entered was wrong."
-      })
+        message: "Old password entered was wrong.",
+      });
     }
   } catch (error) {
     res.status(500).send({

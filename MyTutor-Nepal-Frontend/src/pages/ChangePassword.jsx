@@ -17,6 +17,10 @@ const ChangePassword = () => {
   const schema = yup.object({
     oldPassword: yup.string().required("Old password is required"),
     newPassword: yup.string().required("New password is required"),
+    reEnteredPassword: yup
+      .string()
+      .required("Please type your password")
+      .oneOf([yup.ref("newPassword")], "Passwords do not match"),
   });
 
   const {
@@ -28,6 +32,7 @@ const ChangePassword = () => {
   });
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       dispatch(showLoading());
       const response = await axios.post(
@@ -70,7 +75,7 @@ const ChangePassword = () => {
             autocomplete="new-password"
             name={"oldPassword"}
             errors={errors?.oldPassword?.message}
-            placeholder={"Password"}
+            placeholder={"Old Password"}
           />
           <Password
             width={"500px"}
@@ -79,7 +84,7 @@ const ChangePassword = () => {
             autocomplete="new-password"
             name={"newPassword"}
             errors={errors?.newPassword?.message}
-            placeholder={"Password"}
+            placeholder={"New Password"}
           />
           <Password
             width={"500px"}
@@ -88,7 +93,7 @@ const ChangePassword = () => {
             autocomplete="new-password"
             name={"reEnteredPassword"}
             errors={errors?.reEnteredPassword?.message}
-            placeholder={"Password"}
+            placeholder={"Re-Enter password"}
           />
         </VStack>
         <Flex mt={5} w={"100%"} justifyContent={"start"}>
