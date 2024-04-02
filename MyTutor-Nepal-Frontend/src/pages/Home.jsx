@@ -8,10 +8,10 @@ import {
   FormLabel,
   Grid,
   Image,
-  // Input,
-  // InputGroup,
-  // InputLeftElement,
-  // InputRightElement,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
   Select,
   Text,
   VStack,
@@ -23,7 +23,7 @@ import { faMap } from "@fortawesome/free-solid-svg-icons";
 import PanelLayout from "../components/Layout/PanelLayout";
 import { subjectCategories } from "../data/subjectCategories";
 import { filterPrices } from "../data/filterPrice";
-// import { ArrowForwardIcon, SearchIcon } from "@chakra-ui/icons";
+import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { sortData } from "../data/sortData";
 import NoTutor from "../assets/images/NoTutor.png";
 
@@ -33,6 +33,7 @@ const Home = () => {
   const [pricePerLessonObj, setPricePerLessonObj] = useState(null);
   const [pricePerLessonVal, setPricePerLessonVal] = useState("");
   const [sortBy, setSortBy] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleCategoryChange = (event) => {
     const value = event.target.value;
@@ -43,6 +44,11 @@ const Home = () => {
     } else {
       setCategory(value);
     }
+  };
+
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+    console.log("Search Query:", event.target.value);
   };
 
   const handlePricePerLessonChange = (e) => {
@@ -111,6 +117,21 @@ const Home = () => {
           });
         }
 
+        if (searchQuery) {
+          const lowerCaseQuery = searchQuery.toLowerCase();
+          filteredTutors = filteredTutors.filter((tutor) => {
+            return (
+              tutor.fullName.toLowerCase().includes(lowerCaseQuery) ||
+              tutor.teachingInfo.some((info) =>
+                info.subject.toLowerCase().includes(lowerCaseQuery)
+              ) ||
+              tutor.teachingInfo.some((info) =>
+                info.category.toLowerCase().includes(lowerCaseQuery)
+              )
+            );
+          });
+        }
+
         // Apply sorting based on sortBy
         if (sortBy === "Rating") {
           filteredTutors.sort((a, b) => b.averageRating - a.averageRating);
@@ -137,15 +158,10 @@ const Home = () => {
     }
   };
 
-  console.log(category, "cat");
-  console.log(pricePerLessonObj, "pplobj");
-  console.log(pricePerLessonVal, "pplval");
-  console.log(sortBy, "sortby");
-  console.log(tutors, "tutors");
   useEffect(() => {
     getTutorData();
     //eslint-disable-next-line
-  }, [category, pricePerLessonObj, , pricePerLessonVal, sortBy]);
+  }, [category, pricePerLessonObj, searchQuery, pricePerLessonVal, sortBy]);
   return (
     <PanelLayout>
       <VStack gap={8} alignItems={"stretch"}>
@@ -179,7 +195,7 @@ const Home = () => {
               <option value="">Any</option>
               {filterPrices.map((item) => (
                 <option key={item.id} value={item.price}>
-                  <Text variant={"heading1"}>{item.price}</Text>
+                  {item.price}
                 </option>
               ))}
             </Select>
@@ -212,19 +228,24 @@ const Home = () => {
               Sort by
             </FormLabel>
           </FormControl>
-          {/* <InputGroup>
-          <InputLeftElement>
-            <SearchIcon color="black" />
-          </InputLeftElement>
-          <Input
-            placeholder="Search by keywords or name"
-            type="text"
-            borderColor={"gray.100"}
-          />
-          <InputRightElement _hover={{ cursor: "pointer" }}>
-            <ArrowForwardIcon color="black" />
-          </InputRightElement>
-        </InputGroup> */}
+          <InputGroup>
+            <InputLeftElement>
+              <SearchIcon color="black" />
+            </InputLeftElement>
+            <Input
+              placeholder="Search by keywords or name"
+              type="text"
+              onChange={handleSearchInputChange}
+              value={searchQuery}
+              borderColor={"gray.100"}
+            />
+            <InputRightElement
+              onClick={() => setSearchQuery("")}
+              _hover={{ cursor: "pointer" }}
+            >
+              <CloseIcon color="black" />
+            </InputRightElement>
+          </InputGroup>
         </Grid>
         <Box pos={"relative"}>
           {tutors.length > 0 ? (
