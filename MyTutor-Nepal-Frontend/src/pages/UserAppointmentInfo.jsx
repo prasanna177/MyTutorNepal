@@ -87,6 +87,19 @@ const UserAppointmentInfo = () => {
           <Bundle title={"Total Price"} subtitle={appointment?.totalPrice} />
           <Bundle title={"Message"} subtitle={appointment?.message} />
         </Grid>
+        <VStack alignItems={"stretch"}>
+          <Text variant={"heading2"}>Tutor Location</Text>
+          <iframe
+            width="400"
+            height="400"
+            src={`https://www.google.com/maps/embed/v1/place?key=${
+              import.meta.env.VITE_GOOGLE_API_KEY
+            }
+            &q=${appointment?.tutorInfo?.coordinates?.lat},${
+              appointment?.tutorInfo?.coordinates?.lng
+            }`}
+          ></iframe>
+        </VStack>
         <HStack justifyContent={"space-between"}>
           <NormalButton
             color={"primary.0"}

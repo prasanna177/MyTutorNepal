@@ -113,6 +113,10 @@ const AppointmentInfo = () => {
             />
             <Bundle title={"Email"} subtitle={appointment?.userInfo?.email} />
             <Bundle title={"Phone"} subtitle={appointment?.userInfo?.phone} />
+            <Bundle
+              title={"Address"}
+              subtitle={appointment?.userInfo?.address}
+            />
           </Grid>
         </VStack>
 
@@ -139,6 +143,31 @@ const AppointmentInfo = () => {
             <Bundle title={"Total Price"} subtitle={appointment?.totalPrice} />
             <Bundle title={"Message"} subtitle={appointment?.message} />
           </Grid>
+
+          {/* <div style={{ width: "100%" }}>
+          <iframe
+            width="100%"
+            height="600"
+            frameBorder="0"
+            scrolling="no"
+            marginHeight="0"
+            marginWidth="0"
+            src={`https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=${tutor?.coordinates?.lat},%20${tutor?.coordinates?.lng}+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed`}
+          ></iframe>
+        </div> */}
+          <VStack alignItems={"stretch"}>
+            <Text variant={"heading2"}>Student Location</Text>
+            <iframe
+              width="400"
+              height="400"
+              src={`https://www.google.com/maps/embed/v1/place?key=${
+                import.meta.env.VITE_GOOGLE_API_KEY
+              }
+            &q=${appointment?.userInfo?.coordinates?.lat},${
+                appointment?.userInfo?.coordinates?.lng
+              }`}
+            ></iframe>
+          </VStack>
           <HStack justifyContent={"space-between"}>
             <NormalButton
               color={"primary.0"}

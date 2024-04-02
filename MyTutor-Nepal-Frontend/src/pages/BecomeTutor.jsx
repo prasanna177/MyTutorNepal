@@ -1,8 +1,11 @@
 import {
   Box,
   Flex,
+  FormControl,
+  FormErrorMessage,
   Grid,
   HStack,
+  Select,
   Text,
   Textarea,
   VStack,
@@ -13,7 +16,6 @@ import { useFieldArray, useForm } from "react-hook-form";
 import TextField from "../components/common/TextField";
 import { CloseIcon } from "@chakra-ui/icons";
 import toast from "react-hot-toast";
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +25,7 @@ import PanelLayout from "../components/Layout/PanelLayout";
 import PlaceAutocomplete from "../components/PlaceAutocomplete";
 import NormalButton from "../components/common/Button";
 import ImageInput from "../components/common/ImageInput";
+import { subjectCategories } from "../data/subjectCategories";
 
 const BecomeTutor = () => {
   const [address, setAddress] = useState("");
@@ -41,13 +44,6 @@ const BecomeTutor = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSelect = async (value) => {
-    const results = await geocodeByAddress(value);
-    const ll = await getLatLng(results[0]);
-    setAddress(value);
-    setCoordinates(ll);
-  };
-
   const schema = yup.object({
     phone: yup.string().required("Phone number is required"),
     timing: yup.object().shape({
@@ -59,6 +55,7 @@ const BecomeTutor = () => {
       .of(
         yup.object().shape({
           subject: yup.string().required("Subject is required"),
+          category: yup.string().required("Category is required"),
           price: yup
             .number()
             .typeError("Please enter a valid number")
@@ -199,7 +196,6 @@ const BecomeTutor = () => {
                   <PlaceAutocomplete
                     address={address}
                     setAddress={setAddress}
-                    handleSelect={handleSelect}
                     setCoordinates={setCoordinates}
                   />
                 </VStack>
@@ -216,7 +212,7 @@ const BecomeTutor = () => {
             <VStack gap={7} alignItems={"stretch"}>
               <Text variant={"heading2"}>Services</Text>
               <Box>
-                <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+                <Grid templateColumns="repeat(4, 1fr)" gap={"16px"}>
                   {fields.map((field, index) => (
                     <React.Fragment key={field.id}>
                       <TextField
@@ -227,12 +223,39 @@ const BecomeTutor = () => {
                         label={"Subject"}
                         hasLabel={true}
                       />
+                      <VStack alignItems={"start"} w={"100%"}>
+                        <Text variant={"subtitle1"}>
+                          <span style={{ color: "red" }}>* </span>
+                          Category
+                        </Text>
+                        <FormControl
+                          isInvalid={Boolean(
+                            errors.teachingInfo?.[index]?.category?.message
+                          )}
+                        >
+                          <Select
+                            {...register(`teachingInfo[${index}].category`)}
+                            placeholder={"Select category for this subject"}
+                          >
+                            {subjectCategories.map((item) => (
+                              <option key={item.id} value={item.category}>
+                                {item.category}
+                              </option>
+                            ))}
+                          </Select>
+                          {errors && (
+                            <FormErrorMessage>
+                              {errors.teachingInfo?.[index]?.category?.message}
+                            </FormErrorMessage>
+                          )}
+                        </FormControl>
+                      </VStack>
                       <TextField
                         name={`teachingInfo[${index}].price`}
                         errors={errors.teachingInfo?.[index]?.price?.message}
                         register={register}
                         placeholder={"Enter rate per class for this subject"}
-                        label={"Price"}
+                        label={"Price per lesson"}
                         hasLabel={true}
                       />
                       <HStack>

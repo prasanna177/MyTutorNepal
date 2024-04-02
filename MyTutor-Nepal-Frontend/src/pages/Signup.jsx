@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from "@chakra-ui/icons";
-import { Box, Button, Checkbox, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,7 +8,6 @@ import TextField from "../components/common/TextField";
 import Password from "../components/common/Password";
 import axios from "axios";
 import toast from "react-hot-toast";
-import colors from "../theme/colors";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
 
@@ -106,18 +105,6 @@ const Signup = () => {
                 errors={errors?.confirmPassword?.message}
                 placeholder={"Confirm password"}
               />
-              <Checkbox
-                _checked={{
-                  "& .chakra-checkbox__control": {
-                    background: colors.primary[0],
-                    border: "none",
-                  },
-                }}
-                {...register("hasParentPanel")}
-                iconColor="white"
-              >
-                <Text variant={"title1"}>Include parent panel?</Text>
-              </Checkbox>
             </VStack>
             <VStack mt={4} gap={4} alignItems={"start"} w={"100%"}>
               <Button

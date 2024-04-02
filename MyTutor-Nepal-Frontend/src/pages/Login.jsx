@@ -2,14 +2,12 @@ import { ArrowRightIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Checkbox,
   Flex,
   HStack,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
-import colors from "../theme/colors";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -95,19 +93,7 @@ const Login = () => {
                   placeholder={"Password"}
                   errors={errors?.password?.message}
                 />
-                <HStack width={"100%"} justifyContent={"space-between"}>
-                  <Checkbox
-                    _checked={{
-                      "& .chakra-checkbox__control": {
-                        background: colors.primary[0],
-                        border: "none",
-                      },
-                    }}
-                    {...register("isParent")}
-                    iconColor="white"
-                  >
-                    <Text variant={"title1"}>Are you a parent?</Text>
-                  </Checkbox>
+                <HStack width={"100%"} justifyContent={"end"}>
                   <Text color={"primary.0"} fontSize={"md"}>
                     <Link to={"/forgot-password"}>Forgot password?</Link>
                   </Text>

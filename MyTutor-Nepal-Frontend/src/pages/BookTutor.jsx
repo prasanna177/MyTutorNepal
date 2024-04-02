@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text, VStack } from "@chakra-ui/react";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -112,12 +112,11 @@ const BookTutor = () => {
           <Box>
             <Text>Name: {tutor?.fullName}</Text>
             <Text>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum
-              libero ab repudiandae minus, consequatur laudantium sit dolorum
-              atque repellendus! Magnam provident cum consequuntur quis
-              obcaecati accusamus amet error doloribus facilis eos, earum
-              explicabo voluptate inventore quos quibusdam exercitationem. Ex,
-              laborum!
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Laboriosam illum repellat quod repudiandae ad similique et velit
+              amet voluptates qui, in quo, porro, aliquam nostrum! Quaerat
+              magnam illum repellendus quos quis architecto. Libero voluptas
+              vero nam cumque sunt.
             </Text>
             <Text>Fee: {tutor?.feePerClass}</Text>
             <Text>
@@ -126,15 +125,28 @@ const BookTutor = () => {
           </Box>
         </GridItem>
         <GridItem colSpan={{ lg: 2, sm: 0, md: 1 }}>
-          <BookingBox
-            setPrice={setPrice}
-            setSubject={setSubject}
-            errors={errors}
-            handleBooking={handleBooking}
-            handleSubmit={handleSubmit}
-            register={register}
-            tutor={tutor}
-          />
+          <VStack gap={5} alignItems={"stretch"}>
+            <BookingBox
+              setPrice={setPrice}
+              setSubject={setSubject}
+              errors={errors}
+              handleBooking={handleBooking}
+              handleSubmit={handleSubmit}
+              register={register}
+              tutor={tutor}
+            />
+            <VStack alignItems={"stretch"}>
+              <Text variant={"heading2"}>Tutor Location</Text>
+              <iframe
+                width="100%"
+                height="400"
+                src={`https://www.google.com/maps/embed/v1/place?key=${
+                  import.meta.env.VITE_GOOGLE_API_KEY
+                }
+            &q=${tutor?.coordinates?.lat},${tutor?.coordinates?.lng}`}
+              ></iframe>
+            </VStack>
+          </VStack>
         </GridItem>
       </Grid>
     </PanelLayout>

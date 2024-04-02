@@ -1,8 +1,11 @@
 import {
   Box,
   Flex,
+  FormControl,
+  FormErrorMessage,
   Grid,
   HStack,
+  Select,
   Text,
   Textarea,
   VStack,
@@ -22,6 +25,7 @@ import TextField from "../../components/common/TextField";
 import PlaceAutocomplete from "../../components/PlaceAutocomplete";
 import NormalButton from "../../components/common/Button";
 import ImageInput from "../../components/common/ImageInput";
+import { subjectCategories } from "../../data/subjectCategories";
 
 const EditProfile = () => {
   const [tutor, setTutor] = useState(null);
@@ -51,6 +55,7 @@ const EditProfile = () => {
       .of(
         yup.object().shape({
           subject: yup.string().required("Subject is required"),
+          category: yup.string().required("Category is required"),
           price: yup
             .number()
             .typeError("Please enter a valid number")
@@ -191,6 +196,7 @@ const EditProfile = () => {
     } else {
       tutor?.teachingInfo.forEach((info, index) => {
         setValue(`teachingInfo[${index}].subject`, info.subject || "");
+        setValue(`teachingInfo[${index}].category`, info.category || "");
         setValue(`teachingInfo[${index}].price`, info.price || "");
         setValue(`teachingInfo[${index}].proficiency`, info.proficiency || "");
       });
@@ -272,7 +278,7 @@ const EditProfile = () => {
               <VStack gap={7} alignItems={"stretch"}>
                 <Text variant={"heading2"}>Services</Text>
                 <Box>
-                  <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+                  <Grid templateColumns="repeat(4, 1fr)" gap={"16px"}>
                     {fields?.map((field, index) => (
                       <React.Fragment key={field.id}>
                         <TextField
@@ -285,12 +291,42 @@ const EditProfile = () => {
                           label={"Subject"}
                           hasLabel={true}
                         />
+                        <VStack alignItems={"start"} w={"100%"}>
+                          <Text variant={"subtitle1"}>
+                            <span style={{ color: "red" }}>* </span>
+                            Category
+                          </Text>
+                          <FormControl
+                            isInvalid={Boolean(
+                              errors.teachingInfo?.[index]?.category?.message
+                            )}
+                          >
+                            <Select
+                              {...register(`teachingInfo[${index}].category`)}
+                              placeholder={"Select category for this subject"}
+                            >
+                              {subjectCategories.map((item) => (
+                                <option key={item.id} value={item.category}>
+                                  {item.category}
+                                </option>
+                              ))}
+                            </Select>
+                            {errors && (
+                              <FormErrorMessage>
+                                {
+                                  errors.teachingInfo?.[index]?.category
+                                    ?.message
+                                }
+                              </FormErrorMessage>
+                            )}
+                          </FormControl>
+                        </VStack>
                         <TextField
                           name={`teachingInfo[${index}].price`}
                           errors={errors.teachingInfo?.[index]?.price?.message}
                           register={register}
                           placeholder={"Enter rate per class for this subject"}
-                          label={"Price"}
+                          label={"Price per lesson"}
                           hasLabel={true}
                         />
                         <HStack>
