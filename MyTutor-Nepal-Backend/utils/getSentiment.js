@@ -6,17 +6,20 @@ async function query(data) {
       body: JSON.stringify(data),
     });
     const result = await response.json();
-    const highestSentiment = result[0]?.reduce((prev, current) => {
-      return prev.score > current.score ? prev : current;
-    });
-    if (highestSentiment.label === "positive") {
-      return 1;
-    } else if (highestSentiment.label === "negative") {
-      return -1;
-    } else if (highestSentiment.label === "neutral") {
-      return 0;
+
+    if (result.length > 0) {
+      const highestSentiment = result[0]?.reduce((prev, current) => {
+        return prev.score > current.score ? prev : current;
+      });
+      if (highestSentiment.label === "positive") {
+        return 1;
+      } else if (highestSentiment.label === "negative") {
+        return -1;
+      } else if (highestSentiment.label === "neutral") {
+        return 0;
+      }
     } else {
-      return 0;
+      return 2;
     }
   } catch (error) {
     throw new Error("Error fetching sentiment: " + error.message);

@@ -232,7 +232,7 @@ module.exports.bookTutor_post = async (req, res) => {
         success: false,
         message:
           "User must enter their phone number and address in edit profile before booking.",
-        type: 'no-phone-or-address'
+        type: "no-phone-or-address",
       });
     }
     const tutorStartTime = moment(tutorInfo.timing.startTime, "HH:mm");
@@ -405,14 +405,16 @@ module.exports.rateTutor = async (req, res) => {
 
     //calculate average sentiment
     const totalSentiment = allRatings.reduce((acc, curr) => {
-      return acc + curr.sentiment;
+      if (curr.sentiment !== 2) {
+        return acc + curr.sentiment;
+      }
     }, 0);
     let averageSentiment;
     if (totalSentiment > 0) {
       averageSentiment = "positive";
     } else if (totalSentiment < 0) {
       averageSentiment = "negative";
-    } else {
+    } else if ((totalSentiment === 0)) {
       averageSentiment = "neutral";
     }
     console.log(averageSentiment, "avgRating");

@@ -23,7 +23,7 @@ const ratingSchema = new mongoose.Schema(
       required: true,
     },
     review: String,
-    sentiment: Number,
+    sentiment: Number
   },
   { timestamps: true }
 );

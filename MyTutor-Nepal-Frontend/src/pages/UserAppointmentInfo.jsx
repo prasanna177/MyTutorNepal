@@ -64,6 +64,11 @@ const UserAppointmentInfo = () => {
           />
           <Bundle title={"Email"} subtitle={appointment?.tutorInfo?.email} />
           <Bundle title={"Phone"} subtitle={appointment?.tutorInfo?.phone} />
+          <Bundle
+            title={"Address"}
+            subtitle={appointment?.tutorInfo?.address}
+          />
+          <Bundle title={"Bio"} subtitle={appointment?.tutorInfo?.bio} />
         </Grid>
       </VStack>
 

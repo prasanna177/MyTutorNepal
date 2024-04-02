@@ -1,4 +1,4 @@
-import { FaRegLaugh, FaRegMeh, FaRegSadTear } from "react-icons/fa";
+import { FaQuestion, FaRegLaugh, FaRegMeh, FaRegSadTear } from "react-icons/fa";
 
 const SentimentFace = ({ sentiment }) => {
   console.log(sentiment, "s");
@@ -9,7 +9,9 @@ const SentimentFace = ({ sentiment }) => {
       ) : sentiment === "neutral" || sentiment === 0 ? (
         <FaRegMeh size={30} color="orange" />
       ) : sentiment === "negative" || sentiment === -1 ? (
-        <FaRegSadTear size={30} color="red" />
+        <FaRegSadTear size={30} color="blue" />
+      ) : sentiment === 2 ? (
+        <FaQuestion size={30} color="red" />
       ) : null}
     </>
   );

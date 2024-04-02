@@ -71,6 +71,7 @@ const RatingModal = ({ ratingModal }) => {
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
+      dispatch(hideLoading());
     }
   };
 
