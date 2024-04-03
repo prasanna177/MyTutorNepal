@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import axios from "axios";
 import { createColumnHelper } from "@tanstack/react-table";
-import { ViewIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { DataTable } from "../../components/DataTable";
+import IconView from "../../components/TableActions/IconView";
+import { HStack } from "@chakra-ui/react";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -30,15 +31,13 @@ const Users = () => {
     columnHelper.accessor("action", {
       header: "ACTION",
       cell: (row) => (
-        <ViewIcon
-          color={"primary.0"}
-          _hover={{ cursor: "pointer" }}
-          onClick={() => {
-            navigate(`/admin/users/${row.row.original._id}`);
-          }}
-        >
-          View
-        </ViewIcon>
+        <HStack gap={2}>
+          <IconView
+            handleClick={() => {
+              navigate(`/admin/users/${row.row.original._id}`);
+            }}
+          />
+        </HStack>
       ),
     }),
   ];

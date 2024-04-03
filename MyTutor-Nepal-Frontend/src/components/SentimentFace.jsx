@@ -1,4 +1,5 @@
 import { FaQuestion, FaRegLaugh, FaRegMeh, FaRegSadTear } from "react-icons/fa";
+import { Tooltip } from "react-tooltip";
 
 const SentimentFace = ({ sentiment }) => {
   console.log(sentiment, "s");
@@ -11,8 +12,24 @@ const SentimentFace = ({ sentiment }) => {
       ) : sentiment === "negative" || sentiment === -1 ? (
         <FaRegSadTear size={30} color="blue" />
       ) : sentiment === 2 ? (
-        <FaQuestion size={30} color="red" />
+        <div
+          data-tooltip-id="question-mark"
+          data-tooltip-content="Problem in the server. Your overall sentiment score will not be affected "
+        >
+          <FaQuestion size={30} color="red" />
+        </div>
       ) : null}
+      <Tooltip
+        id="question-mark"
+        place="bottom"
+        style={{
+          zIndex: 9999,
+          padding: "7px",
+          backgroundColor: "#AEAEAE",
+          color: "white",
+          fontSize: "11px",
+        }}
+      />
     </>
   );
 };

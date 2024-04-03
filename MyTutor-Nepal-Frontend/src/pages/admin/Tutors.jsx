@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
-import { Text } from "@chakra-ui/react";
+import { HStack, Text } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
-import { ViewIcon } from "@chakra-ui/icons";
 import { getDateAndTime } from "../../components/Utils";
 import TabTable from "../../components/common/TabTable";
+import IconView from "../../components/TableActions/IconView";
 
 const Tutors = () => {
   const [pendingTutors, setPendingTutors] = useState([]);
@@ -37,15 +37,13 @@ const Tutors = () => {
       header: "ACTION",
       cell: (row) => {
         return (
-          <ViewIcon
-            color={"primary.0"}
-            _hover={{ cursor: "pointer" }}
-            onClick={() => {
-              navigate(`/admin/tutors/${row.row.original._id}`);
-            }}
-          >
-            View
-          </ViewIcon>
+          <HStack gap={2}>
+            <IconView
+              handleClick={() => {
+                navigate(`/admin/tutors/${row.row.original._id}`);
+              }}
+            />
+          </HStack>
         );
       },
     }),

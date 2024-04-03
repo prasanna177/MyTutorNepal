@@ -43,7 +43,7 @@ const BookTutor = () => {
 
   const schema = yup.object({
     fromDate: yup.string().required("Please enter the starting date"),
-    toDate: yup.string().required("Please ending the ending date"),
+    toDate: yup.string().required("Please enter the ending date"),
     time: yup.string().required("Time is required"),
     subject: yup.string().required("Subject is required"),
     message: yup.string().required("Please write a message"),

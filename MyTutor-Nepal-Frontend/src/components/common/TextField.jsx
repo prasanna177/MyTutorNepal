@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 
 const TextField = ({
+  flex,
   name,
   errors,
   register,
@@ -19,7 +20,7 @@ const TextField = ({
   width,
 }) => {
   return (
-    <VStack alignItems={"start"} w={"100%"}>
+    <VStack flex={flex} alignItems={"start"} w={"100%"}>
       <Text variant={"subtitle1"}>
         {hasLabel && !isNotRequired && <span style={{ color: "red" }}>* </span>}
         {label}

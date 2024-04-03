@@ -5,9 +5,9 @@ import { createColumnHelper } from "@tanstack/react-table";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { HStack, Text } from "@chakra-ui/react";
-import { ViewIcon } from "@chakra-ui/icons";
 import TabTable from "../components/common/TabTable";
 import { getDate } from "../components/Utils";
+import IconView from "../components/TableActions/IconView";
 
 const UserAppointments = () => {
   const [pendingAppointments, setPendingAppointments] = useState([]);
@@ -107,18 +107,11 @@ const UserAppointments = () => {
       cell: (row) => {
         return (
           <HStack gap={2}>
-            {/* <Button onClick={() => handleStatus(row.row.original)}>
-              Approve
-            </Button> */}
-            <ViewIcon
-              _hover={{ cursor: "pointer" }}
-              color={"primary.0"}
-              onClick={() =>
+            <IconView
+              handleClick={() =>
                 navigate(`/student/appointments/${row.row.original._id}`)
               }
-            >
-              View
-            </ViewIcon>
+            />
           </HStack>
         );
       },
