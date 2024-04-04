@@ -2,23 +2,31 @@ const mongoose = require("mongoose");
 
 const assignmentSchema = new mongoose.Schema(
   {
+    tutorId: {
+      type: String,
+      required: true,
+    },
+    studentId: {
+      type: String,
+      required: true,
+    },
+    appointmentId: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
     },
     difficulty: {
-      type: Number,
+      type: String,
       required: true,
     },
     grade: {
       type: Number,
     },
-    tutorInfo: {
+    appointmentInfo: {
       type: Object,
-      required: true,
-    },
-    studentInfo: {
-      type: String,
       required: true,
     },
     submittedFile: {
@@ -31,13 +39,16 @@ const assignmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    submissionDate: {
+      type: String,
+    },
     status: {
       type: String,
       required: true,
     },
     feedback: {
       type: String,
-    }
+    },
   },
   { timestamps: true }
 );

@@ -3,6 +3,9 @@ const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
 const crypto = require("crypto");
 const Rating = require("../models/ratingModel");
+const moment = require("moment");
+const Assignment = require("../models/assignmentModel");
+const { appendFile } = require("fs");
 
 module.exports.getTutorInfo = async (req, res) => {
   try {
@@ -217,6 +220,81 @@ module.exports.acceptAppointment = async (req, res) => {
       success: false,
       message: "Error while updating appointment status",
       error,
+    });
+  }
+};
+
+module.exports.createAssignment = async (req, res) => {
+  try {
+    const currentDate = moment().utc().format("YYYY-MM-DD HH:mm:ss");
+    req.body.deadline = moment(req.body.deadline)
+      .utc()
+      .format("YYYY-MM-DD HH:mm:ss");
+    const isDeadlineValid = moment(
+      req.body.deadline,
+      "YYYY-MM-DD HH:mm:ss"
+    ).isSameOrAfter(currentDate);
+    if (!isDeadlineValid) {
+      return res.status(200).send({
+        success: false,
+        message: "Deadline has already passed.",
+      });
+    }
+    const { appointmentId } = req.body;
+    const appointmentInfo = await Appointment.findById(appointmentId);
+    const assignment = await Assignment({
+      ...req.body,
+      appointmentInfo,
+      status: "Pending",
+    });
+    await assignment.save();
+    const user = await User.findById(assignment.studentId);
+    user.unseenNotification.unshift({
+      id: crypto.randomBytes(16).toString("hex"),
+      type: "provide-assignment",
+      message: `You have a new assignment provided by ${assignment.appointmentInfo.tutorInfo.fullName}.`,
+      onClickPath: "/student/assignments",
+      date: new Date(),
+    });
+    user.save();
+    return res.status(200).send({
+      success: true,
+      message: "Assignment provided successfully.",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while providing assignment.",
+    });
+  }
+};
+
+module.exports.getTutorOngoingAppointments = async (req, res) => {
+  try {
+    const tutor = await Tutor.findOne({ userId: req.body.userId });
+    const currentDate = moment(
+      moment().startOf("day").toDate(),
+      "YYYY-MM-DD"
+    ).toISOString();
+    const appointments = await Appointment.find({
+      tutorId: tutor._id,
+      fromDate: { $lte: currentDate },
+      toDate: { $gte: currentDate },
+      status: "approved",
+    });
+    res.status(200).send({
+      success: true,
+      message: "Tutor appointments fetched successfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while fetching appointments.",
     });
   }
 };

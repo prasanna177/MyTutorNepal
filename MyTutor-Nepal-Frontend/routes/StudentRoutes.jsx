@@ -2,6 +2,7 @@ import BecomeTutor from "../src/pages/BecomeTutor";
 import BookTutor from "../src/pages/BookTutor";
 import Home from "../src/pages/Home";
 import MapPage from "../src/pages/Map";
+import MyAssignments from "../src/pages/MyAssignments";
 import UserAppointmentInfo from "../src/pages/UserAppointmentInfo";
 import UserAppointments from "../src/pages/UserAppointments";
 import UserProfile from "../src/pages/UserProfile";
@@ -40,6 +41,11 @@ export const studentRoutes = [
   {
     path: "/student/profile/:id",
     element: <UserProfile />,
+    availability: ["student"],
+  },
+  {
+    path: "/student/assignments",
+    element: <MyAssignments />,
     availability: ["student"],
   },
 ];

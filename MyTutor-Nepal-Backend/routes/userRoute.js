@@ -102,6 +102,12 @@ router.get(
   authMiddleware.isStudent,
   userController.getAllAppointments
 );
+router.get(
+  "/getUserAssignments",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.getUserAssignments
+);
 router.get("/:id/verify/:token", tokenController.verify_token);
 router.post(
   "/saveFilePath",

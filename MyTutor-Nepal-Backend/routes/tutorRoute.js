@@ -34,11 +34,25 @@ router.get(
   authMiddleware.isTutor,
   tutorController.getTutorAppointments
 );
+
+router.get(
+  "/getTutorOngoingAppointments",
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutor,
+  tutorController.getTutorOngoingAppointments
+);
+
 router.post(
   "/acceptAppointment",
   authMiddleware.authMiddleware,
   authMiddleware.isTutor,
   tutorController.acceptAppointment
+);
+router.post(
+  "/createAssignment",
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutor,
+  tutorController.createAssignment
 );
 
 module.exports = router;

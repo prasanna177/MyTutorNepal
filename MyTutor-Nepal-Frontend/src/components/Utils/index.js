@@ -41,7 +41,10 @@ export const getDate = (date) => {
   });
 };
 
-export const getDateAndTime = (date) => {
+export const getDateAndTime = (date,timezone) => {
+  if (timezone === 'utc') {
+    date = new Date(`${date} UTC`);
+  }
   const options = {
     month: "long",
     day: "numeric",

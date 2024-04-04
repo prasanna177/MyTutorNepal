@@ -5,6 +5,7 @@ const Rating = require("../models/ratingModel");
 const moment = require("moment");
 const crypto = require("crypto");
 const query = require("../utils/getSentiment");
+const Assignment = require("../models/assignmentModel");
 
 module.exports.saveFilePath = async (req, res) => {
   try {
@@ -339,7 +340,6 @@ module.exports.bookTutor_post = async (req, res) => {
 module.exports.getAllAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find({ userId: req.body.userId });
-    console.log(appointments);
     res.status(200).send({
       success: true,
       message: "Appointments fetched successfully.",
@@ -414,7 +414,7 @@ module.exports.rateTutor = async (req, res) => {
       averageSentiment = "positive";
     } else if (totalSentiment < 0) {
       averageSentiment = "negative";
-    } else if ((totalSentiment === 0)) {
+    } else if (totalSentiment === 0) {
       averageSentiment = "neutral";
     }
     console.log(averageSentiment, "avgRating");
@@ -477,5 +477,27 @@ module.exports.skipRating = async (req, res) => {
     res
       .status(500)
       .send({ message: "Error skipping tutor rating", success: false, error });
+  }
+};
+
+module.exports.getUserAssignments = async (req, res) => {
+  try {
+    console.log(req.body, "req");
+    const assignments = await Assignment.find({
+      studentId: req.body.userId,
+    });
+    console.log(assignments, "ass");
+    res.status(200).send({
+      success: true,
+      message: "Appointments fetched successfully.",
+      data: assignments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in fetching user assignments",
+    });
   }
 };

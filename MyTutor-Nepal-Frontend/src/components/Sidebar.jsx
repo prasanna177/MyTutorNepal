@@ -52,6 +52,11 @@ const Sidebar = () => {
       icon: "fa-solid fa-book",
     },
     {
+      name: "Assignments",
+      path: "/student/assignments",
+      icon: "fa-solid fa-pen",
+    },
+    {
       name: "Profile",
       path: `/student/profile/${user?._id}`,
       icon: "fa-regular fa-user",
@@ -65,6 +70,7 @@ const Sidebar = () => {
       : StudentMenu;
   return (
     <Box
+      zIndex={12}
       p={4}
       pos={"fixed"}
       minH={"100%"}

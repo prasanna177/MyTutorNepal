@@ -7,7 +7,6 @@ const moment = require("moment");
 
 // runs every 1 hour (as of now)
 cron.schedule("0 0 */1 * * *", async () => {
-  console.log("start");
   try {
     //make currentdate the same format as toDate
     const currentDate = moment(
