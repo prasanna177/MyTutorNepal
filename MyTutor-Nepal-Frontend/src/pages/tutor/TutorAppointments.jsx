@@ -58,6 +58,7 @@ const TutorAppointments = () => {
         return (
           <HStack gap={2}>
             <IconView
+              label={"View"}
               handleClick={() =>
                 navigate(`/tutor/appointments/${row.row.original._id}`)
               }

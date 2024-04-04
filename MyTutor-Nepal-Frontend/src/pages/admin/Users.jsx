@@ -33,6 +33,7 @@ const Users = () => {
       cell: (row) => (
         <HStack gap={2}>
           <IconView
+          label={'View'}
             handleClick={() => {
               navigate(`/admin/users/${row.row.original._id}`);
             }}

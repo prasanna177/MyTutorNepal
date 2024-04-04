@@ -39,6 +39,7 @@ const Tutors = () => {
         return (
           <HStack gap={2}>
             <IconView
+            label={'View'}
               handleClick={() => {
                 navigate(`/admin/tutors/${row.row.original._id}`);
               }}

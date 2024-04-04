@@ -1,10 +1,10 @@
 import { ViewIcon } from "@chakra-ui/icons";
 import { Tooltip } from "react-tooltip";
 
-const IconView = ({ handleClick }) => {
+const IconView = ({ handleClick,label }) => {
   return (
     <>
-      <div data-tooltip-id="view-tooltip" data-tooltip-content="View">
+      <div data-tooltip-id="view-tooltip" data-tooltip-content={label}>
         <ViewIcon
           _hover={{ cursor: "pointer" }}
           color={"primary.0"}
