@@ -28,6 +28,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import IconView from "../components/TableActions/IconView";
+import toast from "react-hot-toast";
 import NormalButton from "../components/common/Button";
 import { LinkIcon } from "@chakra-ui/icons";
 
@@ -123,7 +124,6 @@ const MyAssignments = () => {
   ];
 
   const handleAssignmentSubmission = async (data) => {
-    
     try {
       const formData = new FormData();
       formData.append("submittedFile", selectedFile);
@@ -136,11 +136,31 @@ const MyAssignments = () => {
           },
         }
       );
-      const submittedFile = filePathUrl.data.pdfFilePath
-      const submissionData = { ...data, submittedFile };
-      console.log(submissionData)
+      const submittedFile = filePathUrl.data.pdfFilePath;
+      const submissionData = {
+        ...data,
+        submittedFile,
+        assignmentInfo: assignment,
+        submissionDate: Date.now(),
+      };
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/submit-assignment`,
+        submissionData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      onClose()
+      if (res.data.success) {
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -179,8 +199,7 @@ const MyAssignments = () => {
             <VStack alignItems={"stretch"}>
               <HStack justify={"space-between"}>
                 <Text variant={"overline"} color={"primary.0"}>
-                  {/* {assignment.title} */}
-                  Write the formula of pythagoras theorem
+                  {assignment.title}
                 </Text>
                 <Badge colorScheme="purple">{assignment.difficulty}</Badge>
               </HStack>
