@@ -75,6 +75,12 @@ router.get(
   userController.getUserAssignments
 );
 router.get("/:id/verify/:token", tokenController.verify_token);
+router.post(
+  "/submit-assignment",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.submitAssignment
+);
 
 
 module.exports = router;

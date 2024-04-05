@@ -471,3 +471,52 @@ module.exports.getUserAssignments = async (req, res) => {
     });
   }
 };
+
+module.exports.submitAssignment = async (req, res) => {
+  try {
+    let { assignmentInfo, remarks, submittedFile, submissionDate } = req.body;
+    const existingAssignment = await Assignment.find({
+      _id: assignmentInfo._id,
+      status: "Submitted",
+    });
+    console.log(existingAssignment, "exi");
+    if (existingAssignment.length > 0) {
+      return res.status(200).send({
+        success: false,
+        message: "Cannot send assignment more than once.",
+      });
+    }
+    submissionDate = moment(submissionDate).utc().format("YYYY-MM-DD HH:mm:ss");
+    const updatedAssignment = await Assignment.findByIdAndUpdate(
+      assignmentInfo._id,
+      {
+        remarks,
+        submittedFile,
+        status: "Submitted",
+        submissionDate,
+      }
+    );
+    const tutor = await Tutor.findById(updatedAssignment.tutorId);
+    const tutorUser = await User.findById(tutor.userId);
+    const user = await User.findById(updatedAssignment.userId);
+    tutorUser.unseenNotification.unshift({
+      id: crypto.randomBytes(16).toString("hex"),
+      type: "submit-assignment",
+      message: `Assignment submitted by ${user.fullName}`,
+      // onClickPath: "/tutor/assignments",
+      date: new Date(),
+    });
+    tutorUser.save();
+    res.status(200).send({
+      success: true,
+      message: "Assignment submitted",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in submitting assignments",
+    });
+  }
+};
