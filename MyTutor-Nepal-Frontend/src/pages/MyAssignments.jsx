@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { createColumnHelper } from "@tanstack/react-table";
 import { getDateAndTime } from "../components/Utils";
 import {
+  Badge,
   FormControl,
   FormErrorMessage,
   HStack,
@@ -121,9 +122,26 @@ const MyAssignments = () => {
     }),
   ];
 
-  console.log(assignment, "as");
-  const handleAssignmentSubmission = (data) => {
-    console.log({ ...data, selectedFile });
+  const handleAssignmentSubmission = async (data) => {
+    
+    try {
+      const formData = new FormData();
+      formData.append("submittedFile", selectedFile);
+      const filePathUrl = await axios.post(
+        `${import.meta.env.VITE_SERVER_PORT}/api/uploader/savePdfFilePath`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const submittedFile = filePathUrl.data.pdfFilePath
+      const submissionData = { ...data, submittedFile };
+      console.log(submissionData)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -159,10 +177,13 @@ const MyAssignments = () => {
           <ModalCloseButton />
           <ModalBody>
             <VStack alignItems={"stretch"}>
-              <Text variant={"overline"} color={"primary.0"}>
-                {/* {assignment.title} */}
-                Write the formula of pythagoras theorem
-              </Text>
+              <HStack justify={"space-between"}>
+                <Text variant={"overline"} color={"primary.0"}>
+                  {/* {assignment.title} */}
+                  Write the formula of pythagoras theorem
+                </Text>
+                <Badge colorScheme="purple">{assignment.difficulty}</Badge>
+              </HStack>
               <VStack alignItems={"start"} w={"100%"}>
                 <Text variant={"subtitle1"}>Remarks</Text>
                 <FormControl isInvalid={Boolean(errors?.remarks)}>

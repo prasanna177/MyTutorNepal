@@ -84,7 +84,7 @@ const EditProfile = () => {
     );
     //jugaad
     const filePathUrl = await axios.post(
-      `${import.meta.env.VITE_SERVER_PORT}/api/user/saveFilePath`,
+      `${import.meta.env.VITE_SERVER_PORT}/api/uploader/saveFilePath`,
       formData,
       {
         headers: {

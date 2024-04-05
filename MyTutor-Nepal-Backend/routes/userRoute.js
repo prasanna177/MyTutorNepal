@@ -1,41 +1,7 @@
 const { Router } = require("express");
 const userController = require("../controller/userController");
 const authMiddleware = require("../middleware/authMiddleware");
-1;
-const authController = require("../controller/authController");
 const tokenController = require("../controller/tokenController");
-const multer = require("multer");
-const path = require("path");
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix =
-      Math.round(Math.random() * 1e9) + "-" + file.originalname;
-    cb(null, uniqueSuffix);
-  },
-});
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image/")) {
-    cb(null, true);
-  } else {
-    cb(new Error("Invalid file type. Only images are allowed."), false);
-  }
-};
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 3 * 1024 * 1024 }, //3mb
-  fileFilter: fileFilter,
-});
-const uploadFields = [
-  { name: "profilePicUrl", maxCount: 1 },
-  { name: "nIdFrontUrl", maxCount: 1 },
-  { name: "nIdBackUrl", maxCount: 1 },
-  { name: "teachingCertificateUrl", maxCount: 1 },
-];
 
 const router = Router();
 
@@ -109,12 +75,6 @@ router.get(
   userController.getUserAssignments
 );
 router.get("/:id/verify/:token", tokenController.verify_token);
-router.post(
-  "/saveFilePath",
-  authMiddleware.authMiddleware,
-  authMiddleware.isTutorOrStudent,
-  upload.fields(uploadFields),
-  userController.saveFilePath
-);
+
 
 module.exports = router;

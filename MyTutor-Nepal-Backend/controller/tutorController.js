@@ -5,7 +5,6 @@ const crypto = require("crypto");
 const Rating = require("../models/ratingModel");
 const moment = require("moment");
 const Assignment = require("../models/assignmentModel");
-const { appendFile } = require("fs");
 
 module.exports.getTutorInfo = async (req, res) => {
   try {

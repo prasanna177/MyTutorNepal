@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
 
 module.exports.authMiddleware = (req, res, next) => {
   try {
@@ -111,7 +112,6 @@ module.exports.isAdminOrStudent = async (req, res, next) => {
   }
 };
 
-const User = require("../models/userModel");
 
 module.exports.isTutorOrStudent = async (req, res, next) => {
   try {
