@@ -34,7 +34,7 @@ const TextField = ({
           maxW={width}
           disabled={disabled}
           type={type}
-          {...register(name)}
+          {...(register && register(name))}
           placeholder={placeholder}
         />
         {errors && <FormErrorMessage>{errors}</FormErrorMessage>}

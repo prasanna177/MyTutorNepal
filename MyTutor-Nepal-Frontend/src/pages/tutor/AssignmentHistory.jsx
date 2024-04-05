@@ -124,8 +124,8 @@ const AssignmentHistory = () => {
               <IconView
                 label={"View"}
                 handleClick={() => {
-                  setAssignment(row.row.original);
                   onOpen();
+                  setAssignment(row.row.original);
                 }}
               />
             )}

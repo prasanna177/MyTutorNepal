@@ -32,6 +32,7 @@ import NormalButton from "../components/common/Button";
 import { LinkIcon } from "@chakra-ui/icons";
 import IconSubmit from "../components/TableActions/IconSubmit";
 import IconView from "../components/TableActions/IconView";
+import TextField from "../components/common/TextField";
 
 const MyAssignments = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -46,7 +47,17 @@ const MyAssignments = () => {
   const [isLoading, setIsLoading] = useState(true);
   const inputRef = useRef(null);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isSubmitModalOpen,
+    onOpen: onOpenSubmitModal,
+    onClose: onCloseSubmitModal,
+  } = useDisclosure();
+
+  const {
+    isOpen: isFeedbackModalOpen,
+    onOpen: onOpenFeedbackModal,
+    onClose: onCloseFeedbackModal,
+  } = useDisclosure();
 
   const schema = yup.object({
     deadline: yup.string(),
@@ -117,13 +128,19 @@ const MyAssignments = () => {
             {row.row.original.status === "Pending" ? (
               <IconSubmit
                 handleClick={() => {
-                  onOpen();
+                  onOpenSubmitModal();
                   setAssignment(row.row.original);
                 }}
               />
             ) : row.row.original.status === "Submitted" &&
               row.row.original.grade ? ( // Check if grade exists
-              <IconView label={"View feedback"} />
+              <IconView
+                label={"View feedback"}
+                handleClick={() => {
+                  onOpenFeedbackModal();
+                  setAssignment(row.row.original);
+                }}
+              />
             ) : null}
           </HStack>
         );
@@ -160,7 +177,7 @@ const MyAssignments = () => {
           },
         }
       );
-      onClose();
+      onCloseSubmitModal();
       if (res.data.success) {
         toast.success(res.data.message);
       } else {
@@ -178,12 +195,83 @@ const MyAssignments = () => {
 
   return (
     <PanelLayout title={"My assignments"}>
+      {/*feedback modal*/}
       <Modal
         size={"xl"}
         isCentered={true}
-        isOpen={isOpen}
+        isOpen={isFeedbackModalOpen}
         onClose={() => {
-          onClose();
+          onCloseFeedbackModal();
+        }}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <VStack alignItems={"stretch"}>
+              <Text variant={"heading2"} color={"black"}>
+                Feedback and grade
+              </Text>
+              <HStack justify={"space-between"}>
+                <Text variant={"overline"} color={"primary.0"}>
+                  {assignment.title}
+                </Text>
+                <Badge colorScheme="purple">{assignment.difficulty}</Badge>
+              </HStack>
+              <VStack alignItems={"start"} w={"100%"}>
+                <Text variant={"subtitle1"}>Student&apos;s remarks </Text>
+                <Textarea
+                  _hover={{ cursor: "auto" }}
+                  readOnly
+                  value={assignment.remarks}
+                />
+              </VStack>
+
+              <InputGroup>
+                <InputLeftElement>
+                  <LinkIcon _hover={{ cursor: "pointer" }} color="black" />
+                </InputLeftElement>
+                <Input
+                  readOnly
+                  _hover={{ cursor: "auto" }}
+                  type="text"
+                  placeholder="Attach a file"
+                  value={"Click to view pdf submission"}
+                  borderColor={"gray.100"}
+                />
+              </InputGroup>
+            </VStack>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <HStack alignItems={"stretch"}>
+              <VStack flex={2} alignItems={"start"} w={"100%"}>
+                <Text variant={"subtitle1"}>Feedback</Text>
+                <Textarea
+                  value={assignment.feedback}
+                  readOnly
+                  _hover={{ cursor: "auto" }}
+                />
+              </VStack>
+              <TextField
+                value={assignment.grade}
+                readOnly
+                flex={1}
+                label={"Grade (1-100)"}
+              />
+            </HStack>
+          </ModalBody>
+
+          <ModalFooter></ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/*submit modal*/}
+      <Modal
+        size={"xl"}
+        isCentered={true}
+        isOpen={isSubmitModalOpen}
+        onClose={() => {
+          onCloseSubmitModal();
         }}
       >
         <ModalOverlay />
