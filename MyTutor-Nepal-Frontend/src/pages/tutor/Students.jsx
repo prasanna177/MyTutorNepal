@@ -31,6 +31,7 @@ import TextField from "../../components/common/TextField";
 import { difficulties } from "../../data/difficultyData";
 import toast from "react-hot-toast";
 import { DataTable } from "../../components/DataTable";
+import IconAssignmentHistory from "../../components/TableActions/IconAssignmentHistory";
 
 const Students = () => {
   const [assignmentUsers, setAssignmentUsers] = useState(null);
@@ -84,7 +85,7 @@ const Students = () => {
         return (
           <HStack gap={2}>
             <IconView
-            label={'View'}
+              label={"View"}
               handleClick={() =>
                 navigate(`/tutor/appointments/${row.row.original._id}`)
               }
@@ -97,6 +98,13 @@ const Students = () => {
                   appointmentId: row.row.original._id,
                 });
                 onOpen();
+              }}
+            />
+            <IconAssignmentHistory
+              handleClick={() => {
+                navigate(
+                  `/tutor/appointments/assignments/${row.row.original._id}`
+                );
               }}
             />
           </HStack>

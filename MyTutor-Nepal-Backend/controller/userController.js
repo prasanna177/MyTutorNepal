@@ -496,14 +496,14 @@ module.exports.submitAssignment = async (req, res) => {
         submissionDate,
       }
     );
-    const tutor = await Tutor.findById(updatedAssignment.tutorId);
+    const tutor = await Tutor.findById(updatedAssignment.appointmentInfo.tutorId);
     const tutorUser = await User.findById(tutor.userId);
-    const user = await User.findById(updatedAssignment.userId);
+    const user = await User.findById(updatedAssignment.appointmentInfo.userId);
     tutorUser.unseenNotification.unshift({
       id: crypto.randomBytes(16).toString("hex"),
       type: "submit-assignment",
       message: `Assignment submitted by ${user.fullName}`,
-      // onClickPath: "/tutor/assignments",
+      // onClickPath: "/tutor/appointments/assignments/",
       date: new Date(),
     });
     tutorUser.save();

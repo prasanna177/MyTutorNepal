@@ -8,9 +8,11 @@ const NormalButton = ({
   mt,
   type,
   px,
+  disabled,
 }) => {
   return (
     <Button
+      hidden={disabled}
       mt={mt}
       type={type}
       _hover={{ opacity: 0.8 }}

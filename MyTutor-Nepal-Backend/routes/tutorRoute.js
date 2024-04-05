@@ -54,5 +54,17 @@ router.post(
   authMiddleware.isTutor,
   tutorController.createAssignment
 );
+router.post(
+  "/get-assignments-for-appointment",
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutor,
+  tutorController.getAssignmentsForAppointment
+);
+router.post(
+  "/grade-assignment",
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutor,
+  tutorController.gradeAssignment
+);
 
 module.exports = router;

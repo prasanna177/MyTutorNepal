@@ -1,4 +1,5 @@
 import AppointmentInfo from "../src/pages/tutor/AppointmentInfo";
+import AssignmentHistory from "../src/pages/tutor/AssignmentHistory";
 import EditProfile from "../src/pages/tutor/EditProfile";
 import TutorHome from "../src/pages/tutor/Home";
 import Profile from "../src/pages/tutor/Profile";
@@ -34,6 +35,11 @@ export const tutorRoutes = [
   {
     path: "/tutor/appointments/:appointmentId",
     element: <AppointmentInfo />,
+    availability: ["tutor"],
+  },
+  {
+    path: "/tutor/appointments/assignments/:appointmentId",
+    element: <AssignmentHistory />,
     availability: ["tutor"],
   },
 ];

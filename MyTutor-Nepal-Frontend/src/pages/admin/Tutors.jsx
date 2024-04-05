@@ -28,7 +28,7 @@ const Tutors = () => {
       cell: (row) => {
         return (
           <Text variant={"tableBody"}>
-            {getDateAndTime(row.row.original.createdAt)}
+            {getDateAndTime(row.row.original.createdAt, 'utc')}
           </Text>
         );
       },

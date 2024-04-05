@@ -7,6 +7,8 @@ import {
 } from "@chakra-ui/react";
 
 const TextField = ({
+  readOnly,
+  value,
   flex,
   name,
   errors,
@@ -27,6 +29,8 @@ const TextField = ({
       </Text>
       <FormControl isInvalid={Boolean(errors)}>
         <Input
+          readOnly={readOnly}
+          value={value}
           maxW={width}
           disabled={disabled}
           type={type}

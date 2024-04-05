@@ -27,10 +27,11 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import IconView from "../components/TableActions/IconView";
 import toast from "react-hot-toast";
 import NormalButton from "../components/common/Button";
 import { LinkIcon } from "@chakra-ui/icons";
+import IconSubmit from "../components/TableActions/IconSubmit";
+import IconView from "../components/TableActions/IconView";
 
 const MyAssignments = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -90,6 +91,9 @@ const MyAssignments = () => {
   const columnHelper = createColumnHelper();
 
   const columns = [
+    columnHelper.accessor((row) => row.title, {
+      header: "Assignment",
+    }),
     columnHelper.accessor((row) => row.appointmentInfo.tutorInfo.fullName, {
       header: "Tutor",
     }),
@@ -110,13 +114,17 @@ const MyAssignments = () => {
       cell: (row) => {
         return (
           <HStack gap={2}>
-            <IconView
-              label={"View assignment"}
-              handleClick={() => {
-                onOpen();
-                setAssignment(row.row.original);
-              }}
-            />
+            {row.row.original.status === "Pending" ? (
+              <IconSubmit
+                handleClick={() => {
+                  onOpen();
+                  setAssignment(row.row.original);
+                }}
+              />
+            ) : row.row.original.status === "Submitted" &&
+              row.row.original.grade ? ( // Check if grade exists
+              <IconView label={"View feedback"} />
+            ) : null}
           </HStack>
         );
       },
@@ -152,7 +160,7 @@ const MyAssignments = () => {
           },
         }
       );
-      onClose()
+      onClose();
       if (res.data.success) {
         toast.success(res.data.message);
       } else {
@@ -214,16 +222,15 @@ const MyAssignments = () => {
                   )}
                 </FormControl>
               </VStack>
-              <InputGroup>
+              <InputGroup
+                _hover={{ cursor: "pointer" }}
+                onClick={() => inputRef.current.click()}
+              >
                 <InputLeftElement>
-                  <LinkIcon
-                    _hover={{ cursor: "pointer" }}
-                    onClick={() => inputRef.current.click()}
-                    color="black"
-                  />
+                  <LinkIcon color="black" />
                 </InputLeftElement>
                 <Input
-                  disabled
+                  readOnly
                   type="text"
                   placeholder="Attach a file"
                   value={selectedFile?.name || ""}
