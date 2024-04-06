@@ -10,6 +10,7 @@ const uploaderRoute = require("./routes/uploaderRoute");
 const dbCongfig = require("./config/dbConfig");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { startCronJob } = require("./utils/cronJobs");
 
 //middleware
 const app = express();
@@ -40,3 +41,5 @@ app.get("/login", (req, res) => {
 app.listen(PORT, () => {
   console.log(`server running on PORT ${PORT}`);
 });
+
+startCronJob()

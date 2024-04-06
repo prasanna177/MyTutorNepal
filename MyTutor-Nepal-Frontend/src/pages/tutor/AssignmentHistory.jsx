@@ -34,6 +34,7 @@ import { useForm } from "react-hook-form";
 
 import { LinkIcon } from "@chakra-ui/icons";
 import TextField from "../../components/common/TextField";
+import IconSubmit from "../../components/TableActions/IconSubmit";
 // import { useDispatch } from "react-redux";
 // import { hideLoading, showLoading } from "../../redux/features/alertSlice";
 
@@ -42,15 +43,25 @@ const AssignmentHistory = () => {
   const [assignment, setAssignment] = useState({});
   const [pendingAssignments, setPendingAppointments] = useState([]);
   const [submittedAssignments, setSubmittedAssignments] = useState([]);
+  const [missedAssignments, setMissedAssignments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const params = useParams();
   console.log(assignment, "ass");
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isViewModalOpen,
+    onOpen: onOpenViewModal,
+    onClose: onCloseViewModal,
+  } = useDisclosure();
+
+  const {
+    isOpen: isFeedbackModalOpen,
+    onOpen: onOpenGradeModal,
+    onClose: onCloseGradeModal,
+  } = useDisclosure();
 
   const handleClick = () => {
-    // Open the image in a new tab when clicked
     window.open(
       `${import.meta.env.VITE_SERVER_PORT}/${assignment.submittedFile}`,
       "_blank"
@@ -119,17 +130,29 @@ const AssignmentHistory = () => {
       header: "ACTION",
       cell: (row) => {
         return (
-          <HStack gap={2}>
+          <>
             {row.row.original.status === "Submitted" && (
-              <IconView
-                label={"View"}
-                handleClick={() => {
-                  onOpen();
-                  setAssignment(row.row.original);
-                }}
-              />
+              <HStack gap={2}>
+                {row.row.original.grade ? (
+                  <IconView
+                    label={"View"}
+                    handleClick={() => {
+                      setAssignment(row.row.original);
+                      onOpenViewModal();
+                    }}
+                  />
+                ) : (
+                  <IconSubmit
+                    label={"Grade assignment"}
+                    handleClick={() => {
+                      setAssignment(row.row.original);
+                      onOpenGradeModal();
+                    }}
+                  />
+                )}
+              </HStack>
             )}
-          </HStack>
+          </>
         );
       },
     }),
@@ -159,8 +182,12 @@ const AssignmentHistory = () => {
         const submittedAssignments = res.data.data.filter(
           (appointment) => appointment.status === "Submitted"
         );
+        const missedAssignments = res.data.data.filter(
+          (appointment) => appointment.status === "Missed"
+        );
         setPendingAppointments(pendingAssignments);
         setSubmittedAssignments(submittedAssignments);
+        setMissedAssignments(missedAssignments);
         setAssignments(res.data.data);
       }
     } catch (error) {
@@ -182,7 +209,7 @@ const AssignmentHistory = () => {
           },
         }
       );
-      onClose();
+      onCloseGradeModal();
       if (res.data.success) {
         toast.success(res.data.message);
       } else {
@@ -202,16 +229,87 @@ const AssignmentHistory = () => {
   return (
     <PanelLayout
       title={`${
-        assignments.length > 0 &&
-        assignments[0].appointmentInfo?.userInfo?.fullName
+        assignments.length > 0
+          ? assignments[0].appointmentInfo?.userInfo?.fullName
+          : "Student"
       }'s assignment history`}
     >
+      {/*View assignment */}
       <Modal
         size={"xl"}
         isCentered={true}
-        isOpen={isOpen}
+        isOpen={isViewModalOpen}
         onClose={() => {
-          onClose();
+          onCloseViewModal();
+        }}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <VStack alignItems={"stretch"}>
+              <Text variant={"heading2"} color={"black"}>
+                View assignment
+              </Text>
+              <HStack justify={"space-between"}>
+                <Text variant={"overline"} color={"primary.0"}>
+                  {assignment.title}
+                </Text>
+                <Badge colorScheme="purple">{assignment.difficulty}</Badge>
+              </HStack>
+              <VStack alignItems={"start"} w={"100%"}>
+                <Text variant={"subtitle1"}>Student&apos;s remarks </Text>
+                <Textarea
+                  _hover={{ cursor: "auto" }}
+                  readOnly
+                  value={assignment.remarks}
+                />
+              </VStack>
+
+              <InputGroup onClick={handleClick}>
+                <InputLeftElement>
+                  <LinkIcon _hover={{ cursor: "pointer" }} color="black" />
+                </InputLeftElement>
+                <Input
+                  readOnly
+                  _hover={{ cursor: "auto" }}
+                  type="text"
+                  placeholder="Attach a file"
+                  value={"Click to view pdf submission"}
+                  borderColor={"gray.100"}
+                />
+              </InputGroup>
+            </VStack>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <HStack alignItems={"stretch"}>
+              <VStack flex={2} alignItems={"start"} w={"100%"}>
+                <Text variant={"subtitle1"}>Feedback</Text>
+                <Textarea
+                  value={assignment.feedback}
+                  readOnly
+                  _hover={{ cursor: "auto" }}
+                />
+              </VStack>
+              <TextField
+                value={assignment.grade}
+                readOnly
+                flex={1}
+                label={"Grade (1-100)"}
+              />
+            </HStack>
+          </ModalBody>
+          <ModalFooter></ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/*Grade assignment */}
+      <Modal
+        size={"xl"}
+        isCentered={true}
+        isOpen={isFeedbackModalOpen}
+        onClose={() => {
+          onCloseGradeModal();
         }}
       >
         <ModalOverlay />
@@ -261,8 +359,6 @@ const AssignmentHistory = () => {
                 <Text variant={"subtitle1"}>Feedback</Text>
                 <FormControl isInvalid={Boolean(errors?.feedback)}>
                   <Textarea
-                    value={assignment.feedback}
-                    readOnly={Boolean(assignment.feedback)}
                     _hover={{ cursor: "auto" }}
                     {...register("feedback")}
                     placeholder={"Feedback"}
@@ -275,8 +371,6 @@ const AssignmentHistory = () => {
                 </FormControl>
               </VStack>
               <TextField
-                value={assignment.grade}
-                readOnly={Boolean(assignment.grade)}
                 flex={1}
                 name={"grade"}
                 register={register}
@@ -289,7 +383,6 @@ const AssignmentHistory = () => {
 
           <ModalFooter>
             <NormalButton
-              disabled={Boolean(assignment.grade)}
               color="white"
               bgColor={"primary.0"}
               mr={3}
@@ -302,10 +395,13 @@ const AssignmentHistory = () => {
       <TabTable
         firstData={pendingAssignments}
         secondData={submittedAssignments}
+        thirdData={missedAssignments}
         firstTab={"Pending Assignments"}
         secondTab={"Submitted Assignments"}
+        thirdTab={"Missed assignments"}
         columns={columns}
         isLoading={isLoading}
+        hasThreeTabs={true}
       />
     </PanelLayout>
   );

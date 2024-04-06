@@ -70,6 +70,14 @@ module.exports.delete_all_notifications = async (req, res) => {
 module.exports.becomeTutor_post = async (req, res) => {
   try {
     const { address, nIdFrontUrl, nIdBackUrl, coordinates, userId } = req.body;
+    const existingTutor = await Tutor.find({userId: userId})
+    if (existingTutor.length > 0) {
+      return res.status(200).send({
+        success: false,
+        message: "You have already applied for tutor."
+      })
+    }
+
     if (!nIdFrontUrl || !nIdBackUrl) {
       return res.status(200).send({
         success: false,
@@ -475,6 +483,12 @@ module.exports.getUserAssignments = async (req, res) => {
 module.exports.submitAssignment = async (req, res) => {
   try {
     let { assignmentInfo, remarks, submittedFile, submissionDate } = req.body;
+    if (!submittedFile) {
+      return res.status(200).send({
+        success: false,
+        message: "No file found",
+      });
+    }
     const existingAssignment = await Assignment.find({
       _id: assignmentInfo._id,
       status: "Submitted",
@@ -496,7 +510,9 @@ module.exports.submitAssignment = async (req, res) => {
         submissionDate,
       }
     );
-    const tutor = await Tutor.findById(updatedAssignment.appointmentInfo.tutorId);
+    const tutor = await Tutor.findById(
+      updatedAssignment.appointmentInfo.tutorId
+    );
     const tutorUser = await User.findById(tutor.userId);
     const user = await User.findById(updatedAssignment.appointmentInfo.userId);
     tutorUser.unseenNotification.unshift({

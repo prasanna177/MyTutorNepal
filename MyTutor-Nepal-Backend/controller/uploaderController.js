@@ -30,6 +30,12 @@ module.exports.saveFilePath = async (req, res) => {
 
 module.exports.savePdfFilePath = async (req, res) => {
   try {
+    if (!req?.file?.path) {
+      return res.status(200).send({
+        success: false,
+        message: "File not attached",
+      });
+    }
     const filePath = req.file.path;
     // Return the PDF file path
     console.log(filePath);

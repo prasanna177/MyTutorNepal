@@ -43,6 +43,7 @@ const MyAssignments = () => {
   };
   const [assignment, setAssignment] = useState([]);
   const [pendingAssignments, setPendingAppointments] = useState([]);
+  const [missedAssignments, setMissedAssignments] = useState([]);
   const [submittedAssignments, setSubmittedAssignments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const inputRef = useRef(null);
@@ -58,6 +59,14 @@ const MyAssignments = () => {
     onOpen: onOpenFeedbackModal,
     onClose: onCloseFeedbackModal,
   } = useDisclosure();
+
+  const handleClick = () => {
+    // Open the image in a new tab when clicked
+    window.open(
+      `${import.meta.env.VITE_SERVER_PORT}/${assignment.submittedFile}`,
+      "_blank"
+    );
+  };
 
   const schema = yup.object({
     deadline: yup.string(),
@@ -90,8 +99,12 @@ const MyAssignments = () => {
         const submittedAssignments = res.data.data.filter(
           (appointment) => appointment.status === "Submitted"
         );
+        const missedAssignments = res.data.data.filter(
+          (appointment) => appointment.status === "Missed"
+        );
         setPendingAppointments(pendingAssignments);
         setSubmittedAssignments(submittedAssignments);
+        setMissedAssignments(missedAssignments);
       }
     } catch (error) {
       setIsLoading(false);
@@ -127,6 +140,7 @@ const MyAssignments = () => {
           <HStack gap={2}>
             {row.row.original.status === "Pending" ? (
               <IconSubmit
+                label={"Submit assignment"}
                 handleClick={() => {
                   onOpenSubmitModal();
                   setAssignment(row.row.original);
@@ -226,7 +240,7 @@ const MyAssignments = () => {
                 />
               </VStack>
 
-              <InputGroup>
+              <InputGroup onClick={handleClick}>
                 <InputLeftElement>
                   <LinkIcon _hover={{ cursor: "pointer" }} color="black" />
                 </InputLeftElement>
@@ -349,10 +363,13 @@ const MyAssignments = () => {
       <TabTable
         firstData={pendingAssignments}
         secondData={submittedAssignments}
+        thirdData={missedAssignments}
         firstTab={"Pending Assignments"}
         secondTab={"Submitted Assignments"}
+        thirdTab={"Missed assignments"}
         columns={columns}
         isLoading={isLoading}
+        hasThreeTabs={true}
       />
     </PanelLayout>
   );

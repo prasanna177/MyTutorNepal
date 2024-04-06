@@ -1,10 +1,10 @@
 import { EditIcon } from "@chakra-ui/icons";
 import { Tooltip } from "react-tooltip";
 
-const IconSubmit = ({ handleClick }) => {
+const IconSubmit = ({ handleClick, label }) => {
   return (
     <>
-      <div data-tooltip-id="submit-tooltip" data-tooltip-content="Submit assignment">
+      <div data-tooltip-id="submit-tooltip" data-tooltip-content={label}>
         <EditIcon
           _hover={{ cursor: "pointer" }}
           color={"primary.0"}
