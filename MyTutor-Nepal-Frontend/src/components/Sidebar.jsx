@@ -38,7 +38,7 @@ const Sidebar = () => {
     },
     {
       name: "My Tutor",
-      path: "/student/mytutor",
+      path: "/student/mytutors",
       icon: "fa-solid fa-graduation-cap",
     },
     {

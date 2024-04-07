@@ -29,7 +29,7 @@ const AppRoute = () => {
     <BrowserRouter>
       <ErrorBoundary FallbackComponent={ErrorPage}>
         {loading ? (
-          <SpinnerComponenet />
+          <SpinnerComponenet bgColor={'opaque.0'} />
         ) : (
           <Routes>
             {publicRoutes.map((route) => (

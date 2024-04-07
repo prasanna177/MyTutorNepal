@@ -26,6 +26,10 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    trialEndDate: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       required: true,
@@ -53,6 +57,7 @@ const appointmentSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
+      default: "Pending",
     },
   },
   { timestamps: true }

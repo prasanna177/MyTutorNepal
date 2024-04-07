@@ -214,23 +214,23 @@ module.exports.bookTutor_post = async (req, res) => {
         type: "no-phone-or-address",
       });
     }
-    const tutorStartTime = moment(tutorInfo.timing.startTime, "HH:mm");
-    const tutorEndTime = moment(tutorInfo.timing.endTime, "HH:mm");
-    const bookingTime = moment(time, "HH:mm");
-
+    
     //if fromDate is before the current date
     const currentDate = moment().startOf("day");
     const isFromDateValid = moment(fromDate, "YYYY-MM-DD").isSameOrAfter(
       currentDate
     );
-
+    
     if (!isFromDateValid) {
       return res.status(200).send({
         success: false,
         message: "Start date has already passed.",
       });
     }
-
+    const tutorStartTime = moment(tutorInfo.timing.startTime, "HH:mm");
+    const tutorEndTime = moment(tutorInfo.timing.endTime, "HH:mm");
+    const bookingTime = moment(time, "HH:mm");
+    
     //booking outside of tutor's timings
     if (
       bookingTime.isBefore(tutorStartTime) ||
@@ -533,6 +533,34 @@ module.exports.submitAssignment = async (req, res) => {
       success: false,
       error,
       message: "Error in submitting assignments",
+    });
+  }
+};
+
+module.exports.getUserOngoingAppointments = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userId);
+    const currentDate = moment(
+      moment().startOf("day").toDate(),
+      "YYYY-MM-DD"
+    ).toISOString();
+    const appointments = await Appointment.find({
+      userId: user._id,
+      fromDate: { $lte: currentDate },
+      toDate: { $gte: currentDate },
+      status: "approved",
+    });
+    res.status(200).send({
+      success: true,
+      message: "User appointments fetched successfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while fetching appointments.",
     });
   }
 };

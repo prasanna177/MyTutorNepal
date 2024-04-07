@@ -83,12 +83,8 @@ const UserAppointments = () => {
     }),
     columnHelper.accessor(
       (row) => {
-        const fromDate = moment(row.fromDate);
         const toDate = moment(row.toDate, "YYYY-MM-DD");
         const nowDate = moment(new Date(), "YYYY-MM-DD").toISOString();
-        console.log(fromDate, "from");
-        console.log(toDate, "to");
-        console.log(nowDate, "now");
         const remainingDays = toDate.diff(nowDate, "days") + 1;
         if (remainingDays <= 0) {
           return 0;
@@ -99,8 +95,8 @@ const UserAppointments = () => {
         header: "Remaining days",
       }
     ),
-    columnHelper.accessor("status", {
-      header: "Status",
+    columnHelper.accessor("paymentStatus", {
+      header: "Payment",
     }),
     columnHelper.accessor("action", {
       header: "ACTION",

@@ -81,6 +81,11 @@ router.post(
   authMiddleware.isStudent,
   userController.submitAssignment
 );
-
+router.get(
+  "/get-user-ongoing-appointments",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.getUserOngoingAppointments
+);
 
 module.exports = router;

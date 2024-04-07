@@ -26,8 +26,10 @@ import { filterPrices } from "../data/filterPrice";
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { sortData } from "../data/sortData";
 import NoTutor from "../assets/images/NoTutor.png";
+import SpinnerComponenet from "../components/SpinnerComponent";
 
 const Home = () => {
+  const [loading, setLoading] = useState(false);
   const [tutors, setTutors] = useState([]);
   const [category, setCategory] = useState("");
   const [pricePerLessonObj, setPricePerLessonObj] = useState(null);
@@ -71,6 +73,7 @@ const Home = () => {
   const getTutorData = async () => {
     try {
       // Fetch all tutors from the server
+      setLoading(true);
       const res = await axios.get(
         `${import.meta.env.VITE_SERVER_PORT}/api/user/getAllTutors`,
         {
@@ -79,7 +82,7 @@ const Home = () => {
           },
         }
       );
-
+      setLoading(false);
       if (res.data.success) {
         let filteredTutors = res.data.data;
 
@@ -154,6 +157,7 @@ const Home = () => {
         setTutors(filteredTutors);
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -164,140 +168,146 @@ const Home = () => {
   }, [category, pricePerLessonObj, searchQuery, pricePerLessonVal, sortBy]);
   return (
     <PanelLayout>
-      <VStack gap={8} alignItems={"stretch"}>
-        <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
-          <FormControl variant={"floating"}>
-            <Select value={category} onChange={handleCategoryChange}>
-              <option value="">Any</option>
-              {subjectCategories.map((item) => (
-                <option key={item.id} value={item.category}>
-                  {item.category}
-                </option>
-              ))}
-            </Select>
-            <FormLabel
-              fontWeight={"normal"}
-              fontSize={{
-                base: "16px",
-                "2xl": "18px",
-              }}
-            >
-              I want to learn
-            </FormLabel>
-          </FormControl>
+      {loading ? (
+        <SpinnerComponenet />
+      ) : (
+        <>
+          <VStack gap={8} alignItems={"stretch"}>
+            <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+              <FormControl variant={"floating"}>
+                <Select value={category} onChange={handleCategoryChange}>
+                  <option value="">Any</option>
+                  {subjectCategories.map((item) => (
+                    <option key={item.id} value={item.category}>
+                      {item.category}
+                    </option>
+                  ))}
+                </Select>
+                <FormLabel
+                  fontWeight={"normal"}
+                  fontSize={{
+                    base: "16px",
+                    "2xl": "18px",
+                  }}
+                >
+                  I want to learn
+                </FormLabel>
+              </FormControl>
 
-          <FormControl variant={"floating"}>
-            <Select
-              value={pricePerLessonVal}
-              onChange={handlePricePerLessonChange}
-              disabled={!category}
-            >
-              <option value="">Any</option>
-              {filterPrices.map((item) => (
-                <option key={item.id} value={item.price}>
-                  {item.price}
-                </option>
-              ))}
-            </Select>
-            <FormLabel
-              fontWeight={"normal"}
-              fontSize={{
-                base: "16px",
-                "2xl": "18px",
-              }}
-            >
-              Price per lesson
-            </FormLabel>
-          </FormControl>
-          <FormControl variant={"floating"}>
-            <Select onChange={handleSortByChange}>
-              <option value="">Any</option>
-              {sortData.map((item) => (
-                <option key={item.id} value={item.sortItem}>
-                  {item.sortItem}
-                </option>
-              ))}
-            </Select>
-            <FormLabel
-              fontWeight={"normal"}
-              fontSize={{
-                base: "16px",
-                "2xl": "18px",
-              }}
-            >
-              Sort by
-            </FormLabel>
-          </FormControl>
-          <InputGroup>
-            <InputLeftElement>
-              <SearchIcon color="black" />
-            </InputLeftElement>
-            <Input
-              placeholder="Search by keywords or name"
-              type="text"
-              onChange={handleSearchInputChange}
-              value={searchQuery}
-              borderColor={"gray.100"}
-            />
-            <InputRightElement
-              onClick={() => setSearchQuery("")}
-              _hover={{ cursor: "pointer" }}
-            >
-              <CloseIcon color="black" />
-            </InputRightElement>
-          </InputGroup>
-        </Grid>
-        <Box pos={"relative"}>
-          {tutors.length > 0 ? (
-            <Grid
-              gap={"16px"}
-              templateColumns={{
-                lg: "repeat(5, 1fr)",
-                md: "repeat(3, 1fr)",
-                sm: "repeat(1, 1fr)",
-              }}
-            >
-              {tutors?.map((tutor) => (
-                <TutorCard key={tutor._id} tutor={tutor} />
-              ))}
+              <FormControl variant={"floating"}>
+                <Select
+                  value={pricePerLessonVal}
+                  onChange={handlePricePerLessonChange}
+                  disabled={!category}
+                >
+                  <option value="">Any</option>
+                  {filterPrices.map((item) => (
+                    <option key={item.id} value={item.price}>
+                      {item.price}
+                    </option>
+                  ))}
+                </Select>
+                <FormLabel
+                  fontWeight={"normal"}
+                  fontSize={{
+                    base: "16px",
+                    "2xl": "18px",
+                  }}
+                >
+                  Price per lesson
+                </FormLabel>
+              </FormControl>
+              <FormControl variant={"floating"}>
+                <Select onChange={handleSortByChange}>
+                  <option value="">Any</option>
+                  {sortData.map((item) => (
+                    <option key={item.id} value={item.sortItem}>
+                      {item.sortItem}
+                    </option>
+                  ))}
+                </Select>
+                <FormLabel
+                  fontWeight={"normal"}
+                  fontSize={{
+                    base: "16px",
+                    "2xl": "18px",
+                  }}
+                >
+                  Sort by
+                </FormLabel>
+              </FormControl>
+              <InputGroup>
+                <InputLeftElement>
+                  <SearchIcon color="black" />
+                </InputLeftElement>
+                <Input
+                  placeholder="Search by keywords or name"
+                  type="text"
+                  onChange={handleSearchInputChange}
+                  value={searchQuery}
+                  borderColor={"gray.100"}
+                />
+                <InputRightElement
+                  onClick={() => setSearchQuery("")}
+                  _hover={{ cursor: "pointer" }}
+                >
+                  <CloseIcon color="black" />
+                </InputRightElement>
+              </InputGroup>
             </Grid>
-          ) : (
-            <Center>
-              <VStack alignItems={"center"} justifyContent={"center"}>
-                <Image h={"400px"} src={NoTutor} />
-                <Text variant={"heading1"} color={"gray.400"}>
-                  Looks like no tutors are available.
-                </Text>
-                <Text variant={"heading2"} color={"gray.100"}>
-                  Try removing filters
-                </Text>
-              </VStack>
-            </Center>
-          )}
-        </Box>
-      </VStack>
-      <Link to="/map">
-        <Button
-          pos={"fixed"}
-          zIndex={12}
-          left={"48%"}
-          borderRadius={20}
-          bottom={5}
-          bgColor={"primary.0"}
-          _hover={{
-            transform: "scale(1.03)",
-            transition: "transform 0.3s ease-in-out",
-          }}
-          _active={{
-            transform: "scale(1)",
-            transition: "transform 0.3s ease-in-out",
-          }}
-          color={"white"}
-          rightIcon={<FontAwesomeIcon icon={faMap} />}
-        >
-          Show Map
-        </Button>
-      </Link>
+            <Box pos={"relative"}>
+              {tutors.length > 0 ? (
+                <Grid
+                  gap={"16px"}
+                  templateColumns={{
+                    lg: "repeat(5, 1fr)",
+                    md: "repeat(3, 1fr)",
+                    sm: "repeat(1, 1fr)",
+                  }}
+                >
+                  {tutors?.map((tutor) => (
+                    <TutorCard key={tutor._id} tutor={tutor} />
+                  ))}
+                </Grid>
+              ) : (
+                <Center>
+                  <VStack alignItems={"center"} justifyContent={"center"}>
+                    <Image h={"400px"} src={NoTutor} />
+                    <Text variant={"heading1"} color={"gray.400"}>
+                      Looks like no tutors are available.
+                    </Text>
+                    <Text variant={"heading2"} color={"gray.100"}>
+                      Try removing filters
+                    </Text>
+                  </VStack>
+                </Center>
+              )}
+            </Box>
+          </VStack>
+          <Link to="/map">
+            <Button
+              pos={"fixed"}
+              zIndex={12}
+              left={"48%"}
+              borderRadius={20}
+              bottom={5}
+              bgColor={"primary.0"}
+              _hover={{
+                transform: "scale(1.03)",
+                transition: "transform 0.3s ease-in-out",
+              }}
+              _active={{
+                transform: "scale(1)",
+                transition: "transform 0.3s ease-in-out",
+              }}
+              color={"white"}
+              rightIcon={<FontAwesomeIcon icon={faMap} />}
+            >
+              Show Map
+            </Button>
+          </Link>
+        </>
+      )}
     </PanelLayout>
   );
 };
