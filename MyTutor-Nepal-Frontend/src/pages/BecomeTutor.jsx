@@ -194,6 +194,7 @@ const BecomeTutor = () => {
                     Enter your location
                   </Text>
                   <PlaceAutocomplete
+                    isBecomeTutor={true}
                     address={address}
                     setAddress={setAddress}
                     setCoordinates={setCoordinates}

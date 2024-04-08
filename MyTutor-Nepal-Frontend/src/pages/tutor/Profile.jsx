@@ -159,7 +159,7 @@ const Profile = () => {
                 {tutor?.teachingInfo?.map((item, index) => (
                   <HStack gap={6} key={index}>
                     <Bundle title={"Subject"} subtitle={item.subject} />
-                    <Bundle title={"Price"} subtitle={item.price} />
+                    <Bundle title={"Fee per class"} subtitle={item.price} />
                     <Bundle title={"Proficiency"} subtitle={item.proficiency} />
                   </HStack>
                 ))}

@@ -87,5 +87,11 @@ router.get(
   authMiddleware.isStudent,
   userController.getUserOngoingAppointments
 );
+router.post(
+  "/khalti-api",
+  // authMiddleware.authMiddleware,
+  // authMiddleware.isStudent,
+  userController.khaltiRequest
+);
 
 module.exports = router;

@@ -42,7 +42,7 @@ function startCronJob() {
   });
 
   //mark missed assignment as missed
-  cron.schedule("*/5 * * * * *", async () => {
+  cron.schedule("0 */5 * * * *", async () => {
     try {
       const currentDate = moment().utc().format("YYYY-MM-DD HH:mm:ss");
       const missedAssignments = await Assignment.find({

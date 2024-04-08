@@ -56,7 +56,9 @@ const RequireAuth = ({ children, userRoles }) => {
     } else {
       return children;
     }
-  } else {
+  } 
+  //causing issue when reloading because global state is initially empty
+  else {
     return <Navigate to="/login" />;
   }
 };

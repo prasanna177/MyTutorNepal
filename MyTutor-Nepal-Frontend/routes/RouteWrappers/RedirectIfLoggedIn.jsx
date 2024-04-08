@@ -38,7 +38,7 @@ const RedirectIfLoggedIn = ({ children }) => {
       getUser();
     }
   }, [user, getUser]);
-
+  console.log(user, "user");
   if (localStorage.getItem("token")) {
     if (user?.role === "student") {
       return <Navigate to="/" />;

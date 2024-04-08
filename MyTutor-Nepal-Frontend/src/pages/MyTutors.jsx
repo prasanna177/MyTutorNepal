@@ -15,12 +15,12 @@ const MyTutors = () => {
   const columnHelper = createColumnHelper();
 
   const columns = [
-    columnHelper.accessor("studentName", {
-      header: "Student Name",
+    columnHelper.accessor("tutorName", {
+      header: "Tutor Name",
       cell: (row) => {
         return (
           <Text variant={"tableBody"}>
-            {row.row.original.userInfo.fullName}
+            {row.row.original.tutorInfo.fullName}
           </Text>
         );
       },
@@ -51,7 +51,7 @@ const MyTutors = () => {
         console.log(trialEndDate,'ted')
         const currentDate = moment().startOf("day");
 
-        const remainingDays = trialEndDate.diff(currentDate, "days");
+        const remainingDays = trialEndDate.diff(currentDate, "days")
 
         return (
           <Text variant={"tableBody"}>

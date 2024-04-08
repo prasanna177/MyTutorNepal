@@ -4,6 +4,7 @@ import Home from "../src/pages/Home";
 import MapPage from "../src/pages/Map";
 import MyAssignments from "../src/pages/MyAssignments";
 import MyTutors from "../src/pages/MyTutors";
+import PaymentSuccess from "../src/pages/PaymentSuccess";
 import UserAppointmentInfo from "../src/pages/UserAppointmentInfo";
 import UserAppointments from "../src/pages/UserAppointments";
 import UserProfile from "../src/pages/UserProfile";
@@ -52,6 +53,11 @@ export const studentRoutes = [
   {
     path: "/student/mytutors",
     element: <MyTutors />,
+    availability: ["student"],
+  },
+  {
+    path: "/payment-success/:bookingId",
+    element: <PaymentSuccess />,
     availability: ["student"],
   },
 ];

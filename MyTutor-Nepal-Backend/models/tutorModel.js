@@ -14,6 +14,10 @@ const tutorSchema = new mongoose.Schema(
       required: true,
       lowercase: true,
     },
+    dueMoney: {
+      type: Number,
+      default: 0,
+    },
     phone: {
       type: String,
       required: true,

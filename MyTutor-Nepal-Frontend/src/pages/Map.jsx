@@ -15,9 +15,12 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 
 const MapPage = () => {
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+  console.log(user)
   const [selectedLocationId, setSelectedLocaionId] = useState(null);
   const [tutors, setTutors] = useState([]);
 
@@ -27,7 +30,7 @@ const MapPage = () => {
         `${import.meta.env.VITE_SERVER_PORT}/api/user/getAllTutors`,
         {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"), 
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         }
       );
@@ -46,8 +49,8 @@ const MapPage = () => {
   const [viewPort, setViewPort] = useState({
     width: "100%",
     height: "100%",
-    latitude: 27.7291686,
-    longitude: 85.3335083,
+    latitude: user?.coordinates?.lat,
+    longitude: user?.coordinates?.lng,
     zoom: 18,
   });
   const mapBoxKey =

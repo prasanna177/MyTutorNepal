@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Grid, GridItem, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  Text,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -13,14 +20,18 @@ import PanelLayout from "../components/Layout/PanelLayout";
 import BookingBox from "../components/BookingBox";
 
 const BookTutor = () => {
+  const [paymentType, setPaymentType] = useState(null);
   const [tutor, setTutor] = useState([]);
   const [price, setPrice] = useState(0);
+  console.log(paymentType);
   const [subject, setSubject] = useState("");
 
   const { user } = useSelector((state) => state.user);
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getTutorData = async () => {
     try {
@@ -52,22 +63,35 @@ const BookTutor = () => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const handleBooking = async (data) => {
-    console.log(data);
-    try {
-      //to send total price to backend
-      const fromDate = moment(data.fromDate, "YYYY-MM-DD");
-      const toDate = moment(data.toDate, "YYYY-MM-DD");
-      const numberOfDays = toDate.diff(fromDate, "days") + 1;
-      dispatch(showLoading());
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/book-tutor`,
-        {
+  const handleBooking = async (data, paymentType) => {
+    // const fromDate = moment(data.fromDate, "YYYY-MM-DD");
+    // const toDate = moment(data.toDate, "YYYY-MM-DD");
+    // const numberOfDays = toDate.diff(fromDate, "days") + 1;
+    // console.log({
+    //   tutorId: params.tutorId,
+    //   userId: user._id,
+    //   tutorInfo: tutor,
+    //   userInfo: user,
+    //   feePerClass: price,
+    //   totalPrice: numberOfDays * price,
+    //   subject,
+    //   ...data,
+    // },'gg');
+    
+    if (paymentType === "Cash on delivery") {
+      console.log("cod");
+      try {
+        onClose();
+        const fromDate = moment(data.fromDate, "YYYY-MM-DD");
+        const toDate = moment(data.toDate, "YYYY-MM-DD");
+        const numberOfDays = toDate.diff(fromDate, "days") + 1;
+        const submissionData = {
           tutorId: params.tutorId,
           userId: user._id,
           tutorInfo: tutor,
@@ -75,27 +99,79 @@ const BookTutor = () => {
           feePerClass: price,
           totalPrice: numberOfDays * price,
           subject,
+          paymentType: "Cash on delivery",
           ...data,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+        };
+        console.log(submissionData,'smd');
+        dispatch(showLoading());
+        const res = await axios.post(
+          `${import.meta.env.VITE_SERVER_PORT}/api/user/book-tutor`,
+          submissionData,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        dispatch(hideLoading());
+        if (res.data.success) {
+          toast.success(res.data.message);
+        } else {
+          if (res.data.type && res.data.type === "no-phone-or-address") {
+            navigate(`/student/profile/${user._id}`);
+          }
+          toast.error(res.data.message);
         }
-      );
-      dispatch(hideLoading());
-      if (res.data.success) {
-        toast.success(res.data.message);
-      } else {
-        if (res.data.type && res.data.type === "no-phone-or-address") {
-          navigate(`/student/profile/${user._id}`);
-        }
-        toast.error(res.data.message);
+      } catch (error) {
+        dispatch(hideLoading());
+        console.log(error);
+        toast.error("Something went wrong");
       }
-    } catch (error) {
-      dispatch(hideLoading());
-      console.log(error);
-      toast.error("Something went wrong");
+    }
+
+    if (paymentType === "Khalti") {
+      console.log("kh");
+      try {
+        //to send total price to backend
+        const fromDate = moment(data.fromDate, "YYYY-MM-DD");
+        const toDate = moment(data.toDate, "YYYY-MM-DD");
+        const numberOfDays = toDate.diff(fromDate, "days") + 1;
+        const submissionData = {
+          tutorId: params.tutorId,
+          userId: user._id,
+          tutorInfo: tutor,
+          userInfo: user,
+          feePerClass: price,
+          totalPrice: numberOfDays * price,
+          subject,
+          paymentType: "Khalti",
+          ...data,
+        };
+        console.log(submissionData);
+        dispatch(showLoading());
+        const res = await axios.post(
+          `${import.meta.env.VITE_SERVER_PORT}/api/user/khalti-api`,
+          submissionData,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        dispatch(hideLoading());
+        if (res.data.success) {
+          window.location.href = `${res.data.data.payment_url}`;
+        } else {
+          if (res.data.type && res.data.type === "no-phone-or-address") {
+            navigate(`/student/profile/${user._id}`);
+          }
+          toast.error(res.data.message);
+        }
+      } catch (error) {
+        dispatch(hideLoading());
+        console.log(error);
+        toast.error("Something went wrong");
+      }
     }
   };
 
@@ -127,7 +203,13 @@ const BookTutor = () => {
         <GridItem colSpan={{ lg: 2, sm: 0, md: 1 }}>
           <VStack gap={5} alignItems={"stretch"}>
             <BookingBox
+              isOpen={isOpen}
+              onOpen={onOpen}
+              onClose={onClose}
               setPrice={setPrice}
+              paymentType={paymentType}
+              setPaymentType={setPaymentType}
+              getValues={getValues}
               setSubject={setSubject}
               errors={errors}
               handleBooking={handleBooking}
@@ -137,14 +219,14 @@ const BookTutor = () => {
             />
             <VStack alignItems={"stretch"}>
               <Text variant={"heading2"}>Tutor Location</Text>
-              <iframe
+              {/* <iframe
                 width="100%"
                 height="400"
                 src={`https://www.google.com/maps/embed/v1/place?key=${
                   import.meta.env.VITE_GOOGLE_API_KEY
                 }
             &q=${tutor?.coordinates?.lat},${tutor?.coordinates?.lng}`}
-              ></iframe>
+              ></iframe> */}
             </VStack>
           </VStack>
         </GridItem>

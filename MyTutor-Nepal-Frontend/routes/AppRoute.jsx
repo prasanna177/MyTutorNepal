@@ -23,8 +23,6 @@ const AppRoute = () => {
   ];
 
   const publicRoutes = [...authRoutes];
-  console.log(protectedRoutes, "protected");
-  console.log(publicRoutes, "public");
   return (
     <BrowserRouter>
       <ErrorBoundary FallbackComponent={ErrorPage}>

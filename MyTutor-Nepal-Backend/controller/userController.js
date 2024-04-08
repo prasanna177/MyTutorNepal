@@ -6,6 +6,9 @@ const moment = require("moment");
 const crypto = require("crypto");
 const query = require("../utils/getSentiment");
 const Assignment = require("../models/assignmentModel");
+const axios = require("axios");
+const Booking = require("../models/bookingModel");
+const { bookingValidation } = require("../utils/bookingValidation");
 
 module.exports.mark_notifications_as_seen = async (req, res) => {
   try {
@@ -70,12 +73,12 @@ module.exports.delete_all_notifications = async (req, res) => {
 module.exports.becomeTutor_post = async (req, res) => {
   try {
     const { address, nIdFrontUrl, nIdBackUrl, coordinates, userId } = req.body;
-    const existingTutor = await Tutor.find({userId: userId})
+    const existingTutor = await Tutor.find({ userId: userId });
     if (existingTutor.length > 0) {
       return res.status(200).send({
         success: false,
-        message: "You have already applied for tutor."
-      })
+        message: "You have already applied for tutor.",
+      });
     }
 
     if (!nIdFrontUrl || !nIdBackUrl) {
@@ -204,85 +207,10 @@ module.exports.updateProfile = async (req, res) => {
 
 module.exports.bookTutor_post = async (req, res) => {
   try {
-    const { fromDate, toDate, time, tutorInfo, userInfo } = req.body;
-    const { phone, coordinates } = userInfo;
-    if (!phone || !coordinates) {
-      return res.status(200).send({
-        success: false,
-        message:
-          "User must enter their phone number and address in edit profile before booking.",
-        type: "no-phone-or-address",
-      });
+    if (req.body.paymentType === "Cash on delivery") {
+      bookingValidation(req, res);
     }
-    
-    //if fromDate is before the current date
-    const currentDate = moment().startOf("day");
-    const isFromDateValid = moment(fromDate, "YYYY-MM-DD").isSameOrAfter(
-      currentDate
-    );
-    
-    if (!isFromDateValid) {
-      return res.status(200).send({
-        success: false,
-        message: "Start date has already passed.",
-      });
-    }
-    const tutorStartTime = moment(tutorInfo.timing.startTime, "HH:mm");
-    const tutorEndTime = moment(tutorInfo.timing.endTime, "HH:mm");
-    const bookingTime = moment(time, "HH:mm");
-    
-    //booking outside of tutor's timings
-    if (
-      bookingTime.isBefore(tutorStartTime) ||
-      bookingTime.isAfter(tutorEndTime)
-    ) {
-      return res.status(200).send({
-        success: false,
-        message: "Cannot book outside of tutor's available hours",
-      });
-    }
-
-    //if to date is before from date
-    const isDateValid = moment(toDate, "YYYY-MM-DD").isSameOrAfter(
-      moment(fromDate, "YYYY-MM-DD")
-    );
-
-    if (!isDateValid) {
-      return res.status(200).send({
-        success: false,
-        message: "Invalid date range. Please enter valid dates",
-      });
-    }
-
-    const fromTime = moment(time, "HH:mm").subtract(1, "hours").toISOString();
-    const toTime = moment(time, "HH:mm").add(1, "hours").toISOString();
-    const appointments = await Appointment.find({
-      tutorId: tutorInfo._id,
-      $or: [
-        {
-          $and: [
-            { time: { $gte: fromTime, $lte: toTime } },
-            { fromDate: { $lte: toDate } },
-            { toDate: { $gte: fromDate } },
-          ],
-        },
-        {
-          $and: [
-            { time: { $gte: fromTime, $lte: toTime } },
-            { fromDate: { $gte: toDate } },
-            { toDate: { $lte: fromDate } },
-          ],
-        },
-      ],
-    });
-
-    if (appointments.length > 0) {
-      return res.status(200).send({
-        success: false,
-        message: "Appointments not available at this time",
-      });
-    }
-
+    const { fromDate, toDate, time, userInfo, tutorInfo } = req.body;
     req.body.fromDate = moment(fromDate, "YYYY-MM-DD").toISOString();
     req.body.toDate = moment(toDate, "YYYY-MM-DD").toISOString();
     req.body.time = moment(time, "HH:mm").toISOString();
@@ -467,7 +395,7 @@ module.exports.getUserAssignments = async (req, res) => {
     console.log(assignments, "ass");
     res.status(200).send({
       success: true,
-      message: "Appointments fetched successfully.",
+      message: "Assignments fetched successfully.",
       data: assignments,
     });
   } catch (error) {
@@ -561,6 +489,57 @@ module.exports.getUserOngoingAppointments = async (req, res) => {
       success: false,
       error,
       message: "Error while fetching appointments.",
+    });
+  }
+};
+
+module.exports.khaltiRequest = async (req, res) => {
+  try {
+    bookingValidation(req, res);
+    const booking = new Booking(req.body);
+    booking.save();
+    const bookingId = booking._id;
+
+    const { userInfo, totalPrice } = req.body;
+    const payload = {
+      return_url: `${process.env.CLIENT_PORT}/payment-success/${bookingId}}`,
+      website_url: `${process.env.CLIENT_PORT}`,
+      amount: totalPrice * 100,
+      purchase_order_id: crypto.randomBytes(16).toString("hex"),
+      purchase_order_name: "Book tutor",
+      customer_info: {
+        name: userInfo.fullName,
+        email: userInfo.email,
+        phone: userInfo.phone,
+      },
+    };
+    const khaltiResponse = await axios.post(
+      "https://a.khalti.com/api/v2/epayment/initiate/",
+      payload,
+      {
+        headers: {
+          Authorization: `Key ${process.env.KHALTI_LIVE_SECRET_KEY}`,
+        },
+      }
+    );
+    console.log(khaltiResponse, "res");
+    if (khaltiResponse) {
+      res.status(200).send({
+        success: true,
+        data: khaltiResponse.data,
+      });
+    } else {
+      res.status(200).send({
+        success: false,
+        message: "Somethings went wrong",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(200).send({
+      success: false,
+      message: "Something went wrong",
+      error: error.message,
     });
   }
 };
