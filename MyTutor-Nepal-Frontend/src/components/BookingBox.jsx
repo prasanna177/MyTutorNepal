@@ -55,7 +55,7 @@ const BookingBox = ({
           })}
         >
           <ModalHeader>
-            <Text>Choose payment method</Text>
+            <Text variant={"heading2"}>Choose payment method</Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -65,8 +65,12 @@ const BookingBox = ({
               value={paymentType}
             >
               <VStack alignItems={"start"}>
-                <Radio value="Khalti">Pay with khalti</Radio>
-                <Radio value="Cash on delivery">Pay in person</Radio>
+                <Radio value="Khalti">
+                  <Text variant={"heading3"}>Pay with khalti</Text>
+                </Radio>
+                <Radio value="Cash on delivery">
+                  <Text variant={"heading3"}>Pay in person</Text>
+                </Radio>
               </VStack>
             </RadioGroup>
           </ModalBody>

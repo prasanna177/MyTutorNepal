@@ -54,7 +54,7 @@ const TutorPayment = () => {
       cell: (row) => {
         return (
           <HStack gap={2}>
-            <IconCheck label={"Mark as paid"} handleClick={() => {}} />
+            <IconCheck label={"Mark as paid"} handleClick={() => {console.log(row)} } />
           </HStack>
         );
       },

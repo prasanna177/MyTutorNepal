@@ -169,6 +169,7 @@ const BookTutor = () => {
             <VStack gap={5} alignItems={"stretch"}>
               <Box borderRadius={10} p={5} borderWidth={1}>
                 <VStack alignItems={"stretch"}>
+                <Text variant={"heading2"}>About tutor</Text>
                   <HStack alignItems={"start"}>
                     <ImageComponent
                       isProfileImg={true}
@@ -240,7 +241,14 @@ const BookTutor = () => {
                   <Box>
                     <Text variant={"heading2"}>Professional Information</Text>
                   </Box>
-                  <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+                  <Grid
+                    templateColumns={{
+                      lg: "repeat(3, 1fr)",
+                      md: "repeat(2, 1fr)",
+                      sm: "repeat(1, 1fr)",
+                    }}
+                    gap={"16px"}
+                  >
                     {tutor?.teachingInfo?.map((item, index) => (
                       <HStack gap={6} key={index}>
                         <Bundle title={"Subject"} subtitle={item.subject} />

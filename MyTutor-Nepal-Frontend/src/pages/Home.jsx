@@ -29,8 +29,6 @@ import NoTutor from "../assets/images/NoTutor.png";
 
 // import SpinnerComponenet from "../components/SpinnerComponent";
 
-
-
 const Home = () => {
   const [loading, setLoading] = useState(false);
   console.log(loading);

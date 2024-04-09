@@ -17,7 +17,7 @@ const ImageComponent = ({
   };
   return (
     <VStack alignItems={"start"}>
-      <Text variant={"title1"}>{title}</Text>
+      {title && <Text variant={"title1"}>{title}</Text>}
       {src ? (
         <Image
           borderRadius={borderRadius}
