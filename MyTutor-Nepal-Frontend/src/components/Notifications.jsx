@@ -93,7 +93,7 @@ const Notifications = () => {
           </Box>
         </Flex>
       </MenuButton>
-      <MenuList
+      <MenuList zIndex={100}
         h={"500px"}
         w={"400px"}
         overflowY={"auto"}

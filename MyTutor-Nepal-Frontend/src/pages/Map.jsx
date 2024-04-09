@@ -158,7 +158,12 @@ const MapPage = () => {
   return (
     <Layout>
       <VStack alignItems={"stretch"}>
-        <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+        <Grid
+          p={5}
+          templateColumns="repeat(3, 1fr)"
+          style={{ boxShadow: "0px 0px 5px rgba(0,0,0,0.15)" }}
+          gap={"16px"}
+        >
           <InputGroup>
             <InputLeftElement>
               <SearchIcon color="black" />
@@ -222,7 +227,7 @@ const MapPage = () => {
           </FormControl>
         </Grid>
       </VStack>
-      <Box mt={2} height={"80vh"} w={"96vw"} pos={"relative"}>
+      <Box height={"76vh"} w={"96vw"} pos={"relative"}>
         <Link to="/">
           <Button
             pos={"fixed"}

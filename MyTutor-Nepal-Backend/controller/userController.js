@@ -173,10 +173,22 @@ module.exports.getUserById = async (req, res) => {
 module.exports.getAllTutors = async (req, res) => {
   try {
     const tutors = await Tutor.find({ status: "Approved" });
+
+    const tutorsWithRatings = [];
+
+    for (let i = 0; i < tutors.length; i++) {
+      const tutor = tutors[i];
+      const tutorRatings = await Rating.find({ tutorId: tutor._id });
+      tutorsWithRatings.push({
+        ...tutor.toObject(),
+        ratings: tutorRatings,
+      });
+    }
+
     res.status(200).send({
       success: true,
       message: "Tutors fetched successfully.",
-      data: tutors,
+      data: tutorsWithRatings,
     });
   } catch (error) {
     console.log(error);

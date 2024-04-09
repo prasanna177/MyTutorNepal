@@ -76,7 +76,7 @@ const Profile = () => {
                   <Text variant={"heading2"}>
                     {tutor?.fullName}
                   </Text>
-                  <Text variant={"subtitle2"}>Rs {tutor?.duePayment} due</Text>
+                  <Text variant={"subtitle2"}>Rs {tutor?.dueAmount} due</Text>
                   <HStack w={"100%"}>
                     <div
                       data-tooltip-id="my-tooltip"

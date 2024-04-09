@@ -14,6 +14,19 @@ module.exports.getTutorInfo = async (req, res) => {
     const tutorRatings = await Rating.find({ tutorId: tutor._id });
     tutor.ratings = tutorRatings;
 
+    const tutorAppointments = await Appointment.find({ tutorId: tutor._id });
+    const dueAmount = tutorAppointments.reduce((total, appointment) => {
+      if (
+        appointment.status !== "Pending" &&
+        (appointment.paymentStatus === "Pending" ||
+          appointment.paymentStatus === "On the way")
+      ) {
+        total += appointment.totalPrice;
+      }
+      return total;
+    }, 0);
+    tutor.dueAmount = dueAmount;
+
     res.status(200).send({
       success: true,
       message: "Tutor data fetched successfully",
@@ -356,6 +369,26 @@ module.exports.gradeAssignment = async (req, res) => {
       success: false,
       error,
       message: "Error in grading assignments",
+    });
+  }
+};
+
+module.exports.markAsPaid = async (req, res) => {
+  try {
+    const { appointmentId } = req.body;
+    await Appointment.findByIdAndUpdate(appointmentId, {
+      paymentStatus: "Paid",
+    });
+    res.status(201).send({
+      success: true,
+      message: "Marked as paid",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while marking appointment as paid",
+      error,
     });
   }
 };

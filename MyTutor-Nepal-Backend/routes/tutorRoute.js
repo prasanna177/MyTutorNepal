@@ -66,5 +66,11 @@ router.post(
   authMiddleware.isTutor,
   tutorController.gradeAssignment
 );
+router.post(
+  "/mark-as-paid",
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutor,
+  tutorController.markAsPaid
+);
 
 module.exports = router;

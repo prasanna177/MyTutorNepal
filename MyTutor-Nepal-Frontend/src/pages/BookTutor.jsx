@@ -243,7 +243,7 @@ const BookTutor = () => {
                   </Box>
                   <Grid
                     templateColumns={{
-                      lg: "repeat(3, 1fr)",
+                      lg: "repeat(2, 1fr)",
                       md: "repeat(2, 1fr)",
                       sm: "repeat(1, 1fr)",
                     }}

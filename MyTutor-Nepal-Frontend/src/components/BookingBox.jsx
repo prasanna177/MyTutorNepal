@@ -85,7 +85,7 @@ const BookingBox = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Box p={"30px"} boxShadow={"lg"}>
+      <Box p={"30px"} style={{ boxShadow: "0px 0px 5px rgba(0,0,0,0.15)" }}>
         <Flex gap={2} flexDir={"column"}>
           <Text variant={"heading2"}>Book tutor now</Text>
           <TextField

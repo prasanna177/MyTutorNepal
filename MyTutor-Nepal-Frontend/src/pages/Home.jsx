@@ -175,7 +175,30 @@ const Home = () => {
       ) : ( */}
       <>
         <VStack gap={8} alignItems={"stretch"}>
-          <Grid templateColumns="repeat(3, 1fr)" gap={"16px"}>
+          <Grid
+            p={5}
+            style={{ boxShadow: "0px 0px 5px rgba(0,0,0,0.15)" }}
+            templateColumns="repeat(4, 1fr)"
+            gap={"16px"}
+          >
+            <InputGroup>
+              <InputLeftElement>
+                <SearchIcon color="black" />
+              </InputLeftElement>
+              <Input
+                placeholder="Search by keywords or name"
+                type="text"
+                onChange={handleSearchInputChange}
+                value={searchQuery}
+                borderColor={"gray.100"}
+              />
+              <InputRightElement
+                onClick={() => setSearchQuery("")}
+                _hover={{ cursor: "pointer" }}
+              >
+                <CloseIcon color="black" />
+              </InputRightElement>
+            </InputGroup>
             <FormControl variant={"floating"}>
               <Select value={category} onChange={handleCategoryChange}>
                 <option value="">Any</option>
@@ -238,24 +261,6 @@ const Home = () => {
                 Sort by
               </FormLabel>
             </FormControl>
-            <InputGroup>
-              <InputLeftElement>
-                <SearchIcon color="black" />
-              </InputLeftElement>
-              <Input
-                placeholder="Search by keywords or name"
-                type="text"
-                onChange={handleSearchInputChange}
-                value={searchQuery}
-                borderColor={"gray.100"}
-              />
-              <InputRightElement
-                onClick={() => setSearchQuery("")}
-                _hover={{ cursor: "pointer" }}
-              >
-                <CloseIcon color="black" />
-              </InputRightElement>
-            </InputGroup>
           </Grid>
           <Box pos={"relative"}>
             {tutors.length > 0 ? (

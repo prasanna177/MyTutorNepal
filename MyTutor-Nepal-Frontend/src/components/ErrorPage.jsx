@@ -1,11 +1,10 @@
 // Error page
 
-import { Box, Button, Container, Flex, Image, Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Box, Container, Flex, Image, Text } from "@chakra-ui/react";
 import NoData from "../assets/images/NoData.png";
+import NormalButton from "./common/Button";
 
 const ErrorPage = ({ error, resetErrorBoundary }) => {
-  const navigate = useNavigate();
   return (
     <Container>
       <Flex justifyContent={"center"}>
@@ -16,14 +15,15 @@ const ErrorPage = ({ error, resetErrorBoundary }) => {
               {error.message}
             </Text>
             <Flex justifyContent={"center"}>
-              <Button
+              <NormalButton
+                color={"white"}
+                bgColor={"primary.0"}
+                text={"Go back"}
                 onClick={() => {
-                  navigate("/");
+                  window.history.back();
                   resetErrorBoundary();
                 }}
-              >
-                go Back
-              </Button>
+              />
             </Flex>
           </Box>
         </Flex>
