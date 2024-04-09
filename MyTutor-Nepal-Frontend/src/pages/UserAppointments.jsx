@@ -81,30 +81,14 @@ const UserAppointments = () => {
         );
       },
     }),
-    columnHelper.accessor(
-      (row) => {
-        const toDate = moment(row.toDate, "YYYY-MM-DD");
-        const nowDate = moment(new Date(), "YYYY-MM-DD").toISOString();
-        const remainingDays = toDate.diff(nowDate, "days") + 1;
-        if (remainingDays <= 0) {
-          return 0;
-        }
-        return remainingDays;
-      },
-      {
-        header: "Remaining days",
-      }
-    ),
-    columnHelper.accessor("paymentStatus", {
-      header: "Payment",
-    }),
+
     columnHelper.accessor("action", {
       header: "ACTION",
       cell: (row) => {
         return (
           <HStack gap={2}>
             <IconView
-            label={'View'}
+              label={"View"}
               handleClick={() =>
                 navigate(`/student/appointments/${row.row.original._id}`)
               }

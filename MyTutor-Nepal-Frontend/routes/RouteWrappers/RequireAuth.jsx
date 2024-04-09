@@ -4,6 +4,7 @@ import { setUser } from "../../src/redux/features/userSlice";
 import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const RequireAuth = ({ children, userRoles }) => {
   const dispatch = useDispatch();
@@ -43,7 +44,8 @@ const RequireAuth = ({ children, userRoles }) => {
 
   let currentUserRole;
   if (localStorage.getItem("token")) {
-    currentUserRole = user?.role;
+    const decodedToken = jwtDecode(localStorage.getItem("token"));
+    currentUserRole = decodedToken?.role;
   }
   console.log(currentUserRole, "crr");
   if (currentUserRole) {
@@ -56,7 +58,7 @@ const RequireAuth = ({ children, userRoles }) => {
     } else {
       return children;
     }
-  } 
+  }
   //causing issue when reloading because global state is initially empty
   else {
     return <Navigate to="/login" />;

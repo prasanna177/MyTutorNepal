@@ -26,6 +26,7 @@ const Profile = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  console.log(tutor)
 
   const getTutorInfo = async () => {
     try {
@@ -72,8 +73,10 @@ const Profile = () => {
                   src={tutor?.profilePicUrl}
                 />
                 <VStack alignItems={"flex-start"}>
-                  <Text variant={"heading2"}>{tutor?.fullName}</Text>
-                  <Text variant={"subtitle2"}>{tutor?.phone}</Text>
+                  <Text variant={"heading2"}>
+                    {tutor?.fullName}
+                  </Text>
+                  <Text variant={"subtitle2"}>Rs {tutor?.duePayment} due</Text>
                   <HStack w={"100%"}>
                     <div
                       data-tooltip-id="my-tooltip"

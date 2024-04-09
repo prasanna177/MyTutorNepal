@@ -12,10 +12,10 @@ router.post(
 );
 
 router.post(
-  "/deleteAppointmentById",
+  "/cancel-appointment",
   authMiddleware.authMiddleware,
   authMiddleware.isTutor,
-  appointmentController.deleteAppointmentById
+  appointmentController.cancelAppointment
 );
 
 module.exports = router;

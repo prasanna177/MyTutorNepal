@@ -29,28 +29,39 @@ module.exports.getAppointmentById = async (req, res) => {
   }
 };
 
-module.exports.deleteAppointmentById = async (req, res) => {
+module.exports.cancelAppointment = async (req, res) => {
   try {
-    const appointment = await Appointment.findOneAndDelete({
-      _id: req.body.appointmentId,
-    });
+    const { appointmentId } = req.body;
+    const appointment = await Appointment.findById(appointmentId);
 
-    if (!appointment) {
-      return res.status(200).send({
-        success: false,
-        message: "Appointment not found",
-      });
-    }
-    const user = await User.findById(appointment.userId);
+    const cancelledAppointment = await Appointment.findByIdAndUpdate(
+      appointmentId,
+      {
+        status: "cancelled",
+      }
+    );
+
+    const user = await User.findById(cancelledAppointment.userId);
     const tutor = await Tutor.findById(appointment.tutorId);
-    user.unseenNotification.unshift({
-      id: crypto.randomBytes(16).toString("hex"),
-      type: "Appointment-Rejected",
-      message: `Your appointment with ${tutor.fullName} has been rejected.`,
-      onClickPath: "/student/appointments",
-      date: new Date(),
-    });
-    await user.save();
+    if (cancelledAppointment.paymentType === "Khalti") {
+      user.unseenNotification.unshift({
+        id: crypto.randomBytes(16).toString("hex"),
+        type: "Appointment-Rejected",
+        message: `Your appointment with ${tutor.fullName} has been rejected. Your paid amount will be refunded soon.`,
+        onClickPath: "/student/appointments",
+        date: new Date(),
+      });
+      await user.save();
+    } else if (cancelledAppointment.paymentType === "Cash on delivery") {
+      user.unseenNotification.unshift({
+        id: crypto.randomBytes(16).toString("hex"),
+        type: "Appointment-Rejected",
+        message: `Your appointment with ${tutor.fullName} has been rejected.`,
+        onClickPath: "/student/appointments",
+        date: new Date(),
+      });
+      await user.save();
+    }
 
     res.status(200).send({
       success: true,

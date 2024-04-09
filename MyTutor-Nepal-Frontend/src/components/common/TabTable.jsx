@@ -27,20 +27,20 @@ const TabTable = ({
         <Tab>
           <HStack>
             <Text>{firstTab}</Text>
-            <Box>({firstData.length})</Box>
+            <Box>({firstData && firstData.length})</Box>
           </HStack>
         </Tab>
         <Tab>
           <HStack>
             <Text>{secondTab}</Text>
-            <Box>({secondData.length})</Box>
+            <Box>({secondData && secondData?.length})</Box>
           </HStack>
         </Tab>
         {hasThreeTabs && (
           <Tab>
             <HStack>
               <Text>{thirdTab}</Text>
-              <Box>({thirdData.length})</Box>
+              <Box>({thirdData?.length})</Box>
             </HStack>
           </Tab>
         )}
@@ -48,12 +48,12 @@ const TabTable = ({
 
       <TabPanels>
         <TabPanel>
-          <DataTable columns={columns} data={firstData} isLoading={isLoading} />
+          <DataTable columns={columns} data={firstData && firstData} isLoading={isLoading} />
         </TabPanel>
         <TabPanel>
           <DataTable
             columns={columns}
-            data={secondData}
+            data={secondData && secondData}
             isLoading={isLoading}
           />
         </TabPanel>
@@ -61,7 +61,7 @@ const TabTable = ({
           <TabPanel>
             <DataTable
               columns={columns}
-              data={thirdData}
+              data={thirdData && thirdData}
               isLoading={isLoading}
             />
           </TabPanel>

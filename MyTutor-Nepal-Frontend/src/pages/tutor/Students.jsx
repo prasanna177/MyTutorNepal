@@ -75,6 +75,12 @@ const Students = () => {
     columnHelper.accessor("totalPrice", {
       header: "Total Price",
     }),
+    columnHelper.accessor("paymentStatus", {
+      header: "Payment status",
+    }),
+    columnHelper.accessor("paymentType", {
+      header: "Payment type",
+    }),
     columnHelper.accessor("subject", {
       header: "Subject",
     }),

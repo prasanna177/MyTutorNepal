@@ -44,7 +44,7 @@ const AppointmentInfo = () => {
       const res = await axios.post(
         `${
           import.meta.env.VITE_SERVER_PORT
-        }/api/appointment/deleteAppointmentById`,
+        }/api/appointment/cancel-appointment`,
         { appointmentId },
         {
           headers: {
@@ -142,6 +142,8 @@ const AppointmentInfo = () => {
             />
             <Bundle title={"Total Price"} subtitle={appointment?.totalPrice} />
             <Bundle title={"Message"} subtitle={appointment?.message} />
+            <Bundle title={"Payment status"} subtitle={appointment?.paymentStatus} />
+            <Bundle title={"Payment method"} subtitle={appointment?.paymentType} />
           </Grid>
 
           {/* <div style={{ width: "100%" }}>

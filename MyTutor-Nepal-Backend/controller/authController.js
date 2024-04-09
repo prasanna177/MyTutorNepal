@@ -76,9 +76,13 @@ module.exports.login_post = async (req, res) => {
           success: false,
         });
       }
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: maxAge,
-      });
+      const token = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: maxAge,
+        }
+      );
       res
         .status(200)
         .send({ message: "Login successful", success: true, token });

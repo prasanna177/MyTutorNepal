@@ -26,11 +26,14 @@ import { filterPrices } from "../data/filterPrice";
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { sortData } from "../data/sortData";
 import NoTutor from "../assets/images/NoTutor.png";
+
 // import SpinnerComponenet from "../components/SpinnerComponent";
+
+
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
-  console.log(loading)
+  console.log(loading);
   const [tutors, setTutors] = useState([]);
   const [category, setCategory] = useState("");
   const [pricePerLessonObj, setPricePerLessonObj] = useState(null);

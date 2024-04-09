@@ -6,10 +6,10 @@ import { HStack, Text } from "@chakra-ui/react";
 import TabTable from "../components/common/TabTable";
 import moment from "moment";
 import axios from "axios";
+import { DataTable } from "../components/DataTable";
 
 const MyTutors = () => {
-  const [trialAppointments, setTrialAppointments] = useState([]);
-  const [paidAppointments, setPaidAppointments] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const columnHelper = createColumnHelper();
@@ -43,36 +43,9 @@ const MyTutors = () => {
         );
       },
     }),
-    columnHelper.accessor("trialPeriod", {
-      header: "Trial Period",
-      cell: (row) => {
-        const fromDate = moment(row.row.original.fromDate, "YYYY-MM-DD");
-        const trialEndDate = fromDate.clone().add(3, "days"); // because from date is mutable
-        console.log(trialEndDate,'ted')
-        const currentDate = moment().startOf("day");
 
-        const remainingDays = trialEndDate.diff(currentDate, "days")
-
-        return (
-          <Text variant={"tableBody"}>
-            {remainingDays > 0 ? `${remainingDays} day(s) left` : "Expired"}
-          </Text>
-        );
-      },
-    }),
-
-    columnHelper.accessor("totalPrice", {
-      header: "Total Price",
-    }),
     columnHelper.accessor("subject", {
       header: "Subject",
-    }),
-    columnHelper.accessor("action", {
-      header: "ACTION",
-      cell: (row) => {
-        console.log(row.row.original, "row");
-        return <HStack gap={2}></HStack>;
-      },
     }),
   ];
 
@@ -93,14 +66,7 @@ const MyTutors = () => {
         console.log(res, "res ");
         setIsLoading(false);
         if (res.data.success) {
-          const trialAppointments = res.data.data.filter(
-            (appointment) => appointment.paymentStatus === "Pending"
-          );
-          const paidAppointments = res.data.data.filter(
-            (appointment) => appointment.paymentStatus === "Paid"
-          );
-          setTrialAppointments(trialAppointments);
-          setPaidAppointments(paidAppointments);
+          setAppointments(res.data.data);
         }
       } catch (error) {
         setIsLoading(false);
@@ -111,14 +77,7 @@ const MyTutors = () => {
   }, []);
   return (
     <PanelLayout title={"My tutors"}>
-      <TabTable
-        firstData={trialAppointments}
-        firstTab={"Trial appointments"}
-        secondData={paidAppointments}
-        secondTab={"Active appointments"}
-        columns={columns}
-        isLoading={isLoading}
-      />
+      <DataTable data={appointments} columns={columns} isLoading={isLoading} />
     </PanelLayout>
   );
 };

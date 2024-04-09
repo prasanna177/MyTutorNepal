@@ -14,7 +14,7 @@ const tutorSchema = new mongoose.Schema(
       required: true,
       lowercase: true,
     },
-    dueMoney: {
+    duePayment: {
       type: Number,
       default: 0,
     },

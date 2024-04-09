@@ -70,39 +70,24 @@ const BookTutor = () => {
   });
 
   const handleBooking = async (data, paymentType) => {
-    // const fromDate = moment(data.fromDate, "YYYY-MM-DD");
-    // const toDate = moment(data.toDate, "YYYY-MM-DD");
-    // const numberOfDays = toDate.diff(fromDate, "days") + 1;
-    // console.log({
-    //   tutorId: params.tutorId,
-    //   userId: user._id,
-    //   tutorInfo: tutor,
-    //   userInfo: user,
-    //   feePerClass: price,
-    //   totalPrice: numberOfDays * price,
-    //   subject,
-    //   ...data,
-    // },'gg');
-    
-    if (paymentType === "Cash on delivery") {
-      console.log("cod");
-      try {
-        onClose();
-        const fromDate = moment(data.fromDate, "YYYY-MM-DD");
-        const toDate = moment(data.toDate, "YYYY-MM-DD");
-        const numberOfDays = toDate.diff(fromDate, "days") + 1;
-        const submissionData = {
-          tutorId: params.tutorId,
-          userId: user._id,
-          tutorInfo: tutor,
-          userInfo: user,
-          feePerClass: price,
-          totalPrice: numberOfDays * price,
-          subject,
-          paymentType: "Cash on delivery",
-          ...data,
-        };
-        console.log(submissionData,'smd');
+    try {
+      //to send total price to backend
+      const fromDate = moment(data.fromDate, "YYYY-MM-DD");
+      const toDate = moment(data.toDate, "YYYY-MM-DD");
+      const numberOfDays = toDate.diff(fromDate, "days") + 1;
+      const submissionData = {
+        tutorId: params.tutorId,
+        userId: user._id,
+        tutorInfo: tutor,
+        userInfo: user,
+        feePerClass: price,
+        totalPrice: numberOfDays * price,
+        subject,
+        paymentType,
+        ...data,
+      };
+      if (paymentType === "Cash on delivery") {
+        console.log(submissionData, "smd");
         dispatch(showLoading());
         const res = await axios.post(
           `${import.meta.env.VITE_SERVER_PORT}/api/user/book-tutor`,
@@ -122,35 +107,13 @@ const BookTutor = () => {
           }
           toast.error(res.data.message);
         }
-      } catch (error) {
-        dispatch(hideLoading());
-        console.log(error);
-        toast.error("Something went wrong");
       }
-    }
 
-    if (paymentType === "Khalti") {
-      console.log("kh");
-      try {
-        //to send total price to backend
-        const fromDate = moment(data.fromDate, "YYYY-MM-DD");
-        const toDate = moment(data.toDate, "YYYY-MM-DD");
-        const numberOfDays = toDate.diff(fromDate, "days") + 1;
-        const submissionData = {
-          tutorId: params.tutorId,
-          userId: user._id,
-          tutorInfo: tutor,
-          userInfo: user,
-          feePerClass: price,
-          totalPrice: numberOfDays * price,
-          subject,
-          paymentType: "Khalti",
-          ...data,
-        };
+      if (paymentType === "Khalti") {
         console.log(submissionData);
         dispatch(showLoading());
         const res = await axios.post(
-          `${import.meta.env.VITE_SERVER_PORT}/api/user/khalti-api`,
+          `${import.meta.env.VITE_SERVER_PORT}/api/khalti/khalti-api`,
           submissionData,
           {
             headers: {
@@ -167,11 +130,11 @@ const BookTutor = () => {
           }
           toast.error(res.data.message);
         }
-      } catch (error) {
-        dispatch(hideLoading());
-        console.log(error);
-        toast.error("Something went wrong");
       }
+    } catch (error) {
+      dispatch(hideLoading());
+      console.log(error);
+      toast.error("Something went wrong");
     }
   };
 
@@ -187,6 +150,7 @@ const BookTutor = () => {
         <GridItem colSpan={{ lg: 5, sm: 7, md: 6 }}>
           <Box>
             <Text>Name: {tutor?.fullName}</Text>
+            <Text>Email: {tutor?.email}</Text>
             <Text>
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Laboriosam illum repellat quod repudiandae ad similique et velit

@@ -9,14 +9,14 @@ const Sidebar = () => {
   const location = useLocation();
   const TutorMenu = [
     {
-      name: "Home",
-      path: "/tutor",
-      icon: "fa-solid fa-house",
-    },
-    {
       name: "Students",
       path: "/tutor/students",
       icon: "fa-solid fa-users",
+    },
+    {
+      name: "Profile",
+      path: `/tutor/profile/${user?._id}`,
+      icon: "fa-regular fa-user",
     },
     {
       name: "Appointments",
@@ -24,9 +24,9 @@ const Sidebar = () => {
       icon: "fa-solid fa-calendar-check",
     },
     {
-      name: "Profile",
-      path: `/tutor/profile/${user?._id}`,
-      icon: "fa-regular fa-user",
+      name: "Pending Payment",
+      path: `/tutor/payment`,
+      icon: "fa-solid fa-money-bill",
     },
   ];
 
@@ -34,17 +34,12 @@ const Sidebar = () => {
     {
       name: "Home",
       path: "/",
-      icon: "fa-solid fa-house",
+      icon: "fa-solid fa-users",
     },
     {
       name: "My Tutor",
       path: "/student/mytutors",
       icon: "fa-solid fa-graduation-cap",
-    },
-    {
-      name: "Payment",
-      path: "/student/payment",
-      icon: "fa-solid fa-money-bill",
     },
     {
       name: "Bookings",
