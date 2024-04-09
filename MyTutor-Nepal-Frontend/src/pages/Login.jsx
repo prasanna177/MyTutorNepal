@@ -42,7 +42,7 @@ const Login = () => {
         `${import.meta.env.VITE_SERVER_PORT}/api/auth/login`,
         data
       );
-      // window.location.reload();
+      window.location.reload();
       dispatch(hideLoading());
       const { success, message } = response.data;
       if (success) {

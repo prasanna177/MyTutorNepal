@@ -1,6 +1,6 @@
 import { Box, Divider, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 import { AdminMenu } from "../data/sidebarData";
 
@@ -34,7 +34,7 @@ const Sidebar = () => {
     {
       name: "Home",
       path: "/",
-      icon: "fa-solid fa-users",
+      icon: "fa-solid fa-house",
     },
     {
       name: "My Tutor",
@@ -75,9 +75,7 @@ const Sidebar = () => {
     >
       <VStack>
         <Box maxW={"200px"}>
-          <Link to={"/"}>
-            <Image src={logo} w={"200px"} />
-          </Link>
+          <Image src={logo} w={"200px"} />
         </Box>
         <Divider />
         <Box w={"100%"} color={"gray.700"} fontSize={"lg"}>

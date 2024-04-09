@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import Map, { Marker, Popup } from "react-map-gl";
 import axios from "axios";
+import { FaGraduationCap } from "react-icons/fa";
+import { FiMapPin } from "react-icons/fi";
+
 import {
-  Badge,
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,7 +23,7 @@ import { useSelector } from "react-redux";
 const MapPage = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  console.log(user)
+  console.log(user);
   const [selectedLocationId, setSelectedLocaionId] = useState(null);
   const [tutors, setTutors] = useState([]);
 
@@ -87,6 +90,16 @@ const MapPage = () => {
           {...viewPort}
           onMove={(nextViewPort) => setViewPort(nextViewPort.viewPort)}
         >
+          <Marker
+            longitude={user?.coordinates?.lng}
+            latitude={user?.coordinates?.lat}
+            anchor="left"
+          >
+            <VStack>
+              <Text color="red">You are here</Text>
+              <FiMapPin color="red" size={40} />
+            </VStack>
+          </Marker>
           {tutors?.map((result, index) => (
             <Box key={index}>
               <Marker
@@ -94,18 +107,9 @@ const MapPage = () => {
                 latitude={result?.coordinates?.lat}
                 anchor="left"
               >
-                <Badge
-                  bgColor={
-                    result._id === selectedLocationId ? "black" : "primary.0"
-                  }
-                  color={"white"}
-                  px={3}
-                  py={2}
-                  borderRadius={20}
-                  onClick={() => handleMarkerClick(result._id)}
-                >
-                  <Text fontSize={11}>Rs. {result.feePerClass}</Text>
-                </Badge>
+                <Box onClick={() => handleMarkerClick(result._id)}>
+                  <FaGraduationCap color="#5B3B8C" size={40} />
+                </Box>
               </Marker>
               {result._id === selectedLocationId && (
                 <Popup

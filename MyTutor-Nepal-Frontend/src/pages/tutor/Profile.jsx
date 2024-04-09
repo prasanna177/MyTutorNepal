@@ -82,7 +82,7 @@ const Profile = () => {
                       data-tooltip-id="my-tooltip"
                       data-tooltip-content="Average rating"
                     >
-                      <HStack>
+                      <HStack gap={0}>
                         <FaStar color="#5B3B8C" />
                         <Text variant={"subtitle1"}>
                           {tutor?.averageRating}
