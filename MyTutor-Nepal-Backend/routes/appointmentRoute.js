@@ -18,4 +18,18 @@ router.post(
   appointmentController.cancelAppointment
 );
 
+router.get(
+  "/get-all-appointments",
+  authMiddleware.authMiddleware,
+  authMiddleware.isAdmin,
+  appointmentController.getAllAppointments
+);
+
+router.post(
+  "/mark-as-paid",
+  authMiddleware.authMiddleware,
+  authMiddleware.isAdminOrTutor,
+  appointmentController.markAsPaid
+);
+
 module.exports = router;

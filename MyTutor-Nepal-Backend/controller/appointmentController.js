@@ -56,7 +56,7 @@ module.exports.cancelAppointment = async (req, res) => {
       user.unseenNotification.unshift({
         id: crypto.randomBytes(16).toString("hex"),
         type: "Appointment-Rejected",
-        message: `Your appointment with ${tutor.fullName} has been rejected.`,
+      message: `Your appointment with ${tutor.fullName} has been rejected.`,
         onClickPath: "/student/appointments",
         date: new Date(),
       });
@@ -74,6 +74,45 @@ module.exports.cancelAppointment = async (req, res) => {
       success: false,
       error,
       message: "Error while deleting appointment by id.",
+    });
+  }
+};
+
+
+module.exports.getAllAppointments = async (req,res) => {
+  try {
+    const appointments = await Appointment.find({})
+    res.status(200).send({
+      success: true,
+      message: "Appointments fetched",
+      data: appointments
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while fetching appointments",
+      error,
+    });
+  }
+}
+
+module.exports.markAsPaid = async (req, res) => {
+  try {
+    const { appointmentId } = req.body;
+    await Appointment.findByIdAndUpdate(appointmentId, {
+      paymentStatus: "Paid",
+    });
+    res.status(201).send({
+      success: true,
+      message: "Marked as paid",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while marking appointment as paid",
+      error,
     });
   }
 };

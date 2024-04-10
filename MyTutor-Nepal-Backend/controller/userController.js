@@ -268,6 +268,7 @@ module.exports.bookTutor_khalti_post = async (req, res) => {
     booking.time = moment(time, "HH:mm").toISOString();
     booking.status = "pending";
     booking.paymentType = paymentType;
+    booking.paymentStatus = "Processing"
 
     const newAppointment = new Appointment(booking);
     await newAppointment.save();
@@ -295,7 +296,7 @@ module.exports.bookTutor_khalti_post = async (req, res) => {
   }
 };
 
-module.exports.getAllAppointments = async (req, res) => {
+module.exports.getUserAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find({ userId: req.body.userId });
     res.status(200).send({

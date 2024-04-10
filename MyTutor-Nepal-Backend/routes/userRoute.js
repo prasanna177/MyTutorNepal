@@ -69,10 +69,10 @@ router.post(
   userController.skipRating
 );
 router.get(
-  "/getAllAppointments",
+  "/getUserAppointments",
   authMiddleware.authMiddleware,
   authMiddleware.isStudent,
-  userController.getAllAppointments
+  userController.getUserAppointments
 );
 router.get(
   "/getUserAssignments",

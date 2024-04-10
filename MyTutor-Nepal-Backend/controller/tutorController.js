@@ -17,9 +17,10 @@ module.exports.getTutorInfo = async (req, res) => {
     const tutorAppointments = await Appointment.find({ tutorId: tutor._id });
     const dueAmount = tutorAppointments.reduce((total, appointment) => {
       if (
-        appointment.status !== "Pending" &&
+        (appointment.status === "approved" ||
+          appointment.status === "completed") &&
         (appointment.paymentStatus === "Pending" ||
-          appointment.paymentStatus === "On the way")
+          appointment.paymentStatus === "Processing")
       ) {
         total += appointment.totalPrice;
       }
@@ -159,36 +160,9 @@ module.exports.acceptAppointment = async (req, res) => {
 
     const currentDate = new Date();
     const toDate = new Date(appointment.toDate);
-    const fromDate = new Date(appointment.fromDate);
 
-    //accepting between from date and to date
-    if (currentDate > fromDate && currentDate < toDate) {
-      const daysLeft = Math.ceil(
-        (toDate - currentDate) / (1000 * 60 * 60 * 24)
-      );
-      const updatedTotalPrice = daysLeft * appointment.feePerClass;
-
-      const appointments = await Appointment.findByIdAndUpdate(appointmentId, {
-        status: "approved",
-        totalPrice: updatedTotalPrice,
-      });
-      const user = await User.findOne({ _id: appointments.userId });
-      user.unseenNotification.unshift({
-        id: crypto.randomBytes(16).toString("hex"),
-        type: "Status-Updated",
-        message: `Your appointment has been accepted. Total price is now ${appointments.totalPrice}`,
-        onClickPath: "/student/appointments",
-        date: new Date(),
-      });
-      await user.save();
-      return res.status(200).send({
-        success: true,
-        message:
-          "Appointment accepted. Total price has been updated due to late accept.",
-      });
-    }
     //accepting after to date
-    else if (currentDate > toDate) {
+    if (currentDate > toDate) {
       const appointments = await Appointment.findOneAndDelete({
         _id: appointmentId,
       });
@@ -215,11 +189,18 @@ module.exports.acceptAppointment = async (req, res) => {
       user.unseenNotification.unshift({
         id: crypto.randomBytes(16).toString("hex"),
         type: "Status-Updated",
-        message: "Your appointment has been accepted",
+        message: "Your appointment has been accepted.",
         onClickPath: "/student/appointments",
         date: new Date(),
       });
       await user.save();
+      if (appointments.paymentStatus === "Khalti") {
+        return res.status(200).send({
+          success: true,
+          message:
+            "Appointment accepted. The money will be sent to your Khalti account in 1-2 business days.",
+        });
+      }
       return res.status(200).send({
         success: true,
         message: "Appointment accepted",
@@ -369,26 +350,6 @@ module.exports.gradeAssignment = async (req, res) => {
       success: false,
       error,
       message: "Error in grading assignments",
-    });
-  }
-};
-
-module.exports.markAsPaid = async (req, res) => {
-  try {
-    const { appointmentId } = req.body;
-    await Appointment.findByIdAndUpdate(appointmentId, {
-      paymentStatus: "Paid",
-    });
-    res.status(201).send({
-      success: true,
-      message: "Marked as paid",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Error while marking appointment as paid",
-      error,
     });
   }
 };
