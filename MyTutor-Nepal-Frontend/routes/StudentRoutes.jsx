@@ -56,7 +56,7 @@ export const studentRoutes = [
     availability: ["student"],
   },
   {
-    path: "/payment-success",
+    path: "/payment-success/:bookingId",
     element: <PaymentSuccess />,
     availability: ["student"],
   },

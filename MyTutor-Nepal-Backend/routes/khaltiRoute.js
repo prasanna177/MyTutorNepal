@@ -11,4 +11,12 @@ router.post(
   khaltiController.khaltiRequest
 );
 
+router.post(
+  "/khalti-lookup",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  khaltiController.khaltiPaymentLookup
+);
+
+
 module.exports = router;

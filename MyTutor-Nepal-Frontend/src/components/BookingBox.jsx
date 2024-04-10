@@ -65,11 +65,11 @@ const BookingBox = ({
               value={paymentType}
             >
               <VStack alignItems={"start"}>
-                <Radio value="Khalti">
-                  <Text variant={"heading3"}>Pay with khalti</Text>
-                </Radio>
                 <Radio value="Cash on delivery">
                   <Text variant={"heading3"}>Pay in person</Text>
+                </Radio>
+                <Radio value="Khalti">
+                  <Text variant={"heading3"}>Pay with khalti</Text>
                 </Radio>
               </VStack>
             </RadioGroup>
@@ -166,7 +166,7 @@ const BookingBox = ({
           >
             Book now
           </Button>
-        </HStack>
+      </HStack>
       </Box>
     </>
   );

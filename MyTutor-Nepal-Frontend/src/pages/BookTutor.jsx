@@ -30,7 +30,7 @@ import { getDateAndTime } from "../components/Utils";
 import SpinnerComponenet from "../components/SpinnerComponent";
 
 const BookTutor = () => {
-  const [paymentType, setPaymentType] = useState(null);
+  const [paymentType, setPaymentType] = useState("Cash on delivery");
   const [loading, setLoading] = useState(false);
   const [tutor, setTutor] = useState([]);
   const [price, setPrice] = useState(0);
@@ -169,7 +169,7 @@ const BookTutor = () => {
             <VStack gap={5} alignItems={"stretch"}>
               <Box borderRadius={10} p={5} borderWidth={1}>
                 <VStack alignItems={"stretch"}>
-                <Text variant={"heading2"}>About tutor</Text>
+                  <Text variant={"heading2"}>About tutor</Text>
                   <HStack alignItems={"start"}>
                     <ImageComponent
                       isProfileImg={true}

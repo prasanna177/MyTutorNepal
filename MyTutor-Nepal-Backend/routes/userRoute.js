@@ -51,6 +51,12 @@ router.post(
   userController.bookTutor_post
 );
 router.post(
+  "/book-tutor-khalti",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  userController.bookTutor_khalti_post
+);
+router.post(
   "/rate-tutor",
   authMiddleware.authMiddleware,
   authMiddleware.isStudent,

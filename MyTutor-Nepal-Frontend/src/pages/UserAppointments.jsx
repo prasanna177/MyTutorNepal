@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PanelLayout from "../components/Layout/PanelLayout";
 import { createColumnHelper } from "@tanstack/react-table";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { HStack, Text } from "@chakra-ui/react";
 import TabTable from "../components/common/TabTable";

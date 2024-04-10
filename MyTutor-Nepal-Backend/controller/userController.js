@@ -219,9 +219,7 @@ module.exports.updateProfile = async (req, res) => {
 
 module.exports.bookTutor_post = async (req, res) => {
   try {
-    if (req.body.paymentType === "Cash on delivery") {
-      bookingValidation(req, res);
-    }
+    bookingValidation(req, res);
     const { fromDate, toDate, time, userInfo, tutorInfo, paymentType } =
       req.body;
     req.body.fromDate = moment(fromDate, "YYYY-MM-DD").toISOString();
@@ -253,6 +251,46 @@ module.exports.bookTutor_post = async (req, res) => {
       success: false,
       error,
       message: "Error booking a tutor",
+    });
+  }
+};
+
+module.exports.bookTutor_khalti_post = async (req, res) => {
+  try {
+    const { bookingId } = req.body;
+    const bookingDocument = await Booking.findById(bookingId);
+    const booking = bookingDocument.toObject();
+    const { fromDate, toDate, time, userInfo, tutorInfo, paymentType } =
+      booking;
+
+    booking.fromDate = moment(fromDate, "YYYY-MM-DD").toISOString();
+    booking.toDate = moment(toDate, "YYYY-MM-DD").toISOString();
+    booking.time = moment(time, "HH:mm").toISOString();
+    booking.status = "pending";
+    booking.paymentType = paymentType;
+
+    const newAppointment = new Appointment(booking);
+    await newAppointment.save();
+
+    const user = await User.findOne({ _id: tutorInfo.userId });
+    user.unseenNotification.unshift({
+      id: crypto.randomBytes(16).toString("hex"),
+      type: "New-appointment-request",
+      message: `A new appointment request has been sent by ${userInfo.fullName}`,
+      onClickPath: "/tutor/appointments",
+      date: new Date(),
+    });
+    await user.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Appointment booked successfully",
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error booking tutor.",
     });
   }
 };

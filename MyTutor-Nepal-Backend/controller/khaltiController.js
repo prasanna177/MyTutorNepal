@@ -12,7 +12,8 @@ module.exports.khaltiRequest = async (req, res) => {
 
     const { userInfo, totalPrice } = req.body;
     const payload = {
-      return_url: `${process.env.CLIENT_PORT}/payment-success/${bookingId}}`,
+      return_url: `${process.env.CLIENT_PORT}/payment-success/${bookingId}`,
+      // return_url: `${process.env.CLIENT_PORT}/payment-success}`,
       website_url: `${process.env.CLIENT_PORT}`,
       amount: totalPrice * 100,
       purchase_order_id: crypto.randomBytes(16).toString("hex"),
@@ -42,6 +43,40 @@ module.exports.khaltiRequest = async (req, res) => {
       res.status(200).send({
         success: false,
         message: "Somethings went wrong",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(200).send({
+      success: false,
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+};
+
+module.exports.khaltiPaymentLookup = async (req, res) => {
+  try {
+    const { pidx } = req.body;
+    const khaltiResponse = await axios.post(
+      "https://a.khalti.com/api/v2/epayment/lookup/",
+      { pidx },
+      {
+        headers: {
+          Authorization: `Key ${process.env.KHALTI_LIVE_SECRET_KEY}`,
+        },
+      }
+    );
+    if (khaltiResponse.data.status === "Completed") {
+      return res.status(200).send({
+        success: true,
+        data: khaltiResponse.data,
+        message: "Payment successful. Booking request has been sent.",
+      });
+    } else {
+      res.status(200).send({
+        success: false,
+        message: "Payment failed. Booking was not made.",
       });
     }
   } catch (error) {
