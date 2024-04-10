@@ -1,6 +1,6 @@
 // Error page
 
-import { Box, Container, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import PaymentSuccess from "../assets/images/PaymentSuccess.png";
 import PaymentFailure from "../assets/images/PaymentFailure.png";
 

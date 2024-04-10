@@ -1,4 +1,4 @@
-import Admin from "../src/pages/admin/Admin";
+import PayUsers from "../src/pages/admin/PayUsers";
 import TutorInfo from "../src/pages/admin/TutorInfo";
 import Tutors from "../src/pages/admin/Tutors";
 import UserInfo from "../src/pages/admin/UserInfo";
@@ -6,13 +6,13 @@ import Users from "../src/pages/admin/Users";
 
 export const adminRoutes = [
   {
-    path: "/admin",
-    element: <Admin />,
+    path: "/admin/users",
+    element: <Users />,
     availability: ["admin"],
   },
   {
-    path: "/admin/users",
-    element: <Users />,
+    path: "/admin/pay-users",
+    element: <PayUsers />,
     availability: ["admin"],
   },
   {

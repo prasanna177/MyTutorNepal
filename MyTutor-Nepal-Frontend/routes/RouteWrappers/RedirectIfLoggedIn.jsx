@@ -11,7 +11,7 @@ const RedirectIfLoggedIn = ({ children }) => {
     if (currentUserRole === "student") {
       return <Navigate to="/" />;
     } else if (currentUserRole === "admin") {
-      return <Navigate to="/admin" />;
+      return <Navigate to="/admin/tutors" />;
     } else if (currentUserRole === "tutor") {
       return <Navigate to="/tutor/students" />;
     }

@@ -58,6 +58,7 @@ const PaymentSuccess = () => {
       }
     };
     getPaymentStatus();
+    //eslint-disable-next-line
   }, []);
   console.log(bookingId, "bookingId");
   return (

@@ -19,7 +19,7 @@ const UserAppointments = () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/getAllAppointments`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/user/getUserAppointments`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
