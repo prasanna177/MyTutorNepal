@@ -34,7 +34,6 @@ function startCronJob() {
           date: new Date(),
         });
         await user.save();
-        console.log("completed");
       }
     } catch (error) {
       console.error("Error processing appointments:", error);
@@ -67,25 +66,6 @@ function startCronJob() {
       }
     } catch (error) {
       console.log(error);
-    }
-  });
-
-  cron.schedule("*/1 * * * * *", async () => {
-    try {
-      // Calculate the date three days ago
-      const currentDate = moment().format("YYYY-MM-DD HH:mm:ss");
-      const threeDaysAgo = moment(currentDate).utc().subtract(3, 'days').toDate();
-      // console.log(threeDaysAgo,'3' , currentDate)
-      // Find appointments older than three days and not paid for
-      // const appointmentsToDelete = await Appointment.find({
-      //   fromDate: { $lt: threeDaysAgo },
-      //   paid: false
-      // });
-  
-
-  
-    } catch (error) {
-      console.error("Error deleting appointments:", error);
     }
   });
 }

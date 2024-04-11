@@ -30,8 +30,7 @@ import NoTutor from "../assets/images/NoTutor.png";
 // import SpinnerComponenet from "../components/SpinnerComponent";
 
 const Home = () => {
-  const [loading, setLoading] = useState(false);
-  console.log(loading);
+  // const [loading, setLoading] = useState(false);
   const [tutors, setTutors] = useState([]);
   const [category, setCategory] = useState("");
   const [pricePerLessonObj, setPricePerLessonObj] = useState(null);
@@ -52,7 +51,6 @@ const Home = () => {
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
-    console.log("Search Query:", event.target.value);
   };
 
   const handlePricePerLessonChange = (e) => {
@@ -75,7 +73,7 @@ const Home = () => {
   const getTutorData = async () => {
     try {
       // Fetch all tutors from the server
-      setLoading(true);
+      // setLoading(true);
       const res = await axios.get(
         `${import.meta.env.VITE_SERVER_PORT}/api/user/getAllTutors`,
         {
@@ -84,7 +82,7 @@ const Home = () => {
           },
         }
       );
-      setLoading(false);
+      // setLoading(false);
       if (res.data.success) {
         let filteredTutors = res.data.data;
 
@@ -159,7 +157,7 @@ const Home = () => {
         setTutors(filteredTutors);
       }
     } catch (error) {
-      setLoading(false);
+      // setLoading(false);
       console.log(error);
     }
   };
@@ -169,7 +167,7 @@ const Home = () => {
     //eslint-disable-next-line
   }, [category, pricePerLessonObj, searchQuery, pricePerLessonVal, sortBy]);
   return (
-    <PanelLayout>
+    <PanelLayout title={'Home'}>
       {/* {loading ? (
         <SpinnerComponenet />
       ) : ( */}
@@ -185,13 +183,24 @@ const Home = () => {
               <InputLeftElement>
                 <SearchIcon color="black" />
               </InputLeftElement>
-              <Input
-                placeholder="Search by keywords or name"
-                type="text"
-                onChange={handleSearchInputChange}
-                value={searchQuery}
-                borderColor={"gray.100"}
-              />
+              <FormControl variant={"floating"}>
+                <Input
+                  pl={9}
+                  type="text"
+                  onChange={handleSearchInputChange}
+                  value={searchQuery}
+                  borderColor={"gray.100"}
+                />
+                <FormLabel
+                  fontWeight={"normal"}
+                  fontSize={{
+                    base: "16px",
+                    "2xl": "18px",
+                  }}
+                >
+                  Search by keywords or name
+                </FormLabel>
+              </FormControl>
               <InputRightElement
                 onClick={() => setSearchQuery("")}
                 _hover={{ cursor: "pointer" }}

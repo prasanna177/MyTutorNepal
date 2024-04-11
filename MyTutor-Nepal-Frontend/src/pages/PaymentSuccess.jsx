@@ -60,7 +60,6 @@ const PaymentSuccess = () => {
     getPaymentStatus();
     //eslint-disable-next-line
   }, []);
-  console.log(bookingId, "bookingId");
   return (
     <Flex flexDir={"column"} alignItems={"center"} gap={4}>
       {loading ? (

@@ -5,7 +5,6 @@ import ImageComponent from "./common/ImageComponent";
 import SentimentFace from "./SentimentFace";
 
 const TutorCard = ({ tutor }) => {
-  console.log(tutor, "sad");
   const navigate = useNavigate();
   return (
     <>

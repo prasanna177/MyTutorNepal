@@ -87,7 +87,6 @@ const Students = () => {
     columnHelper.accessor("action", {
       header: "ACTION",
       cell: (row) => {
-        console.log(row.row.original, "row");
         return (
           <HStack gap={2}>
             <IconView
@@ -140,7 +139,6 @@ const Students = () => {
       );
       onClose();
       setIsLoading(false);
-      console.log(res, "res");
       if (res.data.success) {
         toast.success(res.data.message);
       } else {
@@ -151,7 +149,6 @@ const Students = () => {
       console.log(error);
       toast.error("Something went wrong");
     }
-    console.log({ ...data, ...assignmentUsers });
   };
 
   useEffect(() => {
@@ -194,7 +191,6 @@ const Students = () => {
     resolver: yupResolver(schema),
   });
 
-  console.log(appointments, "app");
   return (
     <PanelLayout title={"My students"}>
       <Modal

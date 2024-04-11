@@ -73,7 +73,6 @@ const EditProfile = () => {
     data.nIdBackUrl = nIdBackImage;
     data.teachingCertificateUrl = teachingCertificateImage;
     const submissionData = { ...data, coordinates, address, userId: user._id };
-    console.log(submissionData, "sd1");
     const formData = new FormData();
     formData.append("profilePicUrl", submissionData.profilePicUrl);
     formData.append("nIdFrontUrl", submissionData.nIdFrontUrl);
@@ -92,14 +91,12 @@ const EditProfile = () => {
         },
       }
     );
-    console.log(filePathUrl, "fpu");
     filePathUrl.data.data.forEach((file) => {
       const { fieldname, path } = file;
 
       // Update the corresponding URL in submissionData
       submissionData[fieldname] = path;
     });
-    console.log(submissionData, "sd2");
     try {
       dispatch(showLoading());
       const res = await axios.post(

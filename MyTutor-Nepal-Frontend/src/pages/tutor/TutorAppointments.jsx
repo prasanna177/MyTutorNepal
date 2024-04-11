@@ -81,7 +81,6 @@ const TutorAppointments = () => {
             },
           }
         );
-        console.log(res);
         setIsLoading(false);
         if (res.data.success) {
           const pendingAppointments = res.data.data.filter(

@@ -1,6 +1,7 @@
 const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
 const Tutor = require("../models/tutorModel");
+const moment = require("moment");
 
 module.exports.getAppointmentById = async (req, res) => {
   try {

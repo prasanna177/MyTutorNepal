@@ -34,10 +34,8 @@ const BookTutor = () => {
   const [loading, setLoading] = useState(false);
   const [tutor, setTutor] = useState([]);
   const [price, setPrice] = useState(0);
-  console.log(paymentType);
   const [subject, setSubject] = useState("");
 
-  console.log(tutor, "tut");
   const { user } = useSelector((state) => state.user);
   const params = useParams();
   const dispatch = useDispatch();
@@ -102,7 +100,6 @@ const BookTutor = () => {
         ...data,
       };
       if (paymentType === "Cash on delivery") {
-        console.log(submissionData, "smd");
         dispatch(showLoading());
         const res = await axios.post(
           `${import.meta.env.VITE_SERVER_PORT}/api/user/book-tutor`,
@@ -125,7 +122,6 @@ const BookTutor = () => {
       }
 
       if (paymentType === "Khalti") {
-        console.log(submissionData);
         dispatch(showLoading());
         const res = await axios.post(
           `${import.meta.env.VITE_SERVER_PORT}/api/khalti/khalti-api`,
@@ -158,7 +154,6 @@ const BookTutor = () => {
     //eslint-disable-next-line
   }, []);
 
-  console.log(tutor, "tutor");
   return (
     <PanelLayout title={"Booking Page"}>
       {loading ? (
@@ -323,14 +318,14 @@ const BookTutor = () => {
               />
               <VStack alignItems={"stretch"}>
                 <Text variant={"heading2"}>Tutor Location</Text>
-                {/* <iframe
+                <iframe
                 width="100%"
                 height="400"
                 src={`https://www.google.com/maps/embed/v1/place?key=${
                   import.meta.env.VITE_GOOGLE_API_KEY
                 }
             &q=${tutor?.coordinates?.lat},${tutor?.coordinates?.lng}`}
-              ></iframe> */}
+              ></iframe>
               </VStack>
             </VStack>
           </GridItem>

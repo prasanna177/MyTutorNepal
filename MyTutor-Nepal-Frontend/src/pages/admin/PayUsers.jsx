@@ -136,7 +136,6 @@ const PayUsers = () => {
           },
         }
       );
-      console.log(res);
       setIsLoading(false);
       if (res.data.success) {
         const unpaidTutors = res.data.data.filter(

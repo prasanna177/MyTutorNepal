@@ -61,7 +61,6 @@ const MyTutors = () => {
             },
           }
         );
-        console.log(res, "res ");
         setIsLoading(false);
         if (res.data.success) {
           setAppointments(res.data.data);

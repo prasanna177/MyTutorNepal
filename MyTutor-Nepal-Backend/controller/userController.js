@@ -125,7 +125,6 @@ module.exports.becomeTutor_post = async (req, res) => {
 module.exports.getCurrentUser = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.body.userId });
-    console.log(req.body);
     if (user) {
       user.password = undefined;
       res.status(200).send({
@@ -216,7 +215,7 @@ module.exports.updateProfile = async (req, res) => {
 
 module.exports.bookTutor_post = async (req, res) => {
   try {
-    bookingValidation(req, res);
+    await bookingValidation(req, res);
     const { fromDate, toDate, time, userInfo, tutorInfo, paymentType } =
       req.body;
     req.body.fromDate = moment(fromDate, "YYYY-MM-DD").toISOString();

@@ -12,7 +12,6 @@ module.exports.rateTutor = async (req, res) => {
     if (review) {
       sentiment = await query(review); //get sentiment from review
     }
-    console.log(sentiment);
 
     //send failure message if rating exists for tutor by user for that specific appointment
     const existingRating = await Rating.findOne({
@@ -37,20 +36,17 @@ module.exports.rateTutor = async (req, res) => {
       review,
       sentiment,
     });
-    console.log(tutorRating);
     await tutorRating.save();
     const tutor = await Tutor.findById(tutorId);
 
     //calculate average rating
     const allRatings = await Rating.find({ tutorId });
-    console.log(allRatings);
     const totalRatings = allRatings.length;
     const averageRating = Math.round(
       allRatings.reduce((acc, curr) => {
         return acc + curr.rating;
       }, 0) / totalRatings
     );
-    console.log(averageRating, "avgRating");
 
     //calculate average sentiment
     const totalSentiment = allRatings.reduce((acc, curr) => {
@@ -66,7 +62,6 @@ module.exports.rateTutor = async (req, res) => {
     } else if (totalSentiment === 0) {
       averageSentiment = "neutral";
     }
-    console.log(averageSentiment, "avgRating");
     //update to tutor database
     await Tutor.findByIdAndUpdate(tutorId, { averageSentiment, averageRating });
     // send notification to tutor

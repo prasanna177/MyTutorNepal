@@ -38,7 +38,6 @@ const BecomeTutor = () => {
   const [nIdBackImage, setNIdBackImage] = useState("");
   const [teachingCertificateImage, setTeachingCertificateImage] = useState("");
 
-  console.log(profilePicImage, "pp");
 
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -92,14 +91,12 @@ const BecomeTutor = () => {
           },
         }
       );
-      console.log(filePathUrl, "fpu");
       filePathUrl.data.data.forEach((file) => {
         const { fieldname, path } = file;
 
         // Update the corresponding URL in submissionData
         submissionData[fieldname] = path;
       });
-      console.log(submissionData, "sdsd");
       dispatch(showLoading());
       const res = await axios.post(
         `${import.meta.env.VITE_SERVER_PORT}/api/user/become-tutor`,

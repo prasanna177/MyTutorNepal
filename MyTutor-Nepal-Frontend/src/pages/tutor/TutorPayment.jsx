@@ -87,7 +87,7 @@ const TutorPayment = () => {
       cell: (row) => {
         return (
           <HStack gap={2}>
-            {row.row.original.paymentStatus === "Processing" && (
+            {row.row.original.paymentStatus === "Pending" && (
               <IconCheck
                 label={"Mark as paid"}
                 handleClick={() => handleMarkAsPaid(row.row.original)}
@@ -110,7 +110,6 @@ const TutorPayment = () => {
           },
         }
       );
-      console.log(res);
       setIsLoading(false);
       if (res.data.success) {
         const unpaidAppointments = res.data.data.filter(

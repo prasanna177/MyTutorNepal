@@ -10,11 +10,9 @@ const EmailVerify = () => {
   useEffect(() => {
     const verifyEmailUrl = async () => {
       try {
-        console.log(params);
-        const res = await axios.get(
+        await axios.get(
           `${import.meta.env.VITE_SERVER_PORT}/api/user/${params.id}/verify/${params.token}`
         );
-        console.log(res, "asd");
         setValidUrl(true);
       } catch (error) {
         console.log(error);

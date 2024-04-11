@@ -26,7 +26,6 @@ const Profile = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  console.log(tutor)
 
   const getTutorInfo = async () => {
     try {
@@ -50,7 +49,6 @@ const Profile = () => {
     }
   };
 
-  console.log(tutor);
 
   useEffect(() => {
     getTutorInfo();

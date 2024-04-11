@@ -14,7 +14,6 @@ module.exports.saveFilePath = async (req, res) => {
 
       fileDataArray.push(fileData);
     });
-    console.log(fileDataArray, "fda");
     res.status(200).json({
       message: "Successfully fetched file paths",
       data: fileDataArray,
@@ -38,7 +37,6 @@ module.exports.savePdfFilePath = async (req, res) => {
     }
     const filePath = req.file.path;
     // Return the PDF file path
-    console.log(filePath);
     res.status(200).json({ success: true, pdfFilePath: filePath });
   } catch (error) {
     console.error(error);

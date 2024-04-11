@@ -13,8 +13,6 @@ const UserAppointmentInfo = () => {
   const navigate = useNavigate();
   const [appointment, setAppointment] = useState([]);
 
-  console.log(params, "param");
-
   const getAppointmentInfo = async () => {
     try {
       const res = await axios.post(

@@ -50,7 +50,6 @@ const RatingModal = ({ ratingModal }) => {
         userId: appointment.userId,
         notificationId,
       };
-      console.log(data);
       handleClose();
       dispatch(showLoading());
       const res = await axios.post(
@@ -69,7 +68,6 @@ const RatingModal = ({ ratingModal }) => {
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.log(error);
       toast.error("Something went wrong");
       dispatch(hideLoading());
     }

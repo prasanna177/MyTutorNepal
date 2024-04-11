@@ -2,7 +2,6 @@ import { FaQuestion, FaRegLaugh, FaRegMeh, FaRegSadTear } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
 
 const SentimentFace = ({ sentiment }) => {
-  console.log(sentiment, "s");
   return (
     <>
       {sentiment === "positive" || sentiment === 1 ? (

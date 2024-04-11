@@ -11,7 +11,6 @@ module.exports.authMiddleware = (req, res, next) => {
           success: false,
         });
       } else {
-        console.log(decodedToken, "decodedtoken");
         req.body.userId = decodedToken.id;
         next();
       }

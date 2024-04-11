@@ -47,7 +47,6 @@ const RequireAuth = ({ children, userRoles }) => {
     const decodedToken = jwtDecode(localStorage.getItem("token"));
     currentUserRole = decodedToken?.role;
   }
-  console.log(currentUserRole, "crr");
   if (currentUserRole) {
     if (userRoles) {
       if (userRoles.includes(currentUserRole)) {

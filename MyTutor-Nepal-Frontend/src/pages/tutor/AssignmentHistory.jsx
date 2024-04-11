@@ -47,8 +47,6 @@ const AssignmentHistory = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const params = useParams();
-  console.log(assignment, "ass");
-
   const {
     isOpen: isViewModalOpen,
     onOpen: onOpenViewModal,

@@ -20,12 +20,10 @@ const ForgotPassword = () => {
   const onSubmit = async (data) => {
     try {
       dispatch(showLoading());
-      console.log("start");
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_PORT}/api/auth/forgot-password`,
         data
       );
-      console.log("end");
       dispatch(hideLoading());
       const { success, message } = response.data;
       if (success) {

@@ -7,7 +7,6 @@ const User = require("../models/userModel");
 
 module.exports.signup_post = async (req, res) => {
   try {
-    console.log(req.body, "req");
     let { email, password, fullName } = req.body;
     const user = await User.findOne({ email });
     if (user) {
@@ -99,9 +98,7 @@ module.exports.login_post = async (req, res) => {
 
 module.exports.forgotPassword = async (req, res) => {
   try {
-    console.log(req.body, "reqbody");
     const { email } = req.body;
-    console.log(email, "email");
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(200).send({
@@ -112,7 +109,6 @@ module.exports.forgotPassword = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.RESET_SECRET, {
       expiresIn: "1d",
     });
-    console.log(token, "token");
     const url = `${process.env.CLIENT_PORT}/reset-password/${user._id}/${token}`;
     await sendEmail(
       user.email,

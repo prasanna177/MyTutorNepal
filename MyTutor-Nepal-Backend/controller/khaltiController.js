@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports.khaltiRequest = async (req, res) => {
   try {
-    bookingValidation(req, res);
+    await bookingValidation(req, res);
     const booking = new Booking(req.body);
     booking.save();
     const bookingId = booking._id;
@@ -25,7 +25,7 @@ module.exports.khaltiRequest = async (req, res) => {
       },
     };
     const khaltiResponse = await axios.post(
-      "https://a.khalti.com/api/v2/epayment/initiate/",
+      `${process.env.KHALTI_INITIATE_API}`,
       payload,
       {
         headers: {
@@ -34,14 +34,14 @@ module.exports.khaltiRequest = async (req, res) => {
       }
     );
     if (khaltiResponse) {
-      res.status(200).send({
+      return res.status(200).send({
         success: true,
         data: khaltiResponse.data,
       });
     } else {
-      res.status(200).send({
+      return res.status(200).send({
         success: false,
-        message: "Somethings went wrong",
+        message: "Error processing payment request",
       });
     }
   } catch (error) {
@@ -58,7 +58,7 @@ module.exports.khaltiPaymentLookup = async (req, res) => {
   try {
     const { pidx } = req.body;
     const khaltiResponse = await axios.post(
-      "https://a.khalti.com/api/v2/epayment/lookup/",
+      `${process.env.KHALTI_LOOKUP_API}`,
       { pidx },
       {
         headers: {

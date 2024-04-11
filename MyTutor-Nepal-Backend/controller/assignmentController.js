@@ -6,11 +6,9 @@ const Assignment = require("../models/assignmentModel");
 
 module.exports.getUserAssignments = async (req, res) => {
   try {
-    console.log(req.body, "req");
     const assignments = await Assignment.find({
       studentId: req.body.userId,
     });
-    console.log(assignments, "ass");
     res.status(200).send({
       success: true,
       message: "Assignments fetched successfully.",
@@ -39,7 +37,6 @@ module.exports.submitAssignment = async (req, res) => {
       _id: assignmentInfo._id,
       status: "Submitted",
     });
-    console.log(existingAssignment, "exi");
     if (existingAssignment.length > 0) {
       return res.status(200).send({
         success: false,

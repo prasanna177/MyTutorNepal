@@ -32,7 +32,6 @@ const ChangePassword = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       dispatch(showLoading());
       const response = await axios.post(

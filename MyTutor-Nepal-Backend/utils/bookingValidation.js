@@ -4,8 +4,6 @@ const Appointment = require("../models/appointmentModel");
 module.exports.bookingValidation = async (req, res) => {
   const { fromDate, toDate, time, tutorInfo, userInfo } = req.body;
   const { phone, address } = userInfo;
-  console.log(phone, "phone");
-  console.log(address, "address");
   if (!phone || !address) {
     return res.status(200).send({
       success: false,

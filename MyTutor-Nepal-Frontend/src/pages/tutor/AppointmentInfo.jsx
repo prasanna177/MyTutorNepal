@@ -93,8 +93,6 @@ const AppointmentInfo = () => {
     //eslint-disable-next-line
   }, []);
 
-  console.log(appointment, "appointment");
-
   return (
     <PanelLayout title={"Appointment Information"}>
       <VStack alignItems={"stretch"} gap={7}>

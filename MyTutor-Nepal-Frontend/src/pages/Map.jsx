@@ -31,7 +31,6 @@ import { subjectCategories } from "../data/subjectCategories";
 
 const MapPage = () => {
   const { user } = useSelector((state) => state.user);
-  console.log(user);
   const [selectedLocationId, setSelectedLocaionId] = useState(null);
   const [tutors, setTutors] = useState([]);
   const [category, setCategory] = useState("");
@@ -52,7 +51,6 @@ const MapPage = () => {
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
-    console.log("Search Query:", event.target.value);
   };
 
   const handlePricePerLessonChange = (e) => {
@@ -168,13 +166,24 @@ const MapPage = () => {
             <InputLeftElement>
               <SearchIcon color="black" />
             </InputLeftElement>
-            <Input
-              placeholder="Search by keywords or name"
-              type="text"
-              onChange={handleSearchInputChange}
-              value={searchQuery}
-              borderColor={"gray.100"}
-            />
+            <FormControl variant={"floating"}>
+              <Input
+                pl={9}
+                type="text"
+                onChange={handleSearchInputChange}
+                value={searchQuery}
+                borderColor={"gray.100"}
+              />
+              <FormLabel
+                fontWeight={"normal"}
+                fontSize={{
+                  base: "16px",
+                  "2xl": "18px",
+                }}
+              >
+                Search by keywords or name
+              </FormLabel>
+            </FormControl>
             <InputRightElement
               onClick={() => setSearchQuery("")}
               _hover={{ cursor: "pointer" }}
