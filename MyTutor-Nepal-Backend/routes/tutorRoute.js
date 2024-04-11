@@ -10,6 +10,7 @@ router.post(
   authMiddleware.isAdminOrTutor,
   tutorController.getTutorInfo
 );
+
 router.post(
   "/updateProfile",
   authMiddleware.authMiddleware,
@@ -28,19 +29,6 @@ router.post(
   authMiddleware.isAdmin,
   tutorController.deleteTutorById
 );
-router.get(
-  "/getTutorAppointments",
-  authMiddleware.authMiddleware,
-  authMiddleware.isTutor,
-  tutorController.getTutorAppointments
-);
-
-router.get(
-  "/getTutorOngoingAppointments",
-  authMiddleware.authMiddleware,
-  authMiddleware.isTutor,
-  tutorController.getTutorOngoingAppointments
-);
 
 router.post(
   "/acceptAppointment",
@@ -48,23 +36,12 @@ router.post(
   authMiddleware.isTutor,
   tutorController.acceptAppointment
 );
+
 router.post(
-  "/createAssignment",
+  "/cancel-appointment",
   authMiddleware.authMiddleware,
   authMiddleware.isTutor,
-  tutorController.createAssignment
-);
-router.post(
-  "/get-assignments-for-appointment",
-  authMiddleware.authMiddleware,
-  authMiddleware.isTutor,
-  tutorController.getAssignmentsForAppointment
-);
-router.post(
-  "/grade-assignment",
-  authMiddleware.authMiddleware,
-  authMiddleware.isTutor,
-  tutorController.gradeAssignment
+  tutorController.cancelAppointment
 );
 
 module.exports = router;

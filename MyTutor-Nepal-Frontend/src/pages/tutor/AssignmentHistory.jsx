@@ -165,7 +165,7 @@ const AssignmentHistory = () => {
       const res = await axios.post(
         `${
           import.meta.env.VITE_SERVER_PORT
-        }/api/tutor/get-assignments-for-appointment`,
+        }/api/assignment/get-assignments-for-appointment`,
         { appointmentId: params.appointmentId },
         {
           headers: {
@@ -201,7 +201,7 @@ const AssignmentHistory = () => {
     try {
       const submissionData = { ...data, assignmentInfo: assignment };
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/tutor/grade-assignment`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/assignment/grade-assignment`,
         submissionData,
         {
           headers: {

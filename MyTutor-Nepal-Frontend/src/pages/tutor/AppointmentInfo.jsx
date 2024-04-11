@@ -44,7 +44,7 @@ const AppointmentInfo = () => {
       const res = await axios.post(
         `${
           import.meta.env.VITE_SERVER_PORT
-        }/api/appointment/cancel-appointment`,
+        }/api/tutor/cancel-appointment`,
         { appointmentId },
         {
           headers: {

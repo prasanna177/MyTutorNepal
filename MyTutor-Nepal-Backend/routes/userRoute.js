@@ -56,42 +56,7 @@ router.post(
   authMiddleware.isStudent,
   userController.bookTutor_khalti_post
 );
-router.post(
-  "/rate-tutor",
-  authMiddleware.authMiddleware,
-  authMiddleware.isStudent,
-  userController.rateTutor
-);
-router.post(
-  "/skip-tutor-rating",
-  authMiddleware.authMiddleware,
-  authMiddleware.isStudent,
-  userController.skipRating
-);
-router.get(
-  "/getUserAppointments",
-  authMiddleware.authMiddleware,
-  authMiddleware.isStudent,
-  userController.getUserAppointments
-);
-router.get(
-  "/getUserAssignments",
-  authMiddleware.authMiddleware,
-  authMiddleware.isStudent,
-  userController.getUserAssignments
-);
+
 router.get("/:id/verify/:token", tokenController.verify_token);
-router.post(
-  "/submit-assignment",
-  authMiddleware.authMiddleware,
-  authMiddleware.isStudent,
-  userController.submitAssignment
-);
-router.get(
-  "/get-user-ongoing-appointments",
-  authMiddleware.authMiddleware,
-  authMiddleware.isStudent,
-  userController.getUserOngoingAppointments
-);
 
 module.exports = router;

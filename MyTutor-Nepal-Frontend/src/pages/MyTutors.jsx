@@ -2,9 +2,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import PanelLayout from "../components/Layout/PanelLayout";
 import { useEffect, useState } from "react";
 import { getDate } from "../components/Utils";
-import { HStack, Text } from "@chakra-ui/react";
-import TabTable from "../components/common/TabTable";
-import moment from "moment";
+import { Text } from "@chakra-ui/react";
 import axios from "axios";
 import { DataTable } from "../components/DataTable";
 
@@ -56,7 +54,7 @@ const MyTutors = () => {
         const res = await axios.get(
           `${
             import.meta.env.VITE_SERVER_PORT
-          }/api/user/get-user-ongoing-appointments`,
+          }/api/appointment/get-user-ongoing-appointments`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

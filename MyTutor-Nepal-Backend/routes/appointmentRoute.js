@@ -11,11 +11,11 @@ router.post(
   appointmentController.getAppointmentById
 );
 
-router.post(
-  "/cancel-appointment",
+router.get(
+  "/getUserAppointments",
   authMiddleware.authMiddleware,
-  authMiddleware.isTutor,
-  appointmentController.cancelAppointment
+  authMiddleware.isStudent,
+  appointmentController.getUserAppointments
 );
 
 router.get(
@@ -30,6 +30,27 @@ router.post(
   authMiddleware.authMiddleware,
   authMiddleware.isAdminOrTutor,
   appointmentController.markAsPaid
+);
+
+router.get(
+  "/get-user-ongoing-appointments",
+  authMiddleware.authMiddleware,
+  authMiddleware.isStudent,
+  appointmentController.getUserOngoingAppointments
+);
+
+router.get(
+  "/getTutorAppointments",
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutor,
+  appointmentController.getTutorAppointments
+);
+
+router.get(
+  "/getTutorOngoingAppointments",
+  authMiddleware.authMiddleware,
+  authMiddleware.isTutor,
+  appointmentController.getTutorOngoingAppointments
 );
 
 module.exports = router;

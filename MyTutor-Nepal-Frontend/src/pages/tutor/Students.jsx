@@ -130,7 +130,7 @@ const Students = () => {
       };
       setIsLoading(true);
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/tutor/createAssignment`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/assignment/createAssignment`,
         submissionData,
         {
           headers: {
@@ -161,14 +161,13 @@ const Students = () => {
         const res = await axios.get(
           `${
             import.meta.env.VITE_SERVER_PORT
-          }/api/tutor/getTutorOngoingAppointments`,
+          }/api/appointment/getTutorOngoingAppointments`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
-        console.log(res, "res ");
         setIsLoading(false);
         if (res.data.success) {
           setAppointments(res.data.data);

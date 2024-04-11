@@ -3,8 +3,6 @@ const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
 const crypto = require("crypto");
 const Rating = require("../models/ratingModel");
-const moment = require("moment");
-const Assignment = require("../models/assignmentModel");
 
 module.exports.getTutorInfo = async (req, res) => {
   try {
@@ -134,25 +132,6 @@ module.exports.deleteTutorById = async (req, res) => {
   }
 };
 
-module.exports.getTutorAppointments = async (req, res) => {
-  try {
-    const tutor = await Tutor.findOne({ userId: req.body.userId });
-    const appointments = await Appointment.find({ tutorId: tutor._id });
-    res.status(200).send({
-      success: true,
-      message: "Tutor appointments fetched successfully",
-      data: appointments,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error while fetching appointments.",
-    });
-  }
-};
-
 module.exports.acceptAppointment = async (req, res) => {
   try {
     const { appointmentId } = req.body;
@@ -216,140 +195,52 @@ module.exports.acceptAppointment = async (req, res) => {
   }
 };
 
-module.exports.getTutorOngoingAppointments = async (req, res) => {
-  try {
-    const tutor = await Tutor.findOne({ userId: req.body.userId });
-    const currentDate = moment(
-      moment().startOf("day").toDate(),
-      "YYYY-MM-DD"
-    ).toISOString();
-    const appointments = await Appointment.find({
-      tutorId: tutor._id,
-      fromDate: { $lte: currentDate },
-      toDate: { $gte: currentDate },
-      status: "approved",
-    });
-    res.status(200).send({
-      success: true,
-      message: "Tutor appointments fetched successfully",
-      data: appointments,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error while fetching appointments.",
-    });
-  }
-};
-
-module.exports.getAssignmentsForAppointment = async (req, res) => {
+module.exports.cancelAppointment = async (req, res) => {
   try {
     const { appointmentId } = req.body;
-    const assignments = await Assignment.find({ appointmentId });
-    res.status(200).send({
-      success: true,
-      message: "Assignments fetched succcessfully",
-      data: assignments,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error while fetching assignments.",
-    });
-  }
-};
+    const appointment = await Appointment.findById(appointmentId);
 
-module.exports.createAssignment = async (req, res) => {
-  try {
-    const currentDate = moment().utc().format("YYYY-MM-DD HH:mm:ss");
-    req.body.deadline = moment(req.body.deadline)
-      .utc()
-      .format("YYYY-MM-DD HH:mm:ss");
-    const isDeadlineValid = moment(
-      req.body.deadline,
-      "YYYY-MM-DD HH:mm:ss"
-    ).isSameOrAfter(currentDate);
-    if (!isDeadlineValid) {
-      return res.status(200).send({
-        success: false,
-        message: "Deadline has already passed.",
-      });
-    }
-    const { appointmentId } = req.body;
-    const appointmentInfo = await Appointment.findById(appointmentId);
-    const assignment = await Assignment({
-      ...req.body,
-      appointmentInfo,
-      status: "Pending",
-    });
-    await assignment.save();
-    const user = await User.findById(assignment.appointmentInfo.userId);
-    user.unseenNotification.unshift({
-      id: crypto.randomBytes(16).toString("hex"),
-      type: "provide-assignment",
-      message: `You have a new assignment provided by ${assignment.appointmentInfo.tutorInfo.fullName}.`,
-      onClickPath: "/student/assignments",
-      date: new Date(),
-    });
-    user.save();
-    return res.status(200).send({
-      success: true,
-      message: "Assignment provided successfully.",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error while providing assignment.",
-    });
-  }
-};
-
-module.exports.gradeAssignment = async (req, res) => {
-  try {
-    let { assignmentInfo, grade, feedback } = req.body;
-    const gradedAssignment = await Assignment.findOne({
-      _id: assignmentInfo._id,
-      grade: { $exists: true },
-    });
-    if (gradedAssignment) {
-      return res.status(200).send({
-        success: false,
-        message: "Assignment is already graded.",
-      });
-    }
-    const updatedAssignment = await Assignment.findByIdAndUpdate(
-      assignmentInfo._id,
+    const cancelledAppointment = await Appointment.findByIdAndUpdate(
+      appointmentId,
       {
-        feedback,
-        grade,
+        status: "cancelled",
       }
     );
-    const user = await User.findById(updatedAssignment.appointmentInfo.userId);
-    user.unseenNotification.unshift({
-      id: crypto.randomBytes(16).toString("hex"),
-      type: "grade-assignment",
-      message: `Assignment has been graded for ${updatedAssignment.title}`,
-      onClickPath: "/student/assignments",
-      date: new Date(),
-    });
-    user.save();
+
+    const user = await User.findById(cancelledAppointment.userId);
+    const tutor = await Tutor.findById(appointment.tutorId);
+    if (cancelledAppointment.paymentType === "Khalti") {
+      user.unseenNotification.unshift({
+        id: crypto.randomBytes(16).toString("hex"),
+        type: "Appointment-Rejected",
+        message: `Your appointment with ${tutor.fullName} has been rejected. Your paid amount will be refunded soon.`,
+        onClickPath: "/student/appointments",
+        date: new Date(),
+      });
+      await user.save();
+    } else if (cancelledAppointment.paymentType === "Cash on delivery") {
+      user.unseenNotification.unshift({
+        id: crypto.randomBytes(16).toString("hex"),
+        type: "Appointment-Rejected",
+      message: `Your appointment with ${tutor.fullName} has been rejected.`,
+        onClickPath: "/student/appointments",
+        date: new Date(),
+      });
+      await user.save();
+    }
+
     res.status(200).send({
       success: true,
-      message: "Assignment graded",
+      message: "Appointment rejected",
+      data: appointment,
     });
-    // const user
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
       error,
-      message: "Error in grading assignments",
+      message: "Error while deleting appointment by id.",
     });
   }
 };
+

@@ -33,7 +33,6 @@ module.exports.khaltiRequest = async (req, res) => {
         },
       }
     );
-    console.log(khaltiResponse, "res");
     if (khaltiResponse) {
       res.status(200).send({
         success: true,

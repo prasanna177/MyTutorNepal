@@ -1,6 +1,5 @@
 const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
-const crypto = require("crypto");
 const Tutor = require("../models/tutorModel");
 
 module.exports.getAppointmentById = async (req, res) => {
@@ -29,64 +28,14 @@ module.exports.getAppointmentById = async (req, res) => {
   }
 };
 
-module.exports.cancelAppointment = async (req, res) => {
+module.exports.getAllAppointments = async (req, res) => {
   try {
-    const { appointmentId } = req.body;
-    const appointment = await Appointment.findById(appointmentId);
-
-    const cancelledAppointment = await Appointment.findByIdAndUpdate(
-      appointmentId,
-      {
-        status: "cancelled",
-      }
-    );
-
-    const user = await User.findById(cancelledAppointment.userId);
-    const tutor = await Tutor.findById(appointment.tutorId);
-    if (cancelledAppointment.paymentType === "Khalti") {
-      user.unseenNotification.unshift({
-        id: crypto.randomBytes(16).toString("hex"),
-        type: "Appointment-Rejected",
-        message: `Your appointment with ${tutor.fullName} has been rejected. Your paid amount will be refunded soon.`,
-        onClickPath: "/student/appointments",
-        date: new Date(),
-      });
-      await user.save();
-    } else if (cancelledAppointment.paymentType === "Cash on delivery") {
-      user.unseenNotification.unshift({
-        id: crypto.randomBytes(16).toString("hex"),
-        type: "Appointment-Rejected",
-      message: `Your appointment with ${tutor.fullName} has been rejected.`,
-        onClickPath: "/student/appointments",
-        date: new Date(),
-      });
-      await user.save();
-    }
-
-    res.status(200).send({
-      success: true,
-      message: "Appointment rejected",
-      data: appointment,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error while deleting appointment by id.",
-    });
-  }
-};
-
-
-module.exports.getAllAppointments = async (req,res) => {
-  try {
-    const appointments = await Appointment.find({})
+    const appointments = await Appointment.find({});
     res.status(200).send({
       success: true,
       message: "Appointments fetched",
-      data: appointments
-    })
+      data: appointments,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -95,7 +44,7 @@ module.exports.getAllAppointments = async (req,res) => {
       error,
     });
   }
-}
+};
 
 module.exports.markAsPaid = async (req, res) => {
   try {
@@ -113,6 +62,99 @@ module.exports.markAsPaid = async (req, res) => {
       success: false,
       message: "Error while marking appointment as paid",
       error,
+    });
+  }
+};
+
+module.exports.getUserAppointments = async (req, res) => {
+  try {
+    const appointments = await Appointment.find({ userId: req.body.userId });
+    res.status(200).send({
+      success: true,
+      message: "Appointments fetched successfully.",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in fetching user appointments",
+    });
+  }
+};
+
+module.exports.getUserOngoingAppointments = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userId);
+    const currentDate = moment(
+      moment().startOf("day").toDate(),
+      "YYYY-MM-DD"
+    ).toISOString();
+    const appointments = await Appointment.find({
+      userId: user._id,
+      fromDate: { $lte: currentDate },
+      toDate: { $gte: currentDate },
+      status: "approved",
+    });
+    res.status(200).send({
+      success: true,
+      message: "User appointments fetched successfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while fetching appointments.",
+    });
+  }
+};
+
+module.exports.getTutorAppointments = async (req, res) => {
+  try {
+    const tutor = await Tutor.findOne({ userId: req.body.userId });
+    const appointments = await Appointment.find({ tutorId: tutor._id });
+    res.status(200).send({
+      success: true,
+      message: "Tutor appointments fetched successfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while fetching appointments.",
+    });
+  }
+};
+
+module.exports.getTutorOngoingAppointments = async (req, res) => {
+  try {
+    const tutor = await Tutor.findOne({ userId: req.body.userId });
+    const currentDate = moment(
+      moment().startOf("day").toDate(),
+      "YYYY-MM-DD"
+    ).toISOString();
+    const appointments = await Appointment.find({
+      tutorId: tutor._id,
+      fromDate: { $lte: currentDate },
+      toDate: { $gte: currentDate },
+      status: "approved",
+    });
+    res.status(200).send({
+      success: true,
+      message: "Tutor appointments fetched successfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while fetching appointments.",
     });
   }
 };

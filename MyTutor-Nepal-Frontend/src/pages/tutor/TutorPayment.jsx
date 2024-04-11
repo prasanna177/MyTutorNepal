@@ -103,7 +103,7 @@ const TutorPayment = () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_PORT}/api/tutor/getTutorAppointments`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/appointment/getTutorAppointments`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

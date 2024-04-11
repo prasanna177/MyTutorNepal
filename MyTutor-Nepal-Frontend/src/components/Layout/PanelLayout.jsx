@@ -6,10 +6,10 @@ import Navbar from "../Navbar";
 const PanelLayout = ({ children, title }) => {
   return (
     <>
-      <Box h={"100vh"} pt={2}>
+      <Box h={"100vh"}>
         <Flex>
           <Sidebar />
-          <Box ml={"260px"} w={"100%"} h={"100%"}>
+          <Box ml={"255px"} w={"100%"} h={"100%"}>
             <Navbar />
             <VStack alignItems={"stretch"} gap={4}>
               <Text variant={"heading1"}>{title}</Text>

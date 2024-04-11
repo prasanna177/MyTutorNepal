@@ -84,7 +84,7 @@ const MyAssignments = () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/getUserAssignments`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/assignment/getUserAssignments`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -183,7 +183,7 @@ const MyAssignments = () => {
         submissionDate: Date.now(),
       };
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/submit-assignment`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/assignment/submit-assignment`,
         submissionData,
         {
           headers: {

@@ -90,7 +90,6 @@ const ProfilePopup = () => {
         >
           <HStack>
             <Text>{user?.fullName}</Text>
-            <Text>{user?.role}</Text>
           </HStack>
         </Flex>
         {popupItems.map((item) => (

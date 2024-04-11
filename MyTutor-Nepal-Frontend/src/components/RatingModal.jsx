@@ -54,7 +54,7 @@ const RatingModal = ({ ratingModal }) => {
       handleClose();
       dispatch(showLoading());
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/rate-tutor`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/rating/rate-tutor`,
         data,
         {
           headers: {
@@ -78,7 +78,7 @@ const RatingModal = ({ ratingModal }) => {
   const handleSkipRating = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/user/skip-tutor-rating`,
+        `${import.meta.env.VITE_SERVER_PORT}/api/rating/skip-tutor-rating`,
         {
           userId: appointment.userId,
           notificationId,

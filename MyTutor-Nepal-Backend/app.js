@@ -8,6 +8,7 @@ const appointmentRoute = require("./routes/appointmentRoute");
 const ratingRoute = require("./routes/ratingRoute");
 const uploaderRoute = require("./routes/uploaderRoute");
 const khaltiRoute = require("./routes/khaltiRoute");
+const assignmentRoute = require("./routes/assignmentRoute");
 const dbCongfig = require("./config/dbConfig");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -31,6 +32,7 @@ app.use("/api/appointment", appointmentRoute);
 app.use("/api/rating", ratingRoute);
 app.use("/api/uploader", uploaderRoute);
 app.use("/api/khalti", khaltiRoute);
+app.use("/api/assignment", assignmentRoute);
 
 app.get("/", (req, res) => {
   console.log("Hello from the server");
