@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 import PanelLayout from "../../components/Layout/PanelLayout";
 import axios from "axios";
 import { createColumnHelper } from "@tanstack/react-table";
-import { useNavigate } from "react-router-dom";
 import { DataTable } from "../../components/DataTable";
-import IconView from "../../components/TableActions/IconView";
-import { HStack } from "@chakra-ui/react";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const navigate = useNavigate();
 
   const columnHelper = createColumnHelper();
 
@@ -27,19 +22,6 @@ const Users = () => {
     // }),
     columnHelper.accessor("role", {
       header: "Role",
-    }),
-    columnHelper.accessor("action", {
-      header: "ACTION",
-      cell: (row) => (
-        <HStack gap={2}>
-          <IconView
-          label={'View'}
-            handleClick={() => {
-              navigate(`/admin/users/${row.row.original._id}`);
-            }}
-          />
-        </HStack>
-      ),
     }),
   ];
 

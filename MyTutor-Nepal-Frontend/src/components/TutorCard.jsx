@@ -9,6 +9,7 @@ const TutorCard = ({ tutor }) => {
   return (
     <>
       <Box
+        key={tutor._id}
         cursor={"pointer"}
         onClick={() => navigate(`/book-tutor/${tutor._id}`)}
         maxW="sm"

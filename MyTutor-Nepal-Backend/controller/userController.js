@@ -214,36 +214,41 @@ module.exports.updateProfile = async (req, res) => {
 };
 
 module.exports.bookTutor_post = async (req, res) => {
+  let paymentResponse;
   try {
-    await bookingValidation(req, res);
-    const { fromDate, toDate, time, userInfo, tutorInfo, paymentType } =
-      req.body;
-    req.body.fromDate = moment(fromDate, "YYYY-MM-DD").toISOString();
-    req.body.toDate = moment(toDate, "YYYY-MM-DD").toISOString();
-    req.body.time = moment(time, "HH:mm").toISOString();
-    req.body.status = "pending";
-    req.body.paymentType = paymentType;
+    const validationStatus = await bookingValidation(req, res);
+    if (!validationStatus.success) {
+      paymentResponse = res.status(200).send(validationStatus);
+    } else {
+      const { fromDate, toDate, time, userInfo, tutorInfo, paymentType } =
+        req.body;
+      req.body.fromDate = moment(fromDate, "YYYY-MM-DD").toISOString();
+      req.body.toDate = moment(toDate, "YYYY-MM-DD").toISOString();
+      req.body.time = moment(time, "HH:mm").toISOString();
+      req.body.status = "pending";
+      req.body.paymentType = paymentType;
 
-    const newAppointment = new Appointment(req.body);
-    await newAppointment.save();
+      const newAppointment = new Appointment(req.body);
+      await newAppointment.save();
 
-    const user = await User.findOne({ _id: tutorInfo.userId });
-    user.unseenNotification.unshift({
-      id: crypto.randomBytes(16).toString("hex"),
-      type: "New-appointment-request",
-      message: `A new appointment request has been sent by ${userInfo.fullName}`,
-      onClickPath: "/tutor/appointments",
-      date: new Date(),
-    });
-    await user.save();
+      const user = await User.findOne({ _id: tutorInfo.userId });
+      user.unseenNotification.unshift({
+        id: crypto.randomBytes(16).toString("hex"),
+        type: "New-appointment-request",
+        message: `A new appointment request has been sent by ${userInfo.fullName}`,
+        onClickPath: "/tutor/appointments",
+        date: new Date(),
+      });
+      await user.save();
 
-    res.status(200).send({
-      success: true,
-      message: "Appointment booked successfully",
-    });
+      paymentResponse = res.status(200).send({
+        success: true,
+        message: "Appointment booked successfully",
+      });
+    }
   } catch (error) {
     console.log(error);
-    res.status(500).send({
+    paymentResponse = res.status(500).send({
       success: false,
       error,
       message: "Error booking a tutor",
@@ -264,7 +269,7 @@ module.exports.bookTutor_khalti_post = async (req, res) => {
     booking.time = moment(time, "HH:mm").toISOString();
     booking.status = "pending";
     booking.paymentType = paymentType;
-    booking.paymentStatus = "Processing"
+    booking.paymentStatus = "Processing";
 
     const newAppointment = new Appointment(booking);
     await newAppointment.save();

@@ -1,7 +1,6 @@
 import PayUsers from "../src/pages/admin/PayUsers";
 import TutorInfo from "../src/pages/admin/TutorInfo";
 import Tutors from "../src/pages/admin/Tutors";
-import UserInfo from "../src/pages/admin/UserInfo";
 import Users from "../src/pages/admin/Users";
 
 export const adminRoutes = [
@@ -23,11 +22,6 @@ export const adminRoutes = [
   {
     path: "/admin/tutors/:tutorId",
     element: <TutorInfo />,
-    availability: ["admin"],
-  },
-  {
-    path: "/admin/users/:userId",
-    element: <UserInfo />,
     availability: ["admin"],
   },
 ];

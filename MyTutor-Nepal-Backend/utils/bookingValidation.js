@@ -5,12 +5,12 @@ module.exports.bookingValidation = async (req, res) => {
   const { fromDate, toDate, time, tutorInfo, userInfo } = req.body;
   const { phone, address } = userInfo;
   if (!phone || !address) {
-    return res.status(200).send({
+    return {
       success: false,
       message:
         "User must enter their phone number and address in edit profile before booking.",
       type: "no-phone-or-address",
-    });
+    };
   }
 
   // if fromDate is before the current date
@@ -34,10 +34,10 @@ module.exports.bookingValidation = async (req, res) => {
     bookingTime.isBefore(tutorStartTime) ||
     bookingTime.isAfter(tutorEndTime)
   ) {
-    return res.status(200).send({
+    return {
       success: false,
       message: "Cannot book outside of tutor's available hours",
-    });
+    };
   }
 
   //if to date is before from date
@@ -46,10 +46,10 @@ module.exports.bookingValidation = async (req, res) => {
   );
 
   if (!isDateValid) {
-    return res.status(200).send({
+    return {
       success: false,
       message: "Invalid date range. Please enter valid dates",
-    });
+    };
   }
 
   const fromTime = moment(time, "HH:mm").subtract(1, "hours").toISOString();
@@ -75,9 +75,13 @@ module.exports.bookingValidation = async (req, res) => {
   });
 
   if (appointments.length > 0) {
-    return res.status(200).send({
+    return {
       success: false,
       message: "Appointments not available at this time",
-    });
+    };
   }
+
+  return {
+    success: true,
+  };
 };

@@ -147,9 +147,7 @@ const MapPage = () => {
     longitude: user?.coordinates?.lng,
     zoom: 18,
   });
-  const mapBoxKey =
-    "pk.eyJ1IjoicHJhc2FubmE3NyIsImEiOiJjbHM3azZsMnAxdGNpMmxxcG40aWZiODZlIn0.iVFFaLMdf8uMXlnsMxjg0A";
-
+  const mapBoxKey = `${import.meta.env.VITE_MAPBOX_KEY}`;
   const handleMarkerClick = (id) => {
     setSelectedLocaionId(id);
   };
