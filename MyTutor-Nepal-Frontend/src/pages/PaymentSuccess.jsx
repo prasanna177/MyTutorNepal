@@ -8,7 +8,7 @@ import SpinnerComponenet from "../components/SpinnerComponent";
 import toast from "react-hot-toast";
 
 const PaymentSuccess = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const params = useParams();
   const navigate = useNavigate();
   const urlString = window.location.href;

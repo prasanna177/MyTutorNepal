@@ -1,41 +1,51 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import NormalButton from "../components/common/Button";
+import SpinnerComponenet from "../components/SpinnerComponent";
+import VerifyMessage from "../components/VerifyMessage";
 
 const EmailVerify = () => {
-  const [validUrl, setValidUrl] = useState(false);
+  const [loading, setLoading] = useState(true);
   const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const verifyEmailUrl = async () => {
       try {
+        setLoading(true);
         await axios.get(
-          `${import.meta.env.VITE_SERVER_PORT}/api/user/${params.id}/verify/${params.token}`
+          `${import.meta.env.VITE_SERVER_PORT}/api/user/${params.id}/verify/${
+            params.token
+          }`
         );
-        setValidUrl(true);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         console.log(error);
-        setValidUrl(false);
       }
     };
     verifyEmailUrl();
   }, [params]);
   return (
-    <Box>
-      {validUrl ? (
-        <>
-          <Heading>Email Verified successfully</Heading>
-          <Link to={"/login"}>
-            <Text textDecoration={"underline"} color={"primary.0"}>
-              Take me to login
-            </Text>
-          </Link>
-        </>
+    <Flex flexDir={"column"} alignItems={"center"} gap={4}>
+      {loading ? (
+        <SpinnerComponenet />
       ) : (
-        <Heading>404! Page not found</Heading>
+        <>
+          <VerifyMessage />
+          <NormalButton
+            color={"white"}
+            bgColor={"primary.0"}
+            text={"Take me to login"}
+            onClick={() => {
+              navigate("/login");
+            }}
+          />
+        </>
       )}
-    </Box>
+    </Flex>
   );
 };
 

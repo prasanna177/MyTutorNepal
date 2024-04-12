@@ -22,7 +22,10 @@ const Signup = () => {
       .string()
       .required("Email address is required")
       .matches(emailRegex, "Email address is not valid"),
-    password: yup.string().required("Password is required"),
+    password: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters long"),
     confirmPassword: yup
       .string()
       .required("Please type your password")

@@ -125,6 +125,7 @@ const Home = () => {
           filteredTutors = filteredTutors.filter((tutor) => {
             return (
               tutor.fullName.toLowerCase().includes(lowerCaseQuery) ||
+              tutor.address.toLowerCase().includes(lowerCaseQuery) ||
               tutor.teachingInfo.some((info) =>
                 info.subject.toLowerCase().includes(lowerCaseQuery)
               ) ||

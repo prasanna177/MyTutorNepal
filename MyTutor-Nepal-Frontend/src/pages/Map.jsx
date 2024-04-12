@@ -3,13 +3,12 @@ import Layout from "../components/Layout/Layout";
 import Map, { Marker, Popup } from "react-map-gl";
 import axios from "axios";
 import { FaGraduationCap } from "react-icons/fa";
-import { FiMapPin } from "react-icons/fi";
+import { FaMapPin } from "react-icons/fa";
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 
 import {
   Box,
   Button,
-  Text,
   VStack,
   FormControl,
   FormLabel,
@@ -118,6 +117,7 @@ const MapPage = () => {
           filteredTutors = filteredTutors.filter((tutor) => {
             return (
               tutor.fullName.toLowerCase().includes(lowerCaseQuery) ||
+              tutor.address.toLowerCase().includes(lowerCaseQuery) ||
               tutor.teachingInfo.some((info) =>
                 info.subject.toLowerCase().includes(lowerCaseQuery)
               ) ||
@@ -265,11 +265,9 @@ const MapPage = () => {
             latitude={user?.coordinates?.lat}
             anchor="left"
           >
-            <VStack>
-              <Text color="red">You are here</Text>
-              <FiMapPin color="red" size={40} />
-            </VStack>
+            <FaMapPin color="red" size={40} />
           </Marker>
+
           {tutors?.map((result, index) => (
             <Box key={index}>
               <Marker
@@ -291,21 +289,6 @@ const MapPage = () => {
                   onClose={() => setSelectedLocaionId(null)}
                 >
                   <TutorCard key={result._id} tutor={result} />
-                  {/* <Card
-                    cursor={"pointer"}
-                    onClick={() => navigate(`/book-tutor/${result._id}`)}
-                  >
-                    <CardHeader>{result.fullName}</CardHeader>
-                    <CardBody>
-                      <Text>Fee Per Class: {result.feePerClass}</Text>
-                      <Text>
-                        Timing:{" "}
-                        {result.timing.startTime + "-" + result.timing.endTime}
-                      </Text>
-                      <Text>Address: {result.address}</Text>
-                      <Text>Phone: {result.phone}</Text>
-                    </CardBody>
-                  </Card> */}
                 </Popup>
               )}
             </Box>

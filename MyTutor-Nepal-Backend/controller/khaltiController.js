@@ -17,7 +17,6 @@ module.exports.khaltiRequest = async (req, res) => {
       const { userInfo, totalPrice } = req.body;
       const payload = {
         return_url: `${process.env.CLIENT_PORT}/payment-success/${bookingId}`,
-        // return_url: `${process.env.CLIENT_PORT}/payment-success}`,
         website_url: `${process.env.CLIENT_PORT}`,
         amount: totalPrice * 100,
         purchase_order_id: crypto.randomBytes(16).toString("hex"),

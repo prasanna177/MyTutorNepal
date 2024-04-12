@@ -124,9 +124,6 @@ const MyAssignments = () => {
     columnHelper.accessor((row) => row.appointmentInfo.subject, {
       header: "Subject",
     }),
-    // columnHelper.accessor((row) => 'Create a triangle and find out its base and', {
-    //   header: "Assignment",
-    // }),
     columnHelper.accessor((row) => row.difficulty, {
       header: "Difficulty",
     }),
