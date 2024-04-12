@@ -41,6 +41,7 @@ module.exports.rateTutor = async (req, res) => {
 
     //calculate average rating
     const allRatings = await Rating.find({ tutorId });
+    console.log(allRatings);
     const totalRatings = allRatings.length;
     const averageRating = Math.round(
       allRatings.reduce((acc, curr) => {
@@ -52,8 +53,11 @@ module.exports.rateTutor = async (req, res) => {
     const totalSentiment = allRatings.reduce((acc, curr) => {
       if (curr.sentiment !== 2) {
         return acc + curr.sentiment;
+      } else {
+        return acc; // Return accumulator if sentiment is 2
       }
     }, 0);
+    console.log(totalSentiment, "tot");
     let averageSentiment;
     if (totalSentiment > 0) {
       averageSentiment = "positive";

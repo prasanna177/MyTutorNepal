@@ -200,18 +200,6 @@ const EditProfile = () => {
     }
   }, [tutor, setValue, append]);
 
-  // useEffect(() => {
-  //   // Add default fields to form fields array when component mounts
-  //   tutor?.teachingInfo.forEach((defaultField) => {
-  //     console.log(defaultField, "def");
-  //     append({
-  //       subject: defaultField.subject,
-  //       price: defaultField.price,
-  //       proficiency: defaultField.proficiency,
-  //     });
-  //   });
-  // }, [tutor?.teachingInfo, append]);
-
   return (
     <PanelLayout title={"Edit profile"}>
       {tutor && (
@@ -257,6 +245,7 @@ const EditProfile = () => {
                       Enter your location
                     </Text>
                     <PlaceAutocomplete
+                      isBecomeTutor={true}
                       address={address}
                       setAddress={setAddress}
                       setCoordinates={setCoordinates}

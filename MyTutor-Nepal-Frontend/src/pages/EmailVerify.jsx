@@ -1,15 +1,13 @@
 import { Flex } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import NormalButton from "../components/common/Button";
+import { useParams } from "react-router-dom";
 import SpinnerComponenet from "../components/SpinnerComponent";
 import VerifyMessage from "../components/VerifyMessage";
 
 const EmailVerify = () => {
   const [loading, setLoading] = useState(true);
   const params = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const verifyEmailUrl = async () => {
@@ -35,14 +33,6 @@ const EmailVerify = () => {
       ) : (
         <>
           <VerifyMessage />
-          <NormalButton
-            color={"white"}
-            bgColor={"primary.0"}
-            text={"Take me to login"}
-            onClick={() => {
-              navigate("/login");
-            }}
-          />
         </>
       )}
     </Flex>

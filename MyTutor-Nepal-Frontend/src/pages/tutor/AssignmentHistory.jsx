@@ -209,6 +209,7 @@ const AssignmentHistory = () => {
       );
       onCloseGradeModal();
       if (res.data.success) {
+        getAssignments()
         toast.success(res.data.message);
       } else {
         toast.error(res.data.message);

@@ -95,7 +95,7 @@ const PayUsers = () => {
         const status = row.row.original.status;
 
         let type;
-        if (status === "approved") {
+        if (status === "approved" || status === "completed") {
           type = "Pay Tutor";
         } else if (status === "cancelled") {
           type = "Refund";

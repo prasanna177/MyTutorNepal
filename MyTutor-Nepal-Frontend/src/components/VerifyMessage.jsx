@@ -14,6 +14,7 @@ const VerifyMessage = () => {
         <Image w={"500px"} src={VerifySuccess} />
         <Box>
           <Text variant={"subtitle1"}>Email Verified Successfully</Text>
+          <Text variant={"subtitle1"}>You may close this page</Text>
         </Box>
       </Flex>
     </Flex>

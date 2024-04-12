@@ -3,6 +3,7 @@ const Tutor = require("../models/tutorModel");
 const moment = require("moment");
 const crypto = require("crypto");
 const Assignment = require("../models/assignmentModel");
+const Appointment = require("../models/appointmentModel");
 
 module.exports.getUserAssignments = async (req, res) => {
   try {
