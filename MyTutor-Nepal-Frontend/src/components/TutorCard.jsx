@@ -39,8 +39,8 @@ const TutorCard = ({ tutor }) => {
             </Box>
 
             <Box>
-              {tutor.teachingInfo.map((info) => (
-                <Text variant={"subtitle1"} key={info._id}>
+              {tutor.teachingInfo.map((info,index) => (
+                <Text variant={"subtitle1"} key={index}>
                   {info.subject} - Rs. {info.price} ({info.proficiency})
                 </Text>
               ))}
@@ -51,26 +51,6 @@ const TutorCard = ({ tutor }) => {
           </Box>
         </HStack>
       </Box>
-
-      {/* <Stack>
-        <Card
-          cursor={"pointer"}
-          onClick={() => navigate(`/book-tutor/${tutor._id}`)}
-        >
-          <CardHeader>
-            <Text variant={"heading4"}>{tutor.fullName}</Text>
-          </CardHeader>
-          <CardBody>
-            <ImageComponent width={'250px'} height={'250px'} isProfileImg={true} src={tutor.profilePicUrl} />
-
-            <Text variant={"heading4"}>
-              Timing: {tutor.timing.startTime + "-" + tutor.timing.endTime}
-            </Text>
-            <Text variant={"heading4"}>Phone: {tutor.phone}</Text>
-            <DisplayStars rating={tutor.averageRating} />
-          </CardBody>
-        </Card>
-      </Stack> */}
     </>
   );
 };

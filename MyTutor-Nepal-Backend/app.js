@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads"));
 app.use(express.json()); //this is used to destructure username and password sent by the client in json format
-const PORT = `${process.env.SERVER_PORT}` || 4000;
+const PORT = `${process.env.SERVER_PORT}` || 6000;
 
 //routes
 app.use("/api/user", userRoute);

@@ -116,13 +116,13 @@ const MapPage = () => {
           const lowerCaseQuery = searchQuery.toLowerCase();
           filteredTutors = filteredTutors.filter((tutor) => {
             return (
-              tutor.fullName.toLowerCase().includes(lowerCaseQuery) ||
-              tutor.address.toLowerCase().includes(lowerCaseQuery) ||
-              tutor.teachingInfo.some((info) =>
-                info.subject.toLowerCase().includes(lowerCaseQuery)
+              tutor?.fullName?.toLowerCase().includes(lowerCaseQuery) ||
+              tutor?.address?.toLowerCase().includes(lowerCaseQuery) ||
+              tutor?.teachingInfo?.some((info) =>
+                info?.subject?.toLowerCase().includes(lowerCaseQuery)
               ) ||
               tutor.teachingInfo.some((info) =>
-                info.category.toLowerCase().includes(lowerCaseQuery)
+                info?.category?.toLowerCase().includes(lowerCaseQuery)
               )
             );
           });
@@ -132,6 +132,12 @@ const MapPage = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleSearch = (event) => {
+    if (event.key === "Enter") {
+      getTutorData();
     }
   };
 
@@ -168,6 +174,7 @@ const MapPage = () => {
               <Input
                 pl={9}
                 type="text"
+                onKeyDown={handleSearch}
                 onChange={handleSearchInputChange}
                 value={searchQuery}
                 borderColor={"gray.100"}
