@@ -11,7 +11,7 @@ const RequireAuth = ({ children, userRoles }) => {
   const { user } = useSelector((state) => state.user);
 
   const clearLocalStorageOnError = (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && error.response.status === 403) {
       localStorage.removeItem("token");
     }
   };

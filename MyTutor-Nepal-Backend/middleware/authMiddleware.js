@@ -6,8 +6,7 @@ module.exports.authMiddleware = (req, res, next) => {
     const token = req?.headers["authorization"].split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
       if (err) {
-        console.log(err)
-        return res.status(401).send({
+        return res.status(403).send({
           message: "Auth failed",
           success: false,
         });
@@ -18,7 +17,7 @@ module.exports.authMiddleware = (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(401).send({
+    res.status(403).send({
       message: "Auth failed",
       status: false,
     });
