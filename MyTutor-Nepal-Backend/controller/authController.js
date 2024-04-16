@@ -44,7 +44,7 @@ module.exports.signup_post = async (req, res) => {
 };
 
 module.exports.login_post = async (req, res) => {
-  const maxAge = 4;
+  const maxAge = 6 * 24 * 60 * 60;
   try {
     let { email, password } = req.body;
     const user = await User.findOne({ email });
