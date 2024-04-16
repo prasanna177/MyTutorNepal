@@ -15,6 +15,7 @@ import { hybridRoutes } from "./HybridRoutes";
 const AppRoute = () => {
   const { loading } = useSelector((state) => state.alerts);
   const { ratingModal } = useSelector((state) => state.ratings);
+  
   const protectedRoutes = [
     ...adminRoutes,
     ...tutorRoutes,

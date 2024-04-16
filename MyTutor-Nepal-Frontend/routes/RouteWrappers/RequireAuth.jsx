@@ -10,6 +10,28 @@ const RequireAuth = ({ children, userRoles }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
+  const clearLocalStorageOnError = (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("token");
+    }
+  };
+
+  // Setup Axios interceptors
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        clearLocalStorageOnError(error);
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      // Cleanup interceptor on component unmount
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getUser = async () => {
     try {

@@ -16,16 +16,12 @@ const { startCronJob } = require("./utils/cronJobs");
 
 //middleware
 const app = express();
-app.use(cors({
-  origin: ["https://my-tutor-nepal.vercel.app"],
-  methods: ["POST","GET"],
-  credentials: true
-}));
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); 
 app.use("/uploads", express.static("uploads"));
 app.use(express.json()); //this is used to destructure username and password sent by the client in json format
-const PORT = 4000 || 6000;
+const PORT = `${process.env.SERVER_PORT}` || 6000;
 
 //routes
 app.use("/api/user", userRoute);
