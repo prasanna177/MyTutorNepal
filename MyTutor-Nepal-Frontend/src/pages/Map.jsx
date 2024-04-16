@@ -19,7 +19,8 @@ import {
   InputRightElement,
   Select,
 } from "@chakra-ui/react";
-import "mapbox-gl/dist/mapbox-gl.css";
+import "../../index.scss";
+// import "mapbox-gl/dist/mapbox-gl.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
@@ -261,46 +262,52 @@ const MapPage = () => {
             Show List
           </Button>
         </Link>
-        <Map
-          mapStyle="mapbox://styles/prasanna77/clspm19z2005i01pkahql9x7t"
-          mapboxAccessToken={mapBoxKey}
-          {...viewPort}
-          onMove={(nextViewPort) => setViewPort(nextViewPort.viewPort)}
+        <div
+          id="map"
+          className="mapboxgl-map"
+          style={{ position: "relative", width: "100%", height: "100%" }}
         >
-          <Marker
-            longitude={user?.coordinates?.lng}
-            latitude={user?.coordinates?.lat}
-            anchor="left"
+          <Map
+            mapStyle="mapbox://styles/prasanna77/clspm19z2005i01pkahql9x7t"
+            mapboxAccessToken={mapBoxKey}
+            {...viewPort}
+            onMove={(nextViewPort) => setViewPort(nextViewPort.viewPort)}
           >
-            <FaMapPin color="red" size={40} />
-          </Marker>
+            <Marker
+              longitude={user?.coordinates?.lng}
+              latitude={user?.coordinates?.lat}
+              anchor="left"
+            >
+              <FaMapPin color="red" size={40} />
+            </Marker>
 
-          {tutors?.map((result, index) => (
-            <Box key={index}>
-              <Marker
-                longitude={result?.coordinates?.lng}
-                latitude={result?.coordinates?.lat}
-                anchor="left"
-              >
-                <Box onClick={() => handleMarkerClick(result._id)}>
-                  <FaGraduationCap color="#5B3B8C" size={40} />
-                </Box>
-              </Marker>
-              {result._id === selectedLocationId && (
-                <Popup
-                  latitude={result?.coordinates?.lat}
+            {tutors?.map((result, index) => (
+              <Box key={index}>
+                <Marker
                   longitude={result?.coordinates?.lng}
-                  closeButton={false}
-                  closeOnClick={false}
-                  closeOnMove={true}
-                  onClose={() => setSelectedLocaionId(null)}
+                  latitude={result?.coordinates?.lat}
+                  anchor="left"
                 >
-                  <TutorCard key={result._id} tutor={result} />
-                </Popup>
-              )}
-            </Box>
-          ))}
-        </Map>
+                  <Box onClick={() => handleMarkerClick(result._id)}>
+                    <FaGraduationCap color="#5B3B8C" size={40} />
+                  </Box>
+                </Marker>
+                {result._id === selectedLocationId && (
+                  <Popup
+                    latitude={result?.coordinates?.lat}
+                    longitude={result?.coordinates?.lng}
+                    closeButton={false}
+                    closeOnClick={false}
+                    closeOnMove={true}
+                    onClose={() => setSelectedLocaionId(null)}
+                  >
+                    <TutorCard key={result._id} tutor={result} />
+                  </Popup>
+                )}
+              </Box>
+            ))}
+          </Map>
+        </div>
       </Box>
     </Layout>
   );
