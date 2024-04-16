@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import PanelLayout from "../components/Layout/PanelLayout";
 import { useEffect, useState } from "react";
-import { getDate } from "../components/Utils";
+import { getDate, getTime } from "../components/Utils";
 import { Text } from "@chakra-ui/react";
 import axios from "axios";
 import { DataTable } from "../components/DataTable";
@@ -38,6 +38,15 @@ const MyTutors = () => {
       cell: (row) => {
         return (
           <Text variant={"tableBody"}>{getDate(row.row.original.toDate)}</Text>
+        );
+      },
+    }),
+    columnHelper.accessor("timings", {
+      header: "Time",
+      cell: (row) => {
+        console.log(row);
+        return (
+          <Text variant={"tableBody"}>{getTime(row.row.original.time)}</Text>
         );
       },
     }),

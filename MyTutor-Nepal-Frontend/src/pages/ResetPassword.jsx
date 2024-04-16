@@ -16,7 +16,10 @@ const ResetPassword = () => {
   const { id, token } = useParams();
 
   const schema = yup.object({
-    password: yup.string().required("Password is required"),
+    password: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters long"),
   });
 
   const {
@@ -29,7 +32,9 @@ const ResetPassword = () => {
     try {
       dispatch(showLoading());
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_PORT}/api/auth/reset-password/${id}/${token}`,
+        `${
+          import.meta.env.VITE_SERVER_PORT
+        }/api/auth/reset-password/${id}/${token}`,
         data
       );
       dispatch(hideLoading());

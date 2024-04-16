@@ -16,7 +16,11 @@ const { startCronJob } = require("./utils/cronJobs");
 
 //middleware
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ["https://my-tutor-nepal.vercel.app"],
+  methods: ["POST","GET"],
+  credentials: true
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads"));
