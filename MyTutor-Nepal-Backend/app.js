@@ -18,7 +18,7 @@ const { startCronJob } = require("./utils/cronJobs");
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads"));
 app.use(express.json()); //this is used to destructure username and password sent by the client in json format
 const PORT = `${process.env.SERVER_PORT}` || 6000;
@@ -35,7 +35,7 @@ app.use("/api/khalti", khaltiRoute);
 app.use("/api/assignment", assignmentRoute);
 
 app.get("/", (req, res) => {
-  console.log("Hello from the server");
+  res.json("Hello from the server");
 });
 
 app.get("/login", (req, res) => {
