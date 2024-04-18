@@ -7,8 +7,6 @@ import { adminRoutes } from "./AdminRoutes";
 import { studentRoutes } from "./StudentRoutes";
 import { tutorRoutes } from "./TutorRoutes";
 import { authRoutes } from "./PublicRoutes";
-import ErrorPage from "../src/components/ErrorPage";
-import { ErrorBoundary } from "react-error-boundary";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { hybridRoutes } from "./HybridRoutes";
 
@@ -26,7 +24,6 @@ const AppRoute = () => {
   const publicRoutes = [...authRoutes];
   return (
     <BrowserRouter>
-      <ErrorBoundary FallbackComponent={ErrorPage}>
         {loading ? (
           <SpinnerComponenet bgColor={'opaque.0'} />
         ) : (
@@ -57,7 +54,6 @@ const AppRoute = () => {
           </Routes>
         )}
         {ratingModal && <RatingModal ratingModal={ratingModal} />}
-      </ErrorBoundary>
     </BrowserRouter>
   );
 };
