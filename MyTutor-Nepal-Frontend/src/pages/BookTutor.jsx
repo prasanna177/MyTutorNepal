@@ -219,13 +219,14 @@ const BookTutor = () => {
                           />
                         </Box>
                       </HStack>
-
-                      <Text variant={"subtitle2"}>{tutor?.phone}</Text>
-                      <Text variant={"subtitle2"}>{tutor?.email}</Text>
-                      <Text variant={"subtitle2"}>{tutor?.address}</Text>
-                      <Text variant={"heading3"} color={"gray.500"}>
-                        {tutor?.bio}
-                      </Text>
+                      <VStack align={'start'}>
+                        <Text variant={"subtitle2"}>{tutor?.phone}</Text>
+                        <Text variant={"subtitle2"}>{tutor?.email}</Text>
+                        <Text variant={"subtitle2"}>{tutor?.address}</Text>
+                        <Text variant={"heading3"} color={"gray.500"}>
+                          {tutor?.bio}
+                        </Text>
+                      </VStack>
                     </VStack>
                   </HStack>
                 </VStack>
@@ -319,13 +320,13 @@ const BookTutor = () => {
               <VStack alignItems={"stretch"}>
                 <Text variant={"heading2"}>Tutor Location</Text>
                 <iframe
-                width="100%"
-                height="400"
-                src={`https://www.google.com/maps/embed/v1/place?key=${
-                  import.meta.env.VITE_GOOGLE_API_KEY
-                }
+                  width="100%"
+                  height="400"
+                  src={`https://www.google.com/maps/embed/v1/place?key=${
+                    import.meta.env.VITE_GOOGLE_API_KEY
+                  }
             &q=${tutor?.coordinates?.lat},${tutor?.coordinates?.lng}`}
-              ></iframe>
+                ></iframe>
               </VStack>
             </VStack>
           </GridItem>
