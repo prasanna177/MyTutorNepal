@@ -68,6 +68,18 @@ function startCronJob() {
       console.log(error);
     }
   });
+
+  cron.schedule("0 0 */1 * * *", async () => {
+    try {
+      const users = await User.find({ verified: false });
+
+      for (const user of users) {
+        await User.findByIdAndDelete(user._id);
+      }
+    } catch (error) {
+      console.error("Error deleting users:", error);
+    }
+  });
 }
 
 module.exports = { startCronJob };
