@@ -7,9 +7,10 @@ const RedirectIfLoggedIn = ({ children }) => {
     const decodedToken = jwtDecode(localStorage.getItem("token"));
     currentUserRole = decodedToken?.role;
   }
+  console.log(currentUserRole,'aasd')
   if (localStorage.getItem("token")) {
     if (currentUserRole === "student") {
-      return <Navigate to="/" />;
+      return <Navigate to="/home" />;
     } else if (currentUserRole === "admin") {
       return <Navigate to="/admin/tutors" />;
     } else if (currentUserRole === "tutor") {

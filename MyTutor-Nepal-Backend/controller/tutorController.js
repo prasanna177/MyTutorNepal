@@ -47,7 +47,7 @@ module.exports.updateProfile = async (req, res) => {
     if (!address || !coordinates.lat || !coordinates.lng) {
       return res.status(200).send({
         success: false,
-        message: "Please enter an address",
+        message: "Please enter a valid address using the dropdown",
       });
     }
     const tutor = await Tutor.findOneAndUpdate({ userId }, req.body);
@@ -222,7 +222,7 @@ module.exports.cancelAppointment = async (req, res) => {
       user.unseenNotification.unshift({
         id: crypto.randomBytes(16).toString("hex"),
         type: "Appointment-Rejected",
-      message: `Your appointment with ${tutor.fullName} has been rejected.`,
+        message: `Your appointment with ${tutor.fullName} has been rejected.`,
         onClickPath: "/student/appointments",
         date: new Date(),
       });
@@ -243,4 +243,3 @@ module.exports.cancelAppointment = async (req, res) => {
     });
   }
 };
-

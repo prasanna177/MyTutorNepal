@@ -33,7 +33,7 @@ const Sidebar = () => {
   const StudentMenu = [
     {
       name: "Home",
-      path: "/",
+      path: "/home",
       icon: "fa-solid fa-house",
     },
     {

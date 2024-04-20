@@ -67,7 +67,7 @@ const ForgotPassword = () => {
                   placeholder={"Email"}
                 />
                 <HStack w={"100%"} justifyContent={"flex-end"}>
-                  <Link to={"/login"}>
+                  <Link to={"/"}>
                     <Button type="button">Cancel</Button>
                   </Link>
                   <Button

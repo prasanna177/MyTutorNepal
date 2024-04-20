@@ -18,7 +18,7 @@ const AccessDenied = () => {
           color={"white"}
           bgColor={"primary.0"}
           text={"Go back"}
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
         />
       </VStack>
     </Box>

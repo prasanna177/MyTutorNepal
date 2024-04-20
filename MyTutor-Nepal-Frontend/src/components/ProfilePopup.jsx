@@ -21,7 +21,7 @@ const ProfilePopup = () => {
   const handleLogout = () => {
     localStorage.clear();
     toast.success("Logged out successfully");
-    navigate("/login");
+    navigate("/");
   };
 
   const handleBecomeTutor = () => {

@@ -43,6 +43,9 @@ const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  console.log(coordinates);
+  console.log(address)
+
   const schema = yup.object({
     fullName: yup.string().required("Full name is required"),
     phone: yup.string().required("Phone number is required"),

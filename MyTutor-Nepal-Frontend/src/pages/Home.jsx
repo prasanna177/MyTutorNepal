@@ -50,6 +50,7 @@ const Home = () => {
   };
 
   const handleSearchInputChange = (event) => {
+    
     setSearchQuery(event.target.value);
   };
 

@@ -87,7 +87,7 @@ module.exports.becomeTutor_post = async (req, res) => {
     if (!address || !coordinates.lat || !coordinates.lng) {
       return res.status(200).send({
         success: false,
-        message: "Please enter an address",
+        message: "Please enter a valid address using the dropdown",
       });
     }
     const tutorUser = await User.findById(userId);
@@ -198,6 +198,13 @@ module.exports.getAllTutors = async (req, res) => {
 
 module.exports.updateProfile = async (req, res) => {
   try {
+    const { address, coordinates } = req.body;
+    if (!address || !coordinates.lat || !coordinates.lng) {
+      return res.status(200).send({
+        success: false,
+        message: "Please enter a valid address using the dropdown",
+      });
+    }
     const { userId } = req.body;
     await User.findOneAndUpdate({ _id: userId }, req.body);
     res.status(201).send({

@@ -6,7 +6,7 @@ import Signup from "../src/pages/Signup";
 
 export const authRoutes = [
   {
-    path: "/login",
+    path: "/",
     element: <Login />,
   },
   {

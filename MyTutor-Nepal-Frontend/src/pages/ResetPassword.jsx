@@ -41,7 +41,7 @@ const ResetPassword = () => {
       const { success, message } = response.data;
       if (success) {
         toast.success(message);
-        navigate("/login");
+        navigate("/");
       } else {
         toast.error(message);
       }
@@ -80,7 +80,7 @@ const ResetPassword = () => {
                   errors={errors?.password?.message}
                 />
                 <HStack w={"100%"} justifyContent={"flex-end"}>
-                  <Link to={"/login"}>
+                  <Link to={"/"}>
                     <Button type="button">Cancel</Button>
                   </Link>
                   <Button

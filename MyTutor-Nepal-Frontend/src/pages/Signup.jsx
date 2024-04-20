@@ -49,7 +49,7 @@ const Signup = () => {
       const { success, message } = response.data;
       if (success) {
         toast.success(message);
-        navigate("/login");
+        navigate("/");
       } else {
         toast.error(message);
       }
@@ -123,7 +123,7 @@ const Signup = () => {
               </Button>
               <Text color={"gray.100"} fontSize={"md"}>
                 Already have an account?{" "}
-                <Link fontSize={"xl"} to={"/login"}>
+                <Link fontSize={"xl"} to={"/"}>
                   <Text
                     color={"primary.0"}
                     _hover={{ textDecoration: "underline" }}

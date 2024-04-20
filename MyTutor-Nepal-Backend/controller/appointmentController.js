@@ -69,6 +69,7 @@ module.exports.markAsPaid = async (req, res) => {
 
 module.exports.getUserAppointments = async (req, res) => {
   try {
+    console.log("asd");
     const appointments = await Appointment.find({ userId: req.body.userId });
     res.status(200).send({
       success: true,

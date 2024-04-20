@@ -150,9 +150,9 @@ const MapPage = () => {
   const [viewPort, setViewPort] = useState({
     width: "100%",
     height: "100%",
-    latitude: user?.coordinates?.lat,
-    longitude: user?.coordinates?.lng,
-    zoom: 18,
+    latitude: user?.coordinates?.lat || 28.3974,
+    longitude: user?.coordinates?.lng || 84.1258,
+    zoom: 10,
   });
   const mapBoxKey = `${import.meta.env.VITE_MAPBOX_KEY}`;
   const handleMarkerClick = (id) => {
@@ -243,7 +243,7 @@ const MapPage = () => {
         </Grid>
       </VStack>
       <Box height={"76vh"} w={"96vw"} pos={"relative"}>
-        <Link to="/">
+        <Link to="/home">
           <Button
             pos={"fixed"}
             zIndex={12}
@@ -273,13 +273,15 @@ const MapPage = () => {
             {...viewPort}
             onMove={(nextViewPort) => setViewPort(nextViewPort.viewPort)}
           >
-            <Marker
-              longitude={user?.coordinates?.lng}
-              latitude={user?.coordinates?.lat}
-              anchor="left"
-            >
-              <FaMapPin color="red" size={40} />
-            </Marker>
+            {user?.coordinates && (
+              <Marker
+                longitude={user?.coordinates?.lng}
+                latitude={user?.coordinates?.lat}
+                anchor="left"
+              >
+                <FaMapPin color="red" size={40} />
+              </Marker>
+            )}
 
             {tutors?.map((result, index) => (
               <Box key={index}>

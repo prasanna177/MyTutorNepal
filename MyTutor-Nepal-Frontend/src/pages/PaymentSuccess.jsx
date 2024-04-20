@@ -72,7 +72,7 @@ const PaymentSuccess = () => {
             bgColor={"primary.0"}
             text={"Take me to home"}
             onClick={() => {
-              navigate("/");
+              navigate("/home");
             }}
           />
         </>

@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
           <Box borderBottom={"gray.200"} mb={"20px"} bgColor={"white"}>
             <HStack justifyContent={"space-between"} gap={"300px"}>
               <Box maxW={"200px"}>
-                <Link to={"/"}>
+                <Link to={"/home"}>
                   <Image src={logo} w={"200px"} />
                 </Link>
               </Box>

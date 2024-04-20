@@ -11,7 +11,7 @@ import UserProfile from "../src/pages/UserProfile";
 
 export const studentRoutes = [
   {
-    path: "/",
+    path: "/home",
     element: <Home />,
     availability: ["student"],
   },

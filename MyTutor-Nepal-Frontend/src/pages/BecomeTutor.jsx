@@ -110,7 +110,7 @@ const BecomeTutor = () => {
       dispatch(hideLoading());
       if (res.data.success) {
         toast.success(res.data.message);
-        navigate("/");
+        navigate("/home");
       } else {
         toast.error(res.data.message);
       }

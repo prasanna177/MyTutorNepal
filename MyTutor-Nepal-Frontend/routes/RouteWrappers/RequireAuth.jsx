@@ -49,7 +49,7 @@ const RequireAuth = ({ children, userRoles }) => {
       if (response.data.success) {
         dispatch(setUser(response.data.data));
       } else {
-        <Navigate to="/login" />;
+        <Navigate to="/" />;
       }
     } catch (error) {
       dispatch(hideLoading());
@@ -80,9 +80,8 @@ const RequireAuth = ({ children, userRoles }) => {
       return children;
     }
   }
-  //causing issue when reloading because global state is initially empty
   else {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 };
 

@@ -12,7 +12,13 @@ import PlacesAutocomplete from "react-places-autocomplete";
 import NormalButton from "./common/Button";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
-const PlaceAutocomplete = ({ address, setAddress, setCoordinates, width, isBecomeTutor }) => {
+const PlaceAutocomplete = ({
+  address,
+  setAddress,
+  setCoordinates,
+  width,
+  isBecomeTutor,
+}) => {
   const getUserCurrentAddress = async (lat, lng) => {
     let query = `${lat},${lng}`;
     let apiUrl = `${import.meta.env.VITE_API_ENDPOINT}?key=${
@@ -61,7 +67,13 @@ const PlaceAutocomplete = ({ address, setAddress, setCoordinates, width, isBecom
       <Box flex={isBecomeTutor && 1}>
         <PlacesAutocomplete
           value={address}
-          onChange={setAddress}
+          onChange={(value) => {
+            setAddress(value);
+            setCoordinates({
+              lat: null,
+              lng: null,
+            });
+          }}
           onSelect={handleSelect}
         >
           {({

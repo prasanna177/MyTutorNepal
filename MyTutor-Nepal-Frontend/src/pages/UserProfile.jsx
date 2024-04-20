@@ -85,6 +85,7 @@ const UserProfile = () => {
       dispatch(hideLoading());
       if (res.data.success) {
         toast.success(res.data.message);
+        window.location.reload();
       } else {
         toast.error(res.data.message);
       }
