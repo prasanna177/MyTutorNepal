@@ -8,6 +8,12 @@ module.exports.rateTutor = async (req, res) => {
   try {
     const { userId, tutorId, rating, review, notificationId, appointmentId } =
       req.body;
+      if (!rating) {
+        return res.status(200).send({
+          success: false,
+          message: "You need to provide rating.",
+        });
+      }
     let sentiment = 0;
     if (review) {
       sentiment = await query(review); //get sentiment from review

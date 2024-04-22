@@ -21,7 +21,7 @@ const Signup = () => {
     email: yup
       .string()
       .required("Email address is required")
-      .matches(emailRegex, "Email address is not valid"),
+      .matches(emailRegex, "Email address format is not valid"),
     password: yup
       .string()
       .required("Password is required")

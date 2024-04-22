@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import PanelLayout from "../components/Layout/PanelLayout";
 import TabTable from "../components/common/TabTable";
 import axios from "axios";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { createColumnHelper } from "@tanstack/react-table";
 import { getDateAndTime } from "../components/Utils";
@@ -68,17 +66,11 @@ const MyAssignments = () => {
     );
   };
 
-  const schema = yup.object({
-    deadline: yup.string(),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
+  } = useForm();
 
   const getAssignments = async () => {
     try {
@@ -190,6 +182,7 @@ const MyAssignments = () => {
       );
       onCloseSubmitModal();
       if (res.data.success) {
+        getAssignments();
         toast.success(res.data.message);
       } else {
         toast.error(res.data.message);
